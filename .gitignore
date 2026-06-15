@@ -1,0 +1,17 @@
+# Cloudflare / Wrangler local state
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Local tooling
+.claude/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
