@@ -237,13 +237,12 @@
   }
 
   function Marketplace({ client }) {
+    const B = window.Store.useBilling();
     const [cat, setCat] = useState("All");
-    const [launched, setLaunched] = useState(() => new Set());
     const [launching, setLaunching] = useState(null);
     const active = new Set(client.activeServiceIds);
     const cats = ["All", ...Array.from(new Set(SERVICES.map((s) => s.pillar)))];
     const shown = SERVICES.filter((s) => cat === "All" || s.pillar === cat);
-    const markLaunched = (id) => setLaunched((prev) => { const n = new Set(prev); n.add(id); return n; });
 
     return (
       <div className="space-y-6">
@@ -274,12 +273,12 @@
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {shown.map((s) => (
-            <ServiceCard key={s.id} svc={s} active={active.has(s.id)} launched={launched.has(s.id)} onLaunch={() => setLaunching(s)} />
+            <ServiceCard key={s.id} svc={s} active={active.has(s.id)} launched={B.isLaunched(s.id)} onLaunch={() => setLaunching(s)} />
           ))}
         </div>
 
         <Modal open={!!launching} onClose={() => setLaunching(null)} maxWidth={440}>
-          {launching && <LaunchModal svc={launching} onClose={() => setLaunching(null)} onDone={markLaunched} />}
+          {launching && <LaunchModal svc={launching} onClose={() => setLaunching(null)} onDone={B.launch} />}
         </Modal>
 
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">

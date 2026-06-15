@@ -1,15 +1,22 @@
 /* Billing Management screens — Agency (internal) and Customer (portal).
    Exposed as window.BillingScreens = { AgencyBilling, ClientBilling }.
-   Reuses window.Billing panels (CommitPanel/HybridCreditPanel/AlertBanner) + window.UI primitives. */
+   Shared state via window.Store; reuses window.Billing panels + window.UI primitives. */
 (function () {
-  const { useState } = React;
+  const { useState, useEffect, useRef } = React;
   const Icon = window.Icon;
-  const { CLIENTS, PORTFOLIO, INVOICES, contractOf } = window.AGENCY;
+  const { CLIENTS, PORTFOLIO, contractOf, BILL, CREDIT_PACKS } = window.AGENCY;
   const { fmtUSD, fmtMult, fmtNum } = window.FMT;
   const U = window.UI;
   const { Card, Badge, Progress, LineArea, Modal, InfoDot, SectionTitle, MetronomeBadge, C, cx, ROAI_TIP, ROAI_TIP_SHORT } = U;
+  const useBilling = window.Store.useBilling;
+  const { isOutstanding, owed, outstandingTotal, agingBuckets } = BILL;
 
   const HYBRID_TIP = "Hybrid billing = a fixed subscription plus usage-based AI credits, metered in real time by Metronome. Seats set the pooled monthly credit allotment; top-ups and overages bill on top.";
+  const NET_TIP = "Net 30 / Net 60 = payment is due 30 / 60 days after the invoice date. Enterprise and government accounts typically run longer net terms.";
+  const COMMIT_TIP = "Enterprise commit = a prepaid multi-year spend commitment drawn down by usage, with negotiated rates and rollover — distinct from month-to-month hybrid billing.";
+  const TRUEUP_TIP = "True-up = a periodic reconciliation invoice for usage above the committed/included amount, billed at the contracted overage rate.";
+  const TOPUP_TIP = "Top-up = a one-off credit pack added on top of your monthly allotment. Released once payment confirms and valid for a full year.";
+
   const ST = {
     paid: { tone: "emerald", label: "Paid" }, sent: { tone: "indigo", label: "Sent" },
     overdue: { tone: "rose", label: "Overdue" }, partial: { tone: "amber", label: "Partial" },
@@ -17,8 +24,45 @@
   };
   const METHOD_ICON = { card: "card", ach: "building", wire: "building", po: "receipt", gpc: "wallet" };
   const StatusBadge = ({ s }) => <Badge tone={(ST[s] || ST.draft).tone}>{(ST[s] || ST.draft).label}</Badge>;
-  const owed = (i) => i.amount - i.paid;
-  const isOutstanding = (s) => s === "sent" || s === "overdue" || s === "partial";
+  const nameOf = (id) => CLIENTS.find((c) => c.id === id).name;
+  const clientOf = (id) => CLIENTS.find((c) => c.id === id);
+  let GEN_SEQ = 9001;
+
+  // ---- export helpers (mock PDF via jsPDF if present, CSV via Blob) ----
+  function downloadBlob(filename, content, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  function lineItems(inv, client) {
+    if (String(inv.id).startsWith("gen-")) return [["Usage-based AI credits (Metronome)", inv.amount]];
+    const sub = Math.min(client.mrr, inv.amount);
+    return [["Subscription — " + client.plan + " plan", sub], ["Usage-based AI credits (Metronome)", Math.max(0, inv.amount - sub)]];
+  }
+  function exportInvoicesCSV(rows, eff) {
+    const head = ["Invoice", "Client", "Period", "Issued", "Due", "Amount", "Paid", "Status", "Terms"];
+    const esc = (v) => '"' + String(v).replace(/"/g, '""') + '"';
+    const lines = rows.map((i) => [i.number, nameOf(i.clientId), i.period, i.issued, i.due, i.amount, i.paid, eff(i), i.terms].map(esc).join(","));
+    downloadBlob("vela-invoices.csv", [head.join(","), ...lines].join("\n"), "text/csv");
+  }
+  function downloadInvoicePDF(inv, client, eff) {
+    const J = window.jspdf && window.jspdf.jsPDF;
+    if (!J) { window.print(); return; }
+    const doc = new J({ unit: "pt", format: "a4" });
+    let y = 56;
+    doc.setFontSize(18); doc.text("Vela OS · FPT CX Services", 40, y); y += 24;
+    doc.setFontSize(10); doc.setTextColor(120);
+    doc.text("Invoice " + inv.number, 40, y); y += 15;
+    doc.text(client.name + "  ·  " + client.acct.type + (client.acct.poNumber ? "  ·  PO " + client.acct.poNumber : ""), 40, y); y += 15;
+    doc.text("Period " + inv.period + "    Issued " + inv.issued + "    Due " + inv.due + "    " + inv.terms, 40, y); y += 26;
+    doc.setTextColor(20); doc.setFontSize(11);
+    lineItems(inv, client).forEach(([label, amt]) => { doc.text(label, 40, y); doc.text("$" + amt.toLocaleString(), 430, y); y += 18; });
+    y += 4; doc.setFontSize(13); doc.text("Total", 40, y); doc.text("$" + inv.amount.toLocaleString(), 430, y); y += 22;
+    doc.setFontSize(10); doc.setTextColor(120); doc.text("Status: " + eff(inv), 40, y);
+    doc.save(inv.number + ".pdf");
+  }
 
   function Tabs({ tabs, value, onChange }) {
     return (
@@ -33,7 +77,6 @@
       </div>
     );
   }
-
   function StatCard({ label, value, sub, tone, tip }) {
     return (
       <Card className="p-5">
@@ -44,14 +87,48 @@
     );
   }
 
+  // ---- shared invoice PDF preview ----
+  function InvoicePreview({ inv, client, eff, onClose }) {
+    return (
+      <div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
+          <div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="receipt" size={16} className="text-[var(--muted)]" /> {inv.number}</div>
+          <button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button>
+        </div>
+        <div className="px-6 py-5">
+          <div className="flex items-start justify-between">
+            <div><div className="text-sm font-bold text-[var(--text)]">Vela OS · FPT CX Services</div><div className="text-xs text-[var(--muted)]">billing@vela-os.fpt</div></div>
+            <div className="text-right"><StatusBadge s={eff(inv)} /></div>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-[var(--border)] bg-[var(--panel-2)] p-4 text-sm">
+            <div><div className="text-xs text-[var(--muted)]">Billed to</div><div className="font-medium text-[var(--text)]">{client.name}</div><div className="text-xs text-[var(--muted)]">{client.acct.type}{client.acct.poNumber ? " · PO " + client.acct.poNumber : ""}</div></div>
+            <div className="text-right"><div className="text-xs text-[var(--muted)]">{inv.period}</div><div className="text-xs text-[var(--muted)]">Issued {inv.issued}</div><div className="text-xs text-[var(--muted)]">Due {inv.due} · {inv.terms}</div></div>
+          </div>
+          <div className="mt-4 space-y-2 text-sm">
+            {lineItems(inv, client).map(([label, amt], i) => (
+              <div key={i} className="flex items-center justify-between"><span className="text-[var(--muted)]">{label}</span><span className="font-medium tabular-nums text-[var(--text)]">{fmtUSD(amt)}</span></div>
+            ))}
+            <div className="my-1 border-t border-dashed border-[var(--border)]" />
+            <div className="flex items-center justify-between"><span className="font-semibold text-[var(--text)]">Total</span><span className="text-lg font-bold tabular-nums text-[var(--text)]">{fmtUSD(inv.amount)}</span></div>
+          </div>
+        </div>
+        <div className="flex justify-end gap-2 border-t border-[var(--border)] px-5 py-3">
+          <button onClick={onClose} className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">Close</button>
+          <button onClick={() => downloadInvoicePDF(inv, client, eff)} className="flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--accent-hover)]"><Icon name="download" size={14} /> Download PDF</button>
+        </div>
+      </div>
+    );
+  }
+
   // ============================================================ AGENCY ============================================================
-  function AgencyOverview({ eff }) {
-    const outstandingList = INVOICES.filter((i) => isOutstanding(eff(i)));
-    const collected = INVOICES.reduce((s, i) => s + (eff(i) === "paid" ? i.amount : eff(i) === "partial" ? i.paid : 0), 0);
-    const outstandingTotal = outstandingList.reduce((s, i) => s + owed(i), 0);
-    const rate = collected + outstandingTotal > 0 ? (collected / (collected + outstandingTotal)) * 100 : 100;
-    const aging = { current: 0, d130: 0, d3160: 0 };
-    outstandingList.forEach((i) => { const s = eff(i); aging[s === "sent" ? "current" : s === "partial" ? "d130" : "d3160"] += owed(i); });
+  function AgencyOverview() {
+    const B = useBilling();
+    const all = B.allInvoices();
+    const outstandingList = all.filter((i) => isOutstanding(B.effStatus(i)));
+    const collected = all.reduce((s, i) => s + (B.effStatus(i) === "paid" ? i.amount : B.effStatus(i) === "partial" ? i.paid : 0), 0);
+    const outTotal = outstandingList.reduce((s, i) => s + owed(i), 0);
+    const rate = collected + outTotal > 0 ? (collected / (collected + outTotal)) * 100 : 100;
+    const aging = agingBuckets(all, B.effStatus);
     const agingMax = Math.max(aging.current, aging.d130, aging.d3160, 1);
     const mrrTrend = PORTFOLIO.trend.map((t, i) => ({ month: t.month, mrr: Math.round(PORTFOLIO.totalMRR * (0.78 + 0.22 * (i / (PORTFOLIO.trend.length - 1)))) }));
     const top = [...CLIENTS].map((c) => ({ c, spend: c.mrr + Math.round(c.cost / 3) })).sort((a, b) => b.spend - a.spend).slice(0, 5);
@@ -61,15 +138,14 @@
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <StatCard label="Recurring revenue" value={fmtUSD(PORTFOLIO.totalMRR) + "/mo"} sub={`${CLIENTS.length} active contracts`} />
-          <StatCard label="Outstanding" value={fmtUSD(outstandingTotal, { compact: true })} sub={`${outstandingList.length} open invoices`} tone={outstandingTotal > 0 ? "#f59e0b" : "var(--text)"} />
+          <StatCard label="Outstanding" value={fmtUSD(outTotal, { compact: true })} sub={`${outstandingList.length} open invoices`} tone={outTotal > 0 ? "#f59e0b" : "var(--text)"} />
           <StatCard label="Collection rate" value={Math.round(rate) + "%"} sub="Collected vs billed" tone="#34d399" />
           <StatCard label="Metered usage" value={PORTFOLIO.tokensM.toLocaleString() + "M"} sub="tokens this quarter" tip={HYBRID_TIP} />
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           <Card className="p-5 lg:col-span-7">
             <SectionTitle icon="chart" title="Recurring revenue trend" sub="Monthly recurring revenue across the portfolio" right={<MetronomeBadge />} />
-            <LineArea data={mrrTrend} height={224} formatY={(v) => fmtUSD(v, { compact: true })} formatTip={(v) => fmtUSD(v)}
-              series={[{ key: "mrr", label: "MRR", color: C.indigo, area: true }]} />
+            <LineArea data={mrrTrend} height={224} formatY={(v) => fmtUSD(v, { compact: true })} formatTip={(v) => fmtUSD(v)} series={[{ key: "mrr", label: "MRR", color: C.indigo, area: true }]} />
           </Card>
           <Card className="p-5 lg:col-span-5">
             <SectionTitle icon="receipt" title="Invoice aging" sub="Outstanding balance by age" />
@@ -100,12 +176,48 @@
     );
   }
 
-  function AgencyInvoices({ eff, act, onOpen }) {
+  function GenerateInvoiceModal({ onClose, onCreate }) {
+    const [cid, setCid] = useState(CLIENTS[0].id);
+    const c = clientOf(cid);
+    const events = c.models.map(([name, frac]) => ({ name, tokensM: Math.round(c.credits.tokensM * frac), amount: Math.round((c.cost / 3) * frac) }));
+    const amount = events.reduce((s, e) => s + e.amount, 0);
+    return (
+      <div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="zap" size={16} className="text-[var(--accent-fg)]" /> Generate invoice from usage</div><button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
+        <div className="px-5 py-5">
+          <label className="block text-sm"><span className="text-xs text-[var(--muted)]">Client</span>
+            <select value={cid} onChange={(e) => setCid(e.target.value)} className="mt-1 w-full cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 font-medium text-[var(--text)] outline-none">{CLIENTS.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
+          </label>
+          <div className="mt-4 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-[var(--faint)]">Metered usage events <MetronomeBadge size="sm" /></div>
+          <div className="mt-2 space-y-1.5 rounded-xl border border-[var(--border)] bg-[var(--panel-2)] p-3 text-sm">
+            {events.map((e, i) => (
+              <div key={i} className="flex items-center justify-between"><span className="text-[var(--muted)]">{e.name} · {e.tokensM}M tokens</span><span className="font-medium tabular-nums text-[var(--text)]">{fmtUSD(e.amount)}</span></div>
+            ))}
+            <div className="my-1 border-t border-dashed border-[var(--border)]" />
+            <div className="flex items-center justify-between"><span className="font-semibold text-[var(--text)]">Invoice total</span><span className="font-bold tabular-nums text-[var(--text)]">{fmtUSD(amount)}</span></div>
+          </div>
+        </div>
+        <div className="flex justify-end gap-2 border-t border-[var(--border)] px-5 py-3">
+          <button onClick={onClose} className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">Cancel</button>
+          <button onClick={() => {
+            const num = GEN_SEQ++;
+            onCreate({ id: "gen-" + cid + "-" + num, clientId: cid, number: "INV-2026-" + num, period: "Jul 2026", issued: "Jul 1, 2026", due: c.acct.netTerms === "Net 60" ? "Sep 1, 2026" : "Aug 1, 2026", amount, paid: 0, status: "draft", method: c.acct.methods[0].label, terms: c.acct.netTerms });
+            onClose();
+          }} className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--accent-hover)]">Create invoice</button>
+        </div>
+      </div>
+    );
+  }
+
+  function AgencyInvoices({ onOpen }) {
+    const B = useBilling();
     const [status, setStatus] = useState("All");
     const [client, setClient] = useState("All");
     const [q, setQ] = useState("");
-    const rows = INVOICES.filter((i) => (status === "All" || eff(i) === status) && (client === "All" || i.clientId === client) && (q === "" || i.number.toLowerCase().includes(q.toLowerCase())));
-    const nameOf = (id) => CLIENTS.find((c) => c.id === id).name;
+    const [preview, setPreview] = useState(null);
+    const [gen, setGen] = useState(false);
+    const eff = B.effStatus;
+    const rows = B.allInvoices().filter((i) => (status === "All" || eff(i) === status) && (client === "All" || i.clientId === client) && (q === "" || i.number.toLowerCase().includes(q.toLowerCase())));
     const Sel = ({ value, onChange, children }) => (
       <select value={value} onChange={(e) => onChange(e.target.value)} className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-sm font-medium text-[var(--text)] outline-none">{children}</select>
     );
@@ -113,9 +225,11 @@
       <Card className="overflow-hidden">
         <div className="flex flex-wrap items-center gap-2 border-b border-[var(--border)] p-4">
           <div className="mr-auto text-sm font-semibold text-[var(--text)]">{rows.length} invoices</div>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search #" className="w-28 rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]" />
-          <Sel value={status} onChange={setStatus}><option value="All">All statuses</option>{["paid", "sent", "overdue", "partial", "draft"].map((s) => <option key={s} value={s}>{ST[s].label}</option>)}</Sel>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search #" className="w-24 rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]" />
+          <Sel value={status} onChange={setStatus}><option value="All">All statuses</option>{["paid", "sent", "overdue", "partial", "draft", "submitted"].map((s) => <option key={s} value={s}>{ST[s].label}</option>)}</Sel>
           <Sel value={client} onChange={setClient}><option value="All">All clients</option>{CLIENTS.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</Sel>
+          <button onClick={() => setGen(true)} className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-sm font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]"><Icon name="zap" size={13} /> Generate from usage</button>
+          <button onClick={() => exportInvoicesCSV(rows, eff)} className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-sm font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]"><Icon name="download" size={13} /> Export all</button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -136,9 +250,9 @@
                     <td className="px-4 py-3"><StatusBadge s={s} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1.5">
-                        {s === "draft" && <button onClick={() => act(i, "sent")} className="rounded-md border border-[var(--border)] bg-[var(--chip)] px-2 py-1 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">Send</button>}
-                        {isOutstanding(s) && <button onClick={() => act(i, "paid")} className="rounded-md border border-emerald-500/25 bg-emerald-500/[0.08] px-2 py-1 text-xs font-medium text-emerald-400 hover:bg-emerald-500/15">Mark paid</button>}
-                        <button className="flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--chip)] px-2 py-1 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]"><Icon name="download" size={12} /></button>
+                        {s === "draft" && <button onClick={() => B.setStatus(i.id, "sent")} className="rounded-md border border-[var(--border)] bg-[var(--chip)] px-2 py-1 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">Send</button>}
+                        {isOutstanding(s) && <button onClick={() => B.setStatus(i.id, "paid")} className="rounded-md border border-emerald-500/25 bg-emerald-500/[0.08] px-2 py-1 text-xs font-medium text-emerald-400 hover:bg-emerald-500/15">Mark paid</button>}
+                        <button onClick={() => setPreview(i)} className="rounded-md border border-[var(--border)] bg-[var(--chip)] px-2 py-1 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">View</button>
                       </div>
                     </td>
                   </tr>
@@ -147,6 +261,8 @@
             </tbody>
           </table>
         </div>
+        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460}>{preview && <InvoicePreview inv={preview} client={clientOf(preview.clientId)} eff={eff} onClose={() => setPreview(null)} />}</Modal>
+        <Modal open={gen} onClose={() => setGen(false)} maxWidth={460}>{gen && <GenerateInvoiceModal onClose={() => setGen(false)} onCreate={B.addGenInvoice} />}</Modal>
       </Card>
     );
   }
@@ -154,12 +270,13 @@
   function AgencyContracts({ onOpen }) {
     return (
       <Card className="overflow-hidden">
-        <div className="border-b border-[var(--border)] px-5 py-4"><h3 className="text-base font-semibold text-[var(--text)]">Active contracts <InfoDot label={HYBRID_TIP} /></h3><p className="mt-0.5 text-sm text-[var(--muted)]">Hybrid seat-based and enterprise prepaid commit agreements</p></div>
+        <div className="border-b border-[var(--border)] px-5 py-4"><h3 className="text-base font-semibold text-[var(--text)]">Active contracts <InfoDot label={COMMIT_TIP} /></h3><p className="mt-0.5 text-sm text-[var(--muted)]">Hybrid seat-based and enterprise prepaid commit agreements</p></div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b border-[var(--border)]"><tr className="text-left text-xs text-[var(--muted)]">
               <th className="px-5 py-2.5 font-medium">Client</th><th className="px-4 py-2.5 font-medium">Model</th><th className="px-4 py-2.5 font-medium">Term</th>
-              <th className="px-4 py-2.5 text-right font-medium">Contract value</th><th className="px-4 py-2.5 text-right font-medium">Seats</th><th className="px-4 py-2.5 font-medium">Renewal</th><th className="px-4 py-2.5 font-medium">Terms</th><th className="px-2"></th>
+              <th className="px-4 py-2.5 text-right font-medium">Contract value</th><th className="px-4 py-2.5 text-right font-medium">Seats</th><th className="px-4 py-2.5 font-medium">Renewal</th>
+              <th className="px-4 py-2.5 font-medium"><span className="inline-flex items-center gap-1">Terms <InfoDot label={NET_TIP} /></span></th><th className="px-2"></th>
             </tr></thead>
             <tbody>
               {CLIENTS.map((c) => {
@@ -184,7 +301,8 @@
     );
   }
 
-  function AgencyClients({ eff, onOpen }) {
+  function AgencyClients({ onOpen }) {
+    const B = useBilling();
     return (
       <Card className="overflow-hidden">
         <div className="border-b border-[var(--border)] px-5 py-4"><h3 className="text-base font-semibold text-[var(--text)]">Client billing</h3><p className="mt-0.5 text-sm text-[var(--muted)]">Open a client for their full billing profile</p></div>
@@ -196,8 +314,8 @@
             </tr></thead>
             <tbody>
               {CLIENTS.map((c) => {
-                const out = c.invoices.filter((i) => isOutstanding(eff(i))).reduce((s, i) => s + owed(i), 0);
-                const m = c.acct.methods[0];
+                const out = outstandingTotal(B.invoicesFor(c.id), B.effStatus);
+                const m = B.methodsFor(c)[0];
                 return (
                   <tr key={c.id} onClick={() => onOpen(c.id)} className="group cursor-pointer border-b border-[var(--border)] last:border-0 transition-colors hover:bg-[var(--panel-hi)]">
                     <td className="px-5 py-3"><div className="flex items-center gap-2.5"><span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--chip)] text-[11px] font-bold text-[var(--text)]">{c.short}</span><div><div className="font-medium text-[var(--text)]">{c.name}</div><div className="text-xs text-[var(--muted)]">{c.plan}</div></div></div></td>
@@ -217,10 +335,13 @@
     );
   }
 
-  function ClientBillingProfile({ client, eff, onBack, onOpenDeepDive }) {
+  function ClientBillingProfile({ client, onBack, onOpenDeepDive }) {
+    const B = useBilling();
     const c = client, ct = contractOf(c);
     const { CommitPanel, HybridCreditPanel } = window.Billing;
-    const out = c.invoices.filter((i) => isOutstanding(eff(i))).reduce((s, i) => s + owed(i), 0);
+    const invoices = B.invoicesFor(c.id);
+    const out = outstandingTotal(invoices, B.effStatus);
+    const [preview, setPreview] = useState(null);
     return (
       <div className="space-y-6">
         <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--text)]"><Icon name="arrowLeft" size={15} /> Back to billing</button>
@@ -231,7 +352,7 @@
               <div>
                 <div className="flex items-center gap-2"><h2 className="text-xl font-bold text-[var(--text)]">{c.name}</h2><Badge tone={c.acct.type === "Government" ? "amber" : c.acct.type === "Enterprise" ? "indigo" : "neutral"}>{c.acct.type}</Badge></div>
                 <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--muted)]">
-                  <span>{c.plan} plan</span><span className="text-[var(--faint)]">·</span><span>{c.acct.netTerms}</span><span className="text-[var(--faint)]">·</span>
+                  <span>{c.plan} plan</span><span className="text-[var(--faint)]">·</span><span className="inline-flex items-center gap-1">{c.acct.netTerms} <InfoDot label={NET_TIP} /></span><span className="text-[var(--faint)]">·</span>
                   <span className="flex items-center gap-1.5"><Icon name={METHOD_ICON[c.acct.methods[0].kind] || "card"} size={13} />{c.acct.methods[0].detail}</span>
                   {c.acct.poNumber && <><span className="text-[var(--faint)]">·</span><span>PO {c.acct.poNumber}</span></>}
                 </div>
@@ -244,7 +365,7 @@
           <StatCard label="MRR" value={fmtUSD(c.mrr)} sub="subscription" />
           <StatCard label="Outstanding" value={out > 0 ? fmtUSD(out, { compact: true }) : "$0"} tone={out > 0 ? "#f59e0b" : "#34d399"} sub={out > 0 ? "due" : "all settled"} />
           <StatCard label="ROAI" value={fmtMult(c.roai)} tone="#34d399" tip={ROAI_TIP} sub="this quarter" />
-          <StatCard label="Contract" value={fmtUSD(ct.value, { compact: true })} sub={ct.type} />
+          <StatCard label="Contract" value={fmtUSD(ct.value, { compact: true })} sub={ct.type} tip={ct.type.startsWith("Enterprise") ? COMMIT_TIP : HYBRID_TIP} />
         </div>
         <Card className="p-5">
           <SectionTitle icon="card" title="Contract & usage" sub={ct.type} right={<MetronomeBadge />} />
@@ -252,28 +373,131 @@
         </Card>
         <Card className="overflow-hidden">
           <div className="border-b border-[var(--border)] px-5 py-4"><h3 className="text-base font-semibold text-[var(--text)]">Billing history</h3></div>
-          <div className="overflow-x-auto"><table className="w-full text-sm"><thead className="border-b border-[var(--border)]"><tr className="text-left text-xs text-[var(--muted)]"><th className="px-5 py-2.5 font-medium">Invoice</th><th className="px-4 py-2.5 font-medium">Period</th><th className="px-4 py-2.5 text-right font-medium">Amount</th><th className="px-4 py-2.5 font-medium">Status</th><th className="px-4 py-2.5 font-medium">Due</th></tr></thead>
-            <tbody>{c.invoices.map((i) => <tr key={i.id} className="border-b border-[var(--border)] last:border-0"><td className="px-5 py-3 font-mono text-xs text-[var(--text)]">{i.number}</td><td className="px-4 py-3 text-[var(--muted)]">{i.period}</td><td className="px-4 py-3 text-right font-semibold tabular-nums text-[var(--text)]">{fmtUSD(i.amount)}</td><td className="px-4 py-3"><StatusBadge s={eff(i)} /></td><td className="px-4 py-3 text-[var(--muted)]">{i.due}</td></tr>)}</tbody>
+          <div className="overflow-x-auto"><table className="w-full text-sm"><thead className="border-b border-[var(--border)]"><tr className="text-left text-xs text-[var(--muted)]"><th className="px-5 py-2.5 font-medium">Invoice</th><th className="px-4 py-2.5 font-medium">Period</th><th className="px-4 py-2.5 text-right font-medium">Amount</th><th className="px-4 py-2.5 font-medium">Status</th><th className="px-4 py-2.5 text-right font-medium">Actions</th></tr></thead>
+            <tbody>{invoices.map((i) => <tr key={i.id} className="border-b border-[var(--border)] last:border-0"><td className="px-5 py-3 font-mono text-xs text-[var(--text)]">{i.number}</td><td className="px-4 py-3 text-[var(--muted)]">{i.period}</td><td className="px-4 py-3 text-right font-semibold tabular-nums text-[var(--text)]">{fmtUSD(i.amount)}</td><td className="px-4 py-3"><StatusBadge s={B.effStatus(i)} /></td><td className="px-4 py-3 text-right"><button onClick={() => setPreview(i)} className="rounded-md border border-[var(--border)] bg-[var(--chip)] px-2 py-1 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">View</button></td></tr>)}</tbody>
           </table></div>
         </Card>
+        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460}>{preview && <InvoicePreview inv={preview} client={c} eff={B.effStatus} onClose={() => setPreview(null)} />}</Modal>
       </div>
+    );
+  }
+
+  // ---- live Metronome (via the Worker proxy at /api/metronome/*) ----
+  async function mt(path) {
+    try {
+      const res = await fetch("/api/metronome/" + path);
+      const data = await res.json().catch(() => null);
+      return { ok: res.ok, status: res.status, data };
+    } catch (_) { return { ok: false, status: 0, data: null }; }
+  }
+  const num = (v) => (typeof v === "number" ? fmtUSD(Math.round(v)) : v != null ? String(v) : "—");
+
+  function MetronomeLive() {
+    const [conn, setConn] = useState("loading"); // loading | connected | notconfigured | error
+    const [customers, setCustomers] = useState(null);
+    const [sel, setSel] = useState(null);
+    const [detail, setDetail] = useState(null);
+    useEffect(() => {
+      let alive = true;
+      (async () => {
+        const p = await mt("ping");
+        if (!alive) return;
+        if (p.status === 503) return setConn("notconfigured");
+        if (!p.ok || !p.data || !p.data.ok) return setConn("error");
+        setConn("connected");
+        const cs = await mt("customers?limit=100");
+        if (!alive) return;
+        setCustomers(cs.ok && cs.data && Array.isArray(cs.data.data) ? cs.data.data : []);
+      })();
+      return () => { alive = false; };
+    }, []);
+    const open = async (c) => {
+      setSel(c); setDetail({ loading: true });
+      const [inv, bal] = await Promise.all([mt("invoices?customer_id=" + c.id), mt("balances?customer_id=" + c.id)]);
+      setDetail({ loading: false, invoices: (inv.ok && inv.data && inv.data.data) || [], balances: (bal.ok && bal.data && bal.data.data) || [] });
+    };
+    const badge = conn === "connected" ? <Badge tone="emerald" icon="checkCircle">Connected</Badge>
+      : conn === "notconfigured" ? <Badge tone="amber" icon="alert">Not configured</Badge>
+      : conn === "error" ? <Badge tone="rose" icon="alert">Unreachable</Badge>
+      : <Badge tone="neutral">Connecting…</Badge>;
+    return (
+      <Card className="overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
+          <div className="flex items-center gap-2"><MetronomeBadge /><span className="text-base font-semibold text-[var(--text)]">Live billing data</span></div>
+          {badge}
+        </div>
+        {conn === "notconfigured" && (
+          <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">
+            <Icon name="alert" size={22} className="mx-auto text-amber-400" />
+            <div className="mt-2 font-medium text-[var(--text)]">Metronome key not set</div>
+            <div className="mt-1">Add it as a Worker secret, then this panel goes live:</div>
+            <code className="mt-2 inline-block rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-1.5 font-mono text-xs text-[var(--text)]">npx wrangler secret put METRONOME_API_KEY</code>
+          </div>
+        )}
+        {conn === "error" && <div className="px-5 py-8 text-center text-sm text-[var(--muted)]"><Icon name="alert" size={22} className="mx-auto text-rose-400" /><div className="mt-2 text-[var(--text)]">Couldn't reach Metronome. Check the key and try again.</div></div>}
+        {conn === "loading" && <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">Connecting to Metronome…</div>}
+        {conn === "connected" && !sel && (
+          customers == null ? <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">Loading customers…</div>
+          : customers.length === 0 ? <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">No customers in this Metronome account yet.</div>
+          : <div>
+              {customers.map((c) => (
+                <button key={c.id} onClick={() => open(c)} className="flex w-full items-center gap-3 border-b border-[var(--border)] px-5 py-3.5 text-left transition-colors last:border-0 hover:bg-[var(--panel-hi)]">
+                  <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-[var(--chip)] text-[11px] font-bold text-[var(--text)]">{(c.name || "?").slice(0, 2).toUpperCase()}</span>
+                  <div className="min-w-0 flex-1"><div className="truncate text-sm font-medium text-[var(--text)]">{c.name || c.id}</div><div className="truncate font-mono text-[11px] text-[var(--muted)]">{c.external_id || c.id}</div></div>
+                  <Icon name="chevronRight" size={15} className="text-[var(--faint)]" />
+                </button>
+              ))}
+            </div>
+        )}
+        {conn === "connected" && sel && (
+          <div className="px-5 py-4">
+            <button onClick={() => { setSel(null); setDetail(null); }} className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--muted)] hover:text-[var(--text)]"><Icon name="arrowLeft" size={15} /> All customers</button>
+            <div className="mb-3 text-base font-semibold text-[var(--text)]">{sel.name || sel.id}</div>
+            {detail && detail.loading ? <div className="py-6 text-center text-sm text-[var(--muted)]">Loading…</div> : detail && (
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div>
+                  <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--faint)]">Invoices ({detail.invoices.length})</div>
+                  <div className="space-y-1.5">
+                    {detail.invoices.length === 0 ? <div className="text-sm text-[var(--muted)]">No invoices.</div> : detail.invoices.slice(0, 10).map((iv) => (
+                      <div key={iv.id} className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm">
+                        <span className="text-[var(--muted)]"><Badge tone="neutral">{iv.status || "—"}</Badge></span>
+                        <span className="font-semibold tabular-nums text-[var(--text)]">{num(iv.total)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--faint)]">Balances ({detail.balances.length})</div>
+                  <div className="space-y-1.5">
+                    {detail.balances.length === 0 ? <div className="text-sm text-[var(--muted)]">No active commits or credits.</div> : detail.balances.slice(0, 10).map((b, i) => (
+                      <div key={i} className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm">
+                        <span className="truncate text-[var(--muted)]">{(b.product && b.product.name) || b.type || b.name || "Balance"}</span>
+                        <span className="font-semibold tabular-nums text-[var(--text)]">{num(b.balance && (b.balance.excluding_pending != null ? b.balance.excluding_pending : b.balance.including_pending) != null ? (b.balance.excluding_pending != null ? b.balance.excluding_pending : b.balance.including_pending) : b.total)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="flex items-center gap-2 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="flex-none text-[var(--faint)]" /> Live, read-only data from your connected Metronome account — separate from the modelled demo numbers.</div>
+      </Card>
     );
   }
 
   function AgencyBilling({ tab, setTab, onOpenDeepDive }) {
     const [profileId, setProfileId] = useState(null);
-    const [override, setOverride] = useState({});
-    const eff = (i) => override[i.id] || i.status;
-    const act = (i, status) => setOverride((p) => ({ ...p, [i.id]: status }));
-    if (profileId) return <ClientBillingProfile client={CLIENTS.find((c) => c.id === profileId)} eff={eff} onBack={() => setProfileId(null)} onOpenDeepDive={onOpenDeepDive} />;
-    const TABS = [{ k: "overview", label: "Overview" }, { k: "invoices", label: "Invoices" }, { k: "contracts", label: "Contracts" }, { k: "clients", label: "Clients" }];
+    if (profileId) return <ClientBillingProfile client={clientOf(profileId)} onBack={() => setProfileId(null)} onOpenDeepDive={onOpenDeepDive} />;
+    const TABS = [{ k: "overview", label: "Overview" }, { k: "invoices", label: "Invoices" }, { k: "contracts", label: "Contracts" }, { k: "clients", label: "Clients" }, { k: "live", label: "Live" }];
     return (
       <div className="space-y-6">
         <Tabs tabs={TABS} value={tab} onChange={setTab} />
-        {tab === "invoices" ? <AgencyInvoices eff={eff} act={act} onOpen={setProfileId} />
+        {tab === "invoices" ? <AgencyInvoices onOpen={setProfileId} />
           : tab === "contracts" ? <AgencyContracts onOpen={setProfileId} />
-          : tab === "clients" ? <AgencyClients eff={eff} onOpen={setProfileId} />
-          : <AgencyOverview eff={eff} />}
+          : tab === "clients" ? <AgencyClients onOpen={setProfileId} />
+          : tab === "live" ? <MetronomeLive />
+          : <AgencyOverview />}
       </div>
     );
   }
@@ -309,11 +533,12 @@
     );
   }
 
-  function ClientOverview({ client, eff }) {
+  function ClientOverview({ client }) {
+    const B = useBilling();
     const c = client, h = c.billing.hybrid;
     const { AlertBanner } = window.Billing;
-    const due = c.invoices.filter((i) => isOutstanding(eff(i))).reduce((s, i) => s + owed(i), 0);
-    const credits = h.monthlyRemaining + h.topupTotal;
+    const due = outstandingTotal(B.invoicesFor(c.id), B.effStatus);
+    const credits = h.monthlyRemaining + h.topupTotal + B.topupFor(c.id);
     return (
       <div className="space-y-6">
         <AlertBanner client={c} model="hybrid" />
@@ -336,14 +561,16 @@
     );
   }
 
-  function ClientInvoices({ client, eff, act }) {
+  function ClientInvoices({ client }) {
+    const B = useBilling();
     const c = client, enterprise = c.acct.type !== "Standard";
+    const [preview, setPreview] = useState(null);
     return (
       <Card className="overflow-hidden">
-        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="receipt" size={16} className="text-[var(--muted)]" /> Invoices</div><Badge tone="neutral">{c.invoices.length}</Badge></div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="receipt" size={16} className="text-[var(--muted)]" /> Invoices</div><Badge tone="neutral">{B.invoicesFor(c.id).length}</Badge></div>
         <div>
-          {c.invoices.map((i) => {
-            const s = eff(i);
+          {B.invoicesFor(c.id).map((i) => {
+            const s = B.effStatus(i);
             return (
               <div key={i.id} className="flex flex-wrap items-center gap-3 border-b border-[var(--border)] px-5 py-3.5 last:border-0">
                 <div className="min-w-0 flex-1">
@@ -352,22 +579,25 @@
                 </div>
                 <div className="text-right text-sm font-semibold tabular-nums text-[var(--text)]">{fmtUSD(i.amount)}</div>
                 <div className="flex items-center gap-1.5">
-                  <button className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]"><Icon name="download" size={13} /> PDF</button>
+                  <button onClick={() => setPreview(i)} className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--chip)] px-2.5 py-1.5 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]"><Icon name="receipt" size={13} /> PDF</button>
                   {isOutstanding(s) && (enterprise
-                    ? <button onClick={() => act(i, "submitted")} className="rounded-lg bg-[var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[var(--accent-hover)]">Submit for approval</button>
-                    : <button onClick={() => act(i, "paid")} className="rounded-lg bg-[var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[var(--accent-hover)]">Pay now</button>)}
+                    ? <button onClick={() => B.setStatus(i.id, "submitted")} className="rounded-lg bg-[var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[var(--accent-hover)]">Submit for approval</button>
+                    : <button onClick={() => B.setStatus(i.id, "paid")} className="rounded-lg bg-[var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[var(--accent-hover)]">Pay now</button>)}
                 </div>
               </div>
             );
           })}
         </div>
+        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460}>{preview && <InvoicePreview inv={preview} client={c} eff={B.effStatus} onClose={() => setPreview(null)} />}</Modal>
       </Card>
     );
   }
 
   function ClientPaymentMethods({ client }) {
-    const [methods, setMethods] = useState(client.acct.methods);
+    const B = useBilling();
+    const [defaultIdx, setDefaultIdx] = useState(0);
     const [adding, setAdding] = useState(false);
+    const methods = B.methodsFor(client);
     return (
       <div className="space-y-4">
         <Card className="overflow-hidden">
@@ -377,42 +607,106 @@
               <div key={idx} className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-3.5 last:border-0">
                 <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--chip)] text-[var(--muted)]"><Icon name={METHOD_ICON[m.kind] || "card"} size={16} /></span>
                 <div className="min-w-0 flex-1"><div className="text-sm font-medium text-[var(--text)]">{m.label}</div><div className="text-xs text-[var(--muted)]">{m.detail}</div></div>
-                {m.default ? <Badge tone="emerald">Default</Badge> : <button onClick={() => setMethods((ms) => ms.map((x, i) => ({ ...x, default: i === idx })))} className="text-xs font-medium text-[var(--accent-fg)] hover:underline">Make default</button>}
+                {idx === defaultIdx ? <Badge tone="emerald">Default</Badge> : <button onClick={() => setDefaultIdx(idx)} className="text-xs font-medium text-[var(--accent-fg)] hover:underline">Make default</button>}
               </div>
             ))}
           </div>
-          <div className="flex items-start gap-2 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="mt-0.5 flex-none text-[var(--faint)]" /> Billed on {client.acct.netTerms}{client.acct.poNumber ? ` against PO ${client.acct.poNumber}` : ""}. {client.acct.type === "Government" ? "Government orders support GPC and PO with compliance documentation." : "Usage is metered by Metronome and invoiced monthly."}</div>
+          <div className="flex items-start gap-2 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="mt-0.5 flex-none text-[var(--faint)]" /> Billed on <span className="inline-flex items-center gap-1">{client.acct.netTerms} <InfoDot label={NET_TIP} /></span>{client.acct.poNumber ? ` against PO ${client.acct.poNumber}` : ""}. {client.acct.type === "Government" ? "Government orders support GPC and PO with compliance documentation." : "Usage is metered by Metronome and invoiced monthly."}</div>
         </Card>
         <Modal open={adding} onClose={() => setAdding(false)} maxWidth={420}>
-          {adding && <AddMethodModal client={client} onClose={() => setAdding(false)} onAdd={(m) => setMethods((ms) => [...ms, m])} />}
+          {adding && <AddMethodModal client={client} onClose={() => setAdding(false)} onAdd={(m) => B.addMethod(client.id, m)} />}
         </Modal>
       </div>
     );
   }
 
-  function ClientUsage({ client }) {
-    const { HybridCreditPanel } = window.Billing;
+  function TopUpModal({ client, pack, onClose, onDone }) {
+    const phases = ["Authorizing payment", "Provisioning credits", "Confirming"];
+    const [i, setI] = useState(0);
+    const timer = useRef(null), fired = useRef(false);
+    const done = i >= phases.length;
+    useEffect(() => { if (i < phases.length) { timer.current = setTimeout(() => setI((x) => x + 1), 800); return () => clearTimeout(timer.current); } }, [i]);
+    useEffect(() => { if (done && !fired.current) { fired.current = true; onDone(pack.credits); } }, [done]);
+    const pct = Math.round((Math.min(i, phases.length) / phases.length) * 100);
     return (
-      <Card className="p-5">
-        <SectionTitle icon="cpu" title="Usage & credits" sub="Seats, pooled credits, and where your AI spend went" right={<MetronomeBadge />} />
-        <HybridCreditPanel client={client} />
-        <div className="mt-4 flex items-start gap-2 border-t border-[var(--border)] pt-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="mt-0.5 flex-none text-[var(--faint)]" /> Usage is metered in real time and tied to delivered value — your account is returning <span className="font-semibold text-emerald-400">&nbsp;{fmtMult(client.roai)}</span>&nbsp; on AI investment.</div>
-      </Card>
+      <div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="coins" size={16} className="text-[var(--accent-fg)]" /> Top up {(pack.credits / 1000).toFixed(0)}k credits</div><button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
+        <div className="px-5 py-5">
+          {!done ? (
+            <>
+              <div className="mb-3 flex items-center justify-between text-sm"><span className="font-medium text-[var(--text)]">Processing {fmtUSD(pack.price)}…</span><span className="tabular-nums text-[var(--muted)]">{pct}%</span></div>
+              <Progress pct={pct} tone={C.indigo} h={8} />
+              <div className="mt-4 space-y-2.5">
+                {phases.map((p, idx) => {
+                  const state = idx < i ? "done" : idx === i ? "active" : "pending";
+                  return (
+                    <div key={idx} className="flex items-center gap-2.5 text-sm">
+                      <span className={cx("flex h-5 w-5 flex-none items-center justify-center rounded-full", state === "done" ? "bg-emerald-500/15 text-emerald-400" : state === "active" ? "bg-[var(--accent-soft)] text-[var(--accent-fg)]" : "bg-[var(--chip)] text-[var(--faint)]")}>
+                        {state === "done" ? <Icon name="check" size={12} /> : state === "active" ? <Icon name="refresh" size={12} /> : <span className="h-1.5 w-1.5 rounded-full bg-current" />}
+                      </span>
+                      <span className={state === "pending" ? "text-[var(--muted)]" : "text-[var(--text)]"}>{p}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="py-2 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400"><Icon name="checkCircle" size={26} /></div>
+              <div className="mt-3 text-lg font-bold text-[var(--text)]">{(pack.credits / 1000).toFixed(0)}k credits added</div>
+              <p className="mx-auto mt-1 max-w-xs text-sm text-[var(--muted)]">Valid for a full year and used after your monthly allotment runs out.</p>
+            </div>
+          )}
+        </div>
+        <div className="flex justify-end gap-2 border-t border-[var(--border)] px-5 py-3">
+          <button onClick={onClose} className={cx("rounded-lg px-4 py-2 text-sm font-semibold", done ? "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]" : "border border-[var(--border)] bg-[var(--chip)] text-[var(--text)] hover:bg-[var(--panel-hi)]")}>{done ? "Done" : "Cancel"}</button>
+        </div>
+      </div>
+    );
+  }
+
+  function ClientUsage({ client }) {
+    const B = useBilling();
+    const { HybridCreditPanel } = window.Billing;
+    const [pack, setPack] = useState(1);
+    const [buying, setBuying] = useState(false);
+    const added = B.topupFor(client.id);
+    return (
+      <div className="space-y-4">
+        <Card className="p-5">
+          <SectionTitle icon="cpu" title="Usage & credits" sub="Seats, pooled credits, and where your AI spend went" right={<MetronomeBadge />} />
+          <HybridCreditPanel client={client} />
+          <div className="mt-4 flex items-start gap-2 border-t border-[var(--border)] pt-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="mt-0.5 flex-none text-[var(--faint)]" /> Usage is metered in real time; overages reconcile as a <span className="inline-flex items-center gap-1">true-up <InfoDot label={TRUEUP_TIP} /></span> at your contracted rate. Your account is returning <span className="font-semibold text-emerald-400">&nbsp;{fmtMult(client.roai)}</span>&nbsp; on AI investment.</div>
+        </Card>
+        <Card className="p-5">
+          <div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="coins" size={16} className="text-[var(--accent-fg)]" /> Buy a credit top-up <InfoDot label={TOPUP_TIP} /></div>
+          {added > 0 && <div className="mt-1 text-xs text-emerald-400">{fmtNum(added)} credits added this session</div>}
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {CREDIT_PACKS.map((p, i) => (
+              <button key={i} onClick={() => setPack(i)} className={cx("rounded-xl border p-3 text-center transition-all", pack === i ? "border-[var(--accent)] bg-[var(--accent-soft)]" : "border-[var(--border)] bg-[var(--panel-2)] hover:border-[var(--border-strong)]")}>
+                <div className="text-sm font-bold tabular-nums text-[var(--text)]">+{(p.credits / 1000).toFixed(0)}k</div>
+                <div className="mt-0.5 text-[11px] text-[var(--muted)]">{fmtUSD(p.price)}</div>
+              </button>
+            ))}
+          </div>
+          <button onClick={() => setBuying(true)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--accent-hover)]">
+            <Icon name="plus" size={15} /> Buy {(CREDIT_PACKS[pack].credits / 1000).toFixed(0)}k credits · {fmtUSD(CREDIT_PACKS[pack].price)}
+          </button>
+        </Card>
+        <Modal open={buying} onClose={() => setBuying(false)} maxWidth={420}>{buying && <TopUpModal client={client} pack={CREDIT_PACKS[pack]} onClose={() => setBuying(false)} onDone={(credits) => B.addTopup(client.id, credits)} />}</Modal>
+      </div>
     );
   }
 
   function ClientBilling({ client, tab, setTab }) {
-    const [override, setOverride] = useState({});
-    const eff = (i) => override[i.id] || i.status;
-    const act = (i, status) => setOverride((p) => ({ ...p, [i.id]: status }));
     const TABS = [{ k: "overview", label: "Overview" }, { k: "invoices", label: "Invoices" }, { k: "payment", label: "Payment methods" }, { k: "usage", label: "Usage" }];
     return (
       <div className="space-y-6">
         <Tabs tabs={TABS} value={tab} onChange={setTab} />
-        {tab === "invoices" ? <ClientInvoices client={client} eff={eff} act={act} />
+        {tab === "invoices" ? <ClientInvoices client={client} />
           : tab === "payment" ? <ClientPaymentMethods client={client} />
           : tab === "usage" ? <ClientUsage client={client} />
-          : <ClientOverview client={client} eff={eff} />}
+          : <ClientOverview client={client} />}
       </div>
     );
   }

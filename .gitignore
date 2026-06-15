@@ -5,6 +5,7 @@
 
 # Local tooling
 .claude/
+scripts/seed-state.json
 
 # Node
 node_modules/

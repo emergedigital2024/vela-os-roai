@@ -10,7 +10,7 @@
   // ---- URL routing (query params on /) ----
   const AGENCY_SECTIONS = ["home", "clients", "analytics", "billing"];
   const CLIENT_SECTIONS = ["roai", "projects", "marketplace", "billing", "insights"];
-  const AGENCY_BILLING_TABS = ["overview", "invoices", "contracts", "clients"];
+  const AGENCY_BILLING_TABS = ["overview", "invoices", "contracts", "clients", "live"];
   const CLIENT_BILLING_TABS = ["overview", "invoices", "payment", "usage"];
   function parseURL() {
     const p = new URLSearchParams(window.location.search);
@@ -325,6 +325,7 @@
     else if (section === "billing") main = <BS.AgencyBilling tab={tab} setTab={setTab} onOpenDeepDive={selectClient} />;
 
     return (
+      <window.Store.BillingProvider>
       <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
         {navOpen && <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setNavOpen(false)} />}
         <Sidebar section={section} setSection={(s) => { setSection(s); setSelected(null); }} mode={mode} setMode={setMode} clientSection={clientSection} setClientSection={setClientSection} portalClient={portalClient} setTab={setTab} navOpen={navOpen} setNavOpen={setNavOpen} />
@@ -333,6 +334,7 @@
           <main className="mx-auto max-w-[1320px] px-4 py-7 sm:px-6">{main}</main>
         </div>
       </div>
+      </window.Store.BillingProvider>
     );
   }
 

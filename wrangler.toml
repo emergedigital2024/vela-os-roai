@@ -1,7 +1,10 @@
 name = "vela-os-roai"
 account_id = "4a75e91d6fca8bc58467fb80ce1b9c2e"
 compatibility_date = "2025-06-15"
+main = "src/index.js"
 
 [assets]
 directory = "./public"
+binding = "ASSETS"
 not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]

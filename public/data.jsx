@@ -497,6 +497,25 @@
     { stat: "~60%", label: "of interactions span multiple channels" },
   ];
 
-  window.AGENCY = { CLIENTS, PORTFOLIO, MONTHS, SERVICES, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, MARKET_STATS, INVOICES, contractOf };
+  // ---- shared billing calc helpers (take an effStatus fn so overrides are respected) ----
+  const isOutstandingStatus = (s) => s === "sent" || s === "overdue" || s === "partial";
+  const owedAmt = (i) => i.amount - i.paid;
+  const BILL = {
+    isOutstanding: isOutstandingStatus,
+    owed: owedAmt,
+    outstandingTotal: (invoices, eff) => invoices.filter((i) => isOutstandingStatus(eff(i))).reduce((s, i) => s + owedAmt(i), 0),
+    agingBuckets: (invoices, eff) => {
+      const a = { current: 0, d130: 0, d3160: 0 };
+      invoices.forEach((i) => { const s = eff(i); if (isOutstandingStatus(s)) a[s === "sent" ? "current" : s === "partial" ? "d130" : "d3160"] += owedAmt(i); });
+      return a;
+    },
+  };
+  const CREDIT_PACKS = [
+    { credits: 250000, price: 1500 },
+    { credits: 500000, price: 2800 },
+    { credits: 1000000, price: 5000 },
+  ];
+
+  window.AGENCY = { CLIENTS, PORTFOLIO, MONTHS, SERVICES, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, MARKET_STATS, INVOICES, contractOf, BILL, CREDIT_PACKS };
   window.FMT = { fmtUSD, fmtMult, fmtPct, fmtNum, fmtCompact };
 })();
