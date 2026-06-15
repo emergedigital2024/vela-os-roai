@@ -1,12 +1,12 @@
 /* Client-facing sections: Active Projects, AI Services Marketplace, Insights & Reports.
    Warm, trust-building, emerald-success tone. Exposed as window.ClientViews. */
 (function () {
-  const { useState } = React;
+  const { useState, useEffect, useRef } = React;
   const Icon = window.Icon;
   const { SERVICES, CASE_STUDIES } = window.AGENCY;
   const { fmtUSD, fmtMult, fmtNum } = window.FMT;
   const U = window.UI;
-  const { Card, Badge, Progress, SectionTitle, C, cx } = U;
+  const { Card, Badge, Progress, SectionTitle, Modal, InfoDot, ROAI_TIP_SHORT, C, cx } = U;
 
   // CX pillar visual maps (icon + accent), keyed by pillar name
   const PILLAR_ICON = { "Experience Strategy": "target", "Experience Design": "sparkles", "Experience Platform": "layers", "Commerce Platform": "grid", "Experience Insights": "chart", "Run & Optimize": "settings" };
@@ -126,7 +126,8 @@
   }
 
   // ============================ Marketplace ============================
-  function ServiceCard({ svc, active, requested, onRequest }) {
+  function ServiceCard({ svc, active, launched, onLaunch }) {
+    const isAgent = svc.onEco || svc.package;
     return (
       <Card className="flex flex-col p-5">
         <div className="flex items-start justify-between gap-3">
@@ -144,7 +145,7 @@
         <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--muted)]">{svc.blurb}</p>
 
         <div className="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-3 text-xs">
-          <span className="text-[var(--muted)]">Typical return</span>
+          <span className="flex items-center gap-1 text-[var(--muted)]">Typical return <InfoDot label={ROAI_TIP_SHORT} /></span>
           <span className="font-semibold tabular-nums text-emerald-400">{fmtMult(svc.typicalRoai)}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
@@ -153,18 +154,14 @@
         </div>
 
         <div className="mt-4">
-          {active ? (
+          {active || launched ? (
             <div className="flex w-full items-center justify-center gap-2 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.08] py-2.5 text-sm font-semibold text-emerald-400">
-              <Icon name="checkCircle" size={15} /> Active on your plan
-            </div>
-          ) : requested ? (
-            <div className="flex w-full items-center justify-center gap-2 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.08] py-2.5 text-sm font-semibold text-emerald-400">
-              <Icon name="check" size={15} /> Requested — strategist notified
+              <Icon name="checkCircle" size={15} /> {active ? "Active on your plan" : "Live"}
             </div>
           ) : (
-            <button onClick={onRequest}
+            <button onClick={onLaunch}
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--accent)] py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--accent-hover)]">
-              <Icon name="plus" size={15} /> Add to plan
+              <Icon name="zap" size={15} /> {isAgent ? "Launch agent" : "Launch"}
             </button>
           )}
         </div>
@@ -172,13 +169,81 @@
     );
   }
 
+  // ---- Launch flow (mock provisioning) ----
+  function LaunchModal({ svc, onClose, onDone }) {
+    const isAgent = svc.onEco || svc.package;
+    const phases = isAgent
+      ? ["Provisioning workspace", "Connecting your data", "Configuring the agent", "Running first pass"]
+      : ["Scoping engagement", "Provisioning environment", "Configuring", "Kickoff"];
+    const [i, setI] = useState(0);
+    const timer = useRef(null);
+    const firedDone = useRef(false);
+    const done = i >= phases.length;
+    useEffect(() => {
+      if (i < phases.length) {
+        timer.current = setTimeout(() => setI((x) => x + 1), 850);
+        return () => clearTimeout(timer.current);
+      }
+    }, [i]);
+    useEffect(() => { if (done && !firedDone.current) { firedDone.current = true; onDone(svc.id); } }, [done]);
+    const pct = Math.round((Math.min(i, phases.length) / phases.length) * 100);
+    return (
+      <div>
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
+          <div className="flex items-center gap-3">
+            <PillarChip pillar={svc.pillar} />
+            <div><div className="font-semibold text-[var(--text)]">{svc.name}</div><div className="text-xs text-[var(--muted)]">{svc.pillar}{svc.onEco && svc.stage ? " · " + svc.stage : ""}</div></div>
+          </div>
+          <button onClick={onClose} className="text-[var(--faint)] transition-colors hover:text-[var(--text)]"><Icon name="x" size={18} /></button>
+        </div>
+        <div className="px-5 py-5">
+          {!done ? (
+            <>
+              <div className="mb-3 flex items-center justify-between text-sm">
+                <span className="font-medium text-[var(--text)]">{isAgent ? "Launching agent…" : "Starting engagement…"}</span>
+                <span className="tabular-nums text-[var(--muted)]">{pct}%</span>
+              </div>
+              <Progress pct={pct} tone={C.indigo} h={8} />
+              <div className="mt-4 space-y-2.5">
+                {phases.map((p, idx) => {
+                  const state = idx < i ? "done" : idx === i ? "active" : "pending";
+                  return (
+                    <div key={idx} className="flex items-center gap-2.5 text-sm">
+                      <span className={cx("flex h-5 w-5 flex-none items-center justify-center rounded-full",
+                        state === "done" ? "bg-emerald-500/15 text-emerald-400" : state === "active" ? "bg-[var(--accent-soft)] text-[var(--accent-fg)]" : "bg-[var(--chip)] text-[var(--faint)]")}>
+                        {state === "done" ? <Icon name="check" size={12} /> : state === "active" ? <Icon name="refresh" size={12} /> : <span className="h-1.5 w-1.5 rounded-full bg-current" />}
+                      </span>
+                      <span className={state === "pending" ? "text-[var(--muted)]" : "text-[var(--text)]"}>{p}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="py-2 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400"><Icon name="checkCircle" size={26} /></div>
+              <div className="mt-3 text-lg font-bold text-[var(--text)]">{svc.name} is live</div>
+              <p className="mx-auto mt-1 max-w-xs text-sm text-[var(--muted)]">{isAgent ? "Your agent is provisioned and running. Track it in Active projects." : "Your engagement is set up — your strategist will be in touch."}</p>
+            </div>
+          )}
+        </div>
+        <div className="flex justify-end gap-2 border-t border-[var(--border)] px-5 py-3">
+          {done
+            ? <button onClick={onClose} className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-hover)]">Done</button>
+            : <button onClick={onClose} className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-4 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">Cancel</button>}
+        </div>
+      </div>
+    );
+  }
+
   function Marketplace({ client }) {
     const [cat, setCat] = useState("All");
-    const [requested, setRequested] = useState(() => new Set());
+    const [launched, setLaunched] = useState(() => new Set());
+    const [launching, setLaunching] = useState(null);
     const active = new Set(client.activeServiceIds);
     const cats = ["All", ...Array.from(new Set(SERVICES.map((s) => s.pillar)))];
     const shown = SERVICES.filter((s) => cat === "All" || s.pillar === cat);
-    const request = (id) => setRequested((prev) => { const n = new Set(prev); n.add(id); return n; });
+    const markLaunched = (id) => setLaunched((prev) => { const n = new Set(prev); n.add(id); return n; });
 
     return (
       <div className="space-y-6">
@@ -209,9 +274,13 @@
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {shown.map((s) => (
-            <ServiceCard key={s.id} svc={s} active={active.has(s.id)} requested={requested.has(s.id)} onRequest={() => request(s.id)} />
+            <ServiceCard key={s.id} svc={s} active={active.has(s.id)} launched={launched.has(s.id)} onLaunch={() => setLaunching(s)} />
           ))}
         </div>
+
+        <Modal open={!!launching} onClose={() => setLaunching(null)} maxWidth={440}>
+          {launching && <LaunchModal svc={launching} onClose={() => setLaunching(null)} onDone={markLaunched} />}
+        </Modal>
 
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">
           <div className="flex items-center gap-3">

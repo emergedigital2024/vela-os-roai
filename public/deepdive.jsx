@@ -4,7 +4,7 @@
   const Icon = window.Icon;
   const { fmtUSD, fmtMult, fmtPct, fmtNum, fmtCompact } = window.FMT;
   const U = window.UI;
-  const { Card, Badge, TierBadge, DeltaPill, HealthBar, LineArea, CategoryBars, Donut, Progress, Ring, SectionTitle, MetronomeBadge, InfoDot, C, cx } = U;
+  const { Card, Badge, TierBadge, DeltaPill, HealthBar, LineArea, CategoryBars, Donut, Progress, Ring, SectionTitle, MetronomeBadge, InfoDot, ROAI_TIP, C, cx } = U;
 
   const MODEL_COLORS = [C.indigoDeep || "#4f46e5", C.indigo, C.sky, C.slate];
 
@@ -169,7 +169,7 @@
                 <div className="flex items-center justify-between"><span className="text-[var(--muted)]">Hours saved</span><span className="font-medium tabular-nums text-[var(--text)]">{fmtNum(c.hoursSaved)} hrs</span></div>
                 <div className="flex items-center justify-between"><span className="text-[var(--muted)]">Revenue uplift</span><span className="font-medium tabular-nums text-[var(--text)]">{fmtUSD(c.revenueUplift, { compact: true })}</span></div>
               </div>} />
-          <MetricCard label="ROAI" icon="target" value={c.roaiPct.toFixed(0) + "%"} tone="#34d399" sub={`Net ${fmtUSD(c.net, { compact: true })} created`}
+          <MetricCard label="ROAI" icon="target" tip={ROAI_TIP} value={c.roaiPct.toFixed(0) + "%"} tone="#34d399" sub={`Net ${fmtUSD(c.net, { compact: true })} created`}
             foot={<div className="flex items-center justify-between text-xs"><span className="text-[var(--muted)]">{fmtMult(c.roai)} gross return</span><DeltaPill value={c.roai >= 3 ? 8.6 : -5.2} /></div>} />
           <MetricCard label="Margin" icon="gauge" value={Math.round(c.margin * 100) + "%"} sub="Gross delivery margin"
             foot={<Progress pct={c.margin * 100} tone={c.margin > 0.6 ? C.emerald : C.amber} />} />
@@ -189,7 +189,7 @@
           </Card>
 
           <Card className="p-5 lg:col-span-5">
-            <SectionTitle icon="layers" title="Value by CX service pillar" sub="Delivered value & ROAI per pillar" />
+            <SectionTitle icon="layers" title={<span className="inline-flex items-center gap-1.5">Value by CX service pillar <InfoDot label={ROAI_TIP} /></span>} sub="Delivered value & ROAI per pillar" />
             <CategoryBars categories={c.categories} />
           </Card>
         </div>

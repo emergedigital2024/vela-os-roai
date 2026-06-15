@@ -5,7 +5,7 @@
   const { CLIENTS, PORTFOLIO, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, MARKET_STATS } = window.AGENCY;
   const { fmtUSD, fmtMult, fmtPct, fmtNum, fmtCompact } = window.FMT;
   const U = window.UI;
-  const { Card, Badge, TierBadge, DeltaPill, HealthBar, Sparkline, LineArea, Segmented, SectionTitle, MetronomeBadge, InfoDot, C, cx } = U;
+  const { Card, Badge, TierBadge, DeltaPill, HealthBar, Sparkline, LineArea, Segmented, SectionTitle, MetronomeBadge, InfoDot, ROAI_TIP, C, cx } = U;
 
   function KPI({ label, value, sub, delta, spark, sparkColor, accent, icon, tip }) {
     return (
@@ -97,7 +97,7 @@
                 <Th>Tier</Th>
                 <Th k="cost" right>AI Spend</Th>
                 <Th k="value" right>Value</Th>
-                <Th k="roai" right>ROAI</Th>
+                <Th k="roai" right><span className="inline-flex items-center gap-1">ROAI <span onClick={(e) => e.stopPropagation()}><InfoDot label={ROAI_TIP} /></span></span></Th>
                 <Th k="margin" right>Margin</Th>
                 <Th right>Health</Th>
                 <Th right>8-mo trend</Th>
@@ -164,7 +164,7 @@
           <Card className="relative overflow-hidden p-6 lg:col-span-5" style={{ background: "var(--hero)" }}>
             <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full" style={{ background: "radial-gradient(circle, rgba(99,102,241,.28), transparent 70%)" }} />
             <div className="flex items-center gap-2 text-sm font-medium text-[var(--accent-fg)]">
-              <Icon name="sparkles" size={15} /> Portfolio Return on AI Investment
+              <Icon name="sparkles" size={15} /> Portfolio Return on AI Investment <InfoDot label={ROAI_TIP} />
             </div>
             <div className="mt-4 flex items-end gap-4">
               <div className="text-[64px] font-bold leading-[0.9] tracking-tight text-[var(--text)] tabular-nums">{fmtMult(PORTFOLIO.roai)}</div>

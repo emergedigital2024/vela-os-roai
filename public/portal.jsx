@@ -7,7 +7,7 @@
   const { CLIENTS } = window.AGENCY;
   const { fmtUSD, fmtMult, fmtPct, fmtNum } = window.FMT;
   const U = window.UI;
-  const { Card, Badge, Progress, LineArea, Donut, MetronomeBadge, SectionTitle, C, cx } = U;
+  const { Card, Badge, Progress, LineArea, Donut, MetronomeBadge, SectionTitle, InfoDot, ROAI_TIP_SHORT, C, cx } = U;
 
   const PACKS = [
     { credits: 250000, price: 1500 },
@@ -86,7 +86,7 @@
         {/* value vs investment + simple explainer */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           <Card className="p-6 lg:col-span-8">
-            <SectionTitle icon="chart" title="Value vs. your AI investment" sub="Delivered value compared with what you spent on AI, month by month" />
+            <SectionTitle icon="chart" title={<span className="inline-flex items-center gap-1.5">Value vs. your AI investment <InfoDot label={ROAI_TIP_SHORT} /></span>} sub="Delivered value compared with what you spent on AI, month by month" />
             <LineArea data={c.trend} height={244} formatY={(v) => fmtUSD(v, { compact: true })} formatTip={(v) => fmtUSD(v)}
               series={[{ key: "value", label: "Value delivered", color: C.emerald, area: true }, { key: "cost", label: "Your AI investment", color: C.amber, area: false }]} />
           </Card>
@@ -232,22 +232,23 @@
   }
 
   // ------------------------------- Router -------------------------------
-  function Portal({ client, section = "roai", onPick }) {
+  function Portal({ client, section = "roai", onPick, billingTab, setBillingTab }) {
     const c = client;
     const { AlertBanner } = window.Billing;
     const { ActiveProjects, Marketplace, Insights } = window.ClientViews;
+    const { ClientBilling } = window.BillingScreens;
 
     let body;
     if (section === "projects") body = <ActiveProjects client={c} />;
     else if (section === "marketplace") body = <Marketplace client={c} />;
-    else if (section === "billing") body = <UsageBilling client={c} />;
+    else if (section === "billing") body = <ClientBilling client={c} tab={billingTab} setTab={setBillingTab} />;
     else if (section === "insights") body = <Insights client={c} />;
     else body = <ROAICenter client={c} />;
 
     return (
       <div className="mx-auto max-w-6xl space-y-6">
         <PortalHeader client={c} clients={CLIENTS} onPick={onPick} />
-        <AlertBanner client={c} model="hybrid" />
+        {section !== "billing" && <AlertBanner client={c} model="hybrid" />}
         {body}
         <p className="pb-2 text-center text-xs text-[var(--faint)]">Questions about your results? Your strategist is one message away.</p>
       </div>

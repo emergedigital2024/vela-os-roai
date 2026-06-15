@@ -362,9 +362,34 @@
     );
   }
 
+  // ---------- Modal (overlay dialog) ----------
+  function Modal({ open, onClose, children, maxWidth = 460 }) {
+    useEffect(() => {
+      if (!open) return;
+      const onKey = (e) => { if (e.key === "Escape") onClose && onClose(); };
+      document.addEventListener("keydown", onKey);
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
+    }, [open, onClose]);
+    if (!open) return null;
+    return (
+      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--panel)] shadow-2xl" style={{ maxWidth }}>
+          {children}
+        </div>
+      </div>
+    );
+  }
+
+  // ---------- ROAI explainers (shared tooltip copy) ----------
+  const ROAI_TIP = "ROAI = (Value delivered − AI cost) ÷ AI cost. A 5.0× ROAI means every $1 of AI spend returned $5 of measured value — hours saved plus revenue uplift.";
+  const ROAI_TIP_SHORT = "Return on AI Investment — the measured value (hours saved + revenue uplift) created for every $1 invested in AI.";
+
   window.UI = {
     cx, C, useMeasure, Card, Badge, TierBadge, tierTone, DeltaPill, Tooltip, InfoDot,
     HealthBar, Sparkline, LineArea, CategoryBars, Donut, Progress, Ring, Segmented,
-    SectionTitle, MetronomeBadge,
+    SectionTitle, MetronomeBadge, Modal, ROAI_TIP, ROAI_TIP_SHORT,
   };
 })();

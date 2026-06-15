@@ -340,6 +340,47 @@
       metrics: [["Site ranking", "#6 (+18)"], ["Click-through", "3.2% (+200%)"], ["Featured snippets", "30%"]] },
   };
 
+  // ---- Billing: account profiles, payment methods, terms (incl. enterprise/government) ----
+  const ACCT = {
+    northwind:  { type: "Enterprise", netTerms: "Net 30", methods: [{ kind: "card", label: "Corporate Card", detail: "Visa •••• 4421", default: true }, { kind: "ach", label: "ACH transfer", detail: "Chase •••• 8830" }] },
+    helios:     { type: "Enterprise", netTerms: "Net 30", poNumber: "VF-2026-114", methods: [{ kind: "ach", label: "ACH transfer", detail: "HSBC •••• 2261", default: true }, { kind: "po", label: "Purchase order", detail: "PO #VF-2026-114" }] },
+    cobalt:     { type: "Standard", netTerms: "Net 30", methods: [{ kind: "card", label: "Corporate Card", detail: "Amex •••• 1007", default: true }] },
+    vantage:    { type: "Government", netTerms: "Net 60", poNumber: "PIF-MD-2026-009", methods: [{ kind: "wire", label: "Bank wire", detail: "SNB •••• 4490", default: true }, { kind: "po", label: "Purchase order", detail: "PO #PIF-MD-2026-009" }, { kind: "gpc", label: "Government GPC", detail: "GPC •••• 6628" }] },
+    brightside: { type: "Standard", netTerms: "Net 30", methods: [{ kind: "card", label: "Corporate Card", detail: "Visa •••• 9912", default: true }] },
+    aurora:     { type: "Standard", netTerms: "Net 30", methods: [{ kind: "card", label: "Corporate Card", detail: "Mastercard •••• 7745", default: true }] },
+    meridian:   { type: "Enterprise", netTerms: "Net 30", methods: [{ kind: "card", label: "Corporate Card", detail: "Visa •••• 3380", default: true }, { kind: "ach", label: "ACH transfer", detail: "Barclays •••• 5501" }] },
+  };
+  const INV_BASE = { northwind: 1010, helios: 1110, cobalt: 1210, vantage: 1310, brightside: 1410, aurora: 1510, meridian: 1610 };
+  const NEXT1 = { Feb: "Mar", Mar: "Apr", Apr: "May", May: "Jun", Jun: "Jul", Jul: "Aug" };
+  const NEXT2 = { Feb: "Apr", Mar: "May", Apr: "Jun", May: "Jul", Jun: "Aug", Jul: "Sep" };
+  function dueLabel(m, days) { return (days >= 60 ? NEXT2[m] : days >= 30 ? NEXT1[m] : m) + " 1, 2026"; }
+  function buildInvoices(c) {
+    const acct = ACCT[c.id] || { netTerms: "Net 30", methods: [] };
+    const monthly = c.mrr + Math.round(c.cost / 3);
+    let rnd = c.splitsSeed * 11 + 5;
+    const rand = () => { rnd = (rnd * 9301 + 49297) % 233280; return rnd / 233280; };
+    const defMethod = (acct.methods.find((m) => m.default) || acct.methods[0] || { label: "Card" }).label;
+    const dueDays = acct.netTerms === "Net 60" ? 60 : acct.netTerms === "Net 30" ? 30 : 0;
+    const rows = [
+      { m: "Feb", issued: "Feb 1, 2026", status: "paid" },
+      { m: "Mar", issued: "Mar 1, 2026", status: "paid" },
+      { m: "Apr", issued: "Apr 1, 2026", status: "paid" },
+      { m: "May", issued: "May 1, 2026", status: "paid" },
+      { m: "Jun", issued: "Jun 1, 2026", status: "sent" },
+      { m: "Jul", issued: "Jul 1, 2026", status: "draft" },
+    ];
+    if (c.id === "meridian") { rows[3].status = "partial"; rows[4].status = "overdue"; }
+    return rows.map((r, i) => {
+      const amount = Math.round(monthly * (1 + (rand() - 0.5) * 0.12));
+      const paid = r.status === "paid" ? amount : r.status === "partial" ? Math.round(amount * 0.5) : 0;
+      return {
+        id: c.id + "-" + r.m, clientId: c.id, number: "INV-2026-" + (INV_BASE[c.id] + i),
+        period: r.m + " 2026", issued: r.issued, due: dueLabel(r.m, dueDays),
+        amount, paid, status: r.status, method: defMethod, terms: acct.netTerms,
+      };
+    });
+  }
+
   const CLIENTS = RAW.map((c) => {
     const mult = c.value / c.cost;
     const net = c.value - c.cost;
@@ -362,8 +403,25 @@
       reports: buildReports(),
       clientInsights: buildInsights(c, categories),
       caseStudy: CLIENT_CASES[c.id] || null,
+      acct: ACCT[c.id] || { type: "Standard", netTerms: "Net 30", methods: [{ kind: "card", label: "Corporate Card", detail: "Card on file", default: true }] },
+      invoices: buildInvoices(c),
     };
   });
+  const INVOICES = CLIENTS.flatMap((c) => c.invoices);
+
+  // contract summary derived from the existing hybrid/commit billing model
+  function contractOf(c) {
+    const isCommit = c.billing.model === "commit";
+    const h = c.billing.hybrid, cm = c.billing.commit;
+    return {
+      type: isCommit ? "Enterprise commit" : "Hybrid (seat-based)",
+      term: isCommit ? cm.termLabel : "Monthly rolling",
+      value: isCommit ? cm.total : c.mrr * 12,
+      seats: h.seats, credits: h.included, commit: isCommit ? cm.total : null,
+      renewal: c.renewal, netTerms: c.acct.netTerms,
+      method: c.acct.methods[0] ? c.acct.methods[0].label : "Card", plan: c.plan,
+    };
+  }
 
   // ---- portfolio rollups ----
   const totalCost = CLIENTS.reduce((s, c) => s + c.cost, 0);
@@ -439,6 +497,6 @@
     { stat: "~60%", label: "of interactions span multiple channels" },
   ];
 
-  window.AGENCY = { CLIENTS, PORTFOLIO, MONTHS, SERVICES, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, MARKET_STATS };
+  window.AGENCY = { CLIENTS, PORTFOLIO, MONTHS, SERVICES, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, MARKET_STATS, INVOICES, contractOf };
   window.FMT = { fmtUSD, fmtMult, fmtPct, fmtNum, fmtCompact };
 })();
