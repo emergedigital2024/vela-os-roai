@@ -137,6 +137,10 @@
             className="mt-2 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
             An <span className="font-medium">Emerge Digital</span> company ↗
           </a>
+          <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=tiein" target="_blank" rel="noopener"
+            className="mt-1 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
+            Part of the <span className="font-medium">Agentforce practice</span> ↗
+          </a>
         </div>
       </aside>
     );
