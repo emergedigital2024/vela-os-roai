@@ -27,5 +27,5 @@ right repo is identified.
 
 ## Provenance
 
-Every Vela figure is sourced from `public/data.jsx` / `public/guide.html`; the `future` figures
+Every Vela figure is sourced from `app/data.jsx` / `public/guide.html`; the `future` figures
 (FPT parent, Salesforce credentials, ARR) came from issue #5.

@@ -23,7 +23,7 @@ single-page prototype and deployed to Cloudflare Workers static assets.
   explaining it next to every ROAI figure.
 - **Mobile-navigable** — off-canvas drawer + hamburger below `lg`, responsive layouts and
   scrollable tables; static sidebar on desktop.
-- **Premium dark/light theme** — indigo + emerald accents, hand-built SVG charts, no build step.
+- **Premium dark/light theme** — indigo + emerald accents, hand-built SVG charts.
 
 ## What's inside
 
@@ -57,26 +57,39 @@ threshold alerts; Net 30 / Net 60, ACH, wire, corporate card, Government GPC and
 
 ## Tech
 
-Vanilla **React 18 + Babel (in-browser) + Tailwind via CDN** — no build step, no bundler.
-Hand-built SVG charts. Theme via CSS variables (dark default, light supported). Each file is
-a plain IIFE that registers a `window.*` global, loaded in order from `public/index.html`.
+Vanilla **React 18 + Tailwind (via CDN)**, bundled by **esbuild**. Each component file is a
+plain IIFE that registers a `window.*` global and reads the globals registered before it, so
+**load order matters** (the canonical order lives in `app/entry.js`). The build concatenates
+React + the 11 modules in that order, transpiles JSX (classic runtime → `React.createElement`),
+and minifies everything into one content-hashed asset — there is no in-browser Babel anymore.
+Hand-built SVG charts. Theme via CSS variables (dark default, light supported).
 
 ```
-public/
-  index.html        # shell: fonts, Tailwind config, theme tokens, script load order
-  data.jsx          # window.AGENCY/FMT — clients, 6 CX pillars, services catalog,
-                    #   proof datasets, billing mock data (acct, INVOICES, contractOf)
-  icons.jsx         # window.Icon — inline stroke icon set
-  ui.jsx            # window.UI — primitives + SVG charts (Card, Badge, LineArea, Donut,
-                    #   Progress, Modal, Tooltip/InfoDot, ROAI tip constants, …)
-  billing.jsx       # window.Billing — hybrid / enterprise-commit panels + Metronome alerts
-  billingscreens.jsx# window.BillingScreens — AgencyBilling + ClientBilling (tabbed screens)
-  clientviews.jsx   # window.ClientViews — Active Projects, Marketplace (Launch flow), Insights
-  overview.jsx      # window.Overview — agency overview + proof / partners
-  deepdive.jsx      # window.DeepDive — client deep dive + Proven results
-  portal.jsx        # window.Portal — client portal shell / section router
-  app.jsx           # window.App — shell, sidebar (morphing + mobile drawer), topbar,
-                    #   query-param routing
+app/                  # source (not served)
+  index.html          # template — the build injects the hashed <script> at the <!-- build:js --> marker
+  entry.js            # import order: _globals → data → icons → … → app → _bootstrap
+  _globals.js         # puts React / ReactDOM on window (the IIFEs reference a global `React`)
+  _bootstrap.js       # ReactDOM.createRoot(#root).render(<App/>)  — runs last
+  data.jsx            # window.AGENCY/FMT — clients, 6 CX pillars, services catalog, billing data
+  icons.jsx           # window.Icon — inline stroke icon set
+  ui.jsx              # window.UI — primitives + SVG charts (Card, Badge, LineArea, Donut, …)
+  store.jsx           # window.Store — shared billing state (React Context)
+  billing.jsx         # window.Billing — hybrid / enterprise-commit panels + Metronome alerts
+  billingscreens.jsx  # window.BillingScreens — AgencyBilling + ClientBilling (lazy-loads jsPDF)
+  clientviews.jsx     # window.ClientViews — Active Projects, Marketplace (Launch flow), Insights
+  overview.jsx        # window.Overview — agency overview + proof / partners
+  deepdive.jsx        # window.DeepDive — client deep dive + Proven results
+  portal.jsx          # window.Portal — client portal shell / section router
+  app.jsx             # window.App — shell, sidebar (morphing + mobile drawer), topbar, routing
+
+public/               # served by Cloudflare — static assets + build output
+  assets/vela-*.js    # generated: the hashed, minified bundle           (git-ignored)
+  index.html          # generated from app/index.html with the hash injected (git-ignored)
+  _headers            # immutable 1-year cache on /assets/*; HTML revalidated
+  og.png, guide.html, robots.txt, sitemap.xml, canonical-facts.json, downloads/
+
+scripts/build.mjs     # the esbuild build (bundle + minify + hash, then render index.html)
+src/index.js          # the Worker: serves public/ + the read-only Metronome /api proxy
 ```
 
 Routing is a lightweight `URLSearchParams` + `history` sync in `app.jsx` (no router library).
@@ -84,16 +97,18 @@ Routing is a lightweight `URLSearchParams` + `history` sync in `app.jsx` (no rou
 ## Develop & deploy
 
 ```bash
-# local preview (serves public/ via Wrangler dev)
-npx wrangler dev --port 8788
-
-# deploy to Cloudflare (Emerge Digital account)
-CLOUDFLARE_ACCOUNT_ID=4a75e91d6fca8bc58467fb80ce1b9c2e npx wrangler deploy
+npm install          # one-time
+npm run build        # bundle app/ → public/assets/vela-<hash>.js + public/index.html
+npm run dev          # build, then `wrangler dev` (serves public/ + the /api proxy locally)
+npm run deploy       # build, then `wrangler deploy`
 ```
 
-Config: `wrangler.toml` serves `public/` as static assets with SPA fallback
-(`not_found_handling = "single-page-application"`), which is what makes the query-param
-deep links resolve on direct load.
+`public/assets/` and `public/index.html` are **build output** — run `npm run build` before
+serving or deploying. CI does this automatically: pushing to `main` triggers
+`.github/workflows/deploy.yml` (`npm ci && npm run build`, then `wrangler deploy`), and every
+PR gets an isolated preview version via `preview.yml`.
 
-Repo: `emergedigital2024/vela-os-roai` (deploys are run manually via `wrangler deploy`;
-pushing to GitHub does not auto-deploy).
+Config: `wrangler.toml` serves `public/` as static assets with SPA fallback
+(`not_found_handling = "single-page-application"`) and routes `/api/*` to the Worker first
+(`run_worker_first`), which is what makes the query-param deep links resolve on direct load.
+The Metronome key lives only in the `METRONOME_API_KEY` secret.

@@ -1,11 +1,11 @@
-# Short cache on the in-browser-compiled .jsx assets so repeat views within a
-# session avoid full re-downloads (interim until a build step emits content-hashed,
-# immutable bundles). HTML stays revalidated so deploys are picked up immediately.
-/*.jsx
-  Cache-Control: public, max-age=300
+# Content-hashed app bundles emitted by the build (public/assets/vela-<hash>.js).
+# The filename changes whenever the contents change, so caching it forever is safe.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
 /og.png
   Cache-Control: public, max-age=86400
 
+# HTML stays revalidated so each deploy's new hashed bundle is picked up immediately.
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
