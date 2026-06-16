@@ -47,8 +47,23 @@
     const lines = rows.map((i) => [i.number, nameOf(i.clientId), i.period, i.issued, i.due, i.amount, i.paid, eff(i), i.terms].map(esc).join(","));
     downloadBlob("vela-invoices.csv", [head.join(","), ...lines].join("\n"), "text/csv");
   }
-  function downloadInvoicePDF(inv, client, eff) {
-    const J = window.jspdf && window.jspdf.jsPDF;
+  // jsPDF is loaded on demand (only when a user exports a PDF) to keep it off the critical path.
+  let _jspdfPromise = null;
+  function loadJsPDF() {
+    if (window.jspdf && window.jspdf.jsPDF) return Promise.resolve(window.jspdf.jsPDF);
+    if (_jspdfPromise) return _jspdfPromise;
+    _jspdfPromise = new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js";
+      s.onload = () => resolve(window.jspdf && window.jspdf.jsPDF);
+      s.onerror = () => { _jspdfPromise = null; reject(new Error("jsPDF failed to load")); };
+      document.head.appendChild(s);
+    });
+    return _jspdfPromise;
+  }
+  async function downloadInvoicePDF(inv, client, eff) {
+    let J;
+    try { J = await loadJsPDF(); } catch (e) { J = null; }
     if (!J) { window.print(); return; }
     const doc = new J({ unit: "pt", format: "a4" });
     let y = 56;
@@ -93,7 +108,7 @@
       <div>
         <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
           <div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="receipt" size={16} className="text-[var(--muted)]" /> {inv.number}</div>
-          <button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button>
+          <button type="button" aria-label="Close" onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button>
         </div>
         <div className="px-6 py-5">
           <div className="flex items-start justify-between">
@@ -183,7 +198,7 @@
     const amount = events.reduce((s, e) => s + e.amount, 0);
     return (
       <div>
-        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="zap" size={16} className="text-[var(--accent-fg)]" /> Generate invoice from usage</div><button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="zap" size={16} className="text-[var(--accent-fg)]" /> Generate invoice from usage</div><button type="button" aria-label="Close" onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
         <div className="px-5 py-5">
           <label className="block text-sm"><span className="text-xs text-[var(--muted)]">Client</span>
             <select value={cid} onChange={(e) => setCid(e.target.value)} className="mt-1 w-full cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 font-medium text-[var(--text)] outline-none">{CLIENTS.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>
@@ -261,8 +276,8 @@
             </tbody>
           </table>
         </div>
-        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460}>{preview && <InvoicePreview inv={preview} client={clientOf(preview.clientId)} eff={eff} onClose={() => setPreview(null)} />}</Modal>
-        <Modal open={gen} onClose={() => setGen(false)} maxWidth={460}>{gen && <GenerateInvoiceModal onClose={() => setGen(false)} onCreate={B.addGenInvoice} />}</Modal>
+        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460} label="Invoice preview">{preview && <InvoicePreview inv={preview} client={clientOf(preview.clientId)} eff={eff} onClose={() => setPreview(null)} />}</Modal>
+        <Modal open={gen} onClose={() => setGen(false)} maxWidth={460} label="Generate invoice from usage">{gen && <GenerateInvoiceModal onClose={() => setGen(false)} onCreate={B.addGenInvoice} />}</Modal>
       </Card>
     );
   }
@@ -377,7 +392,7 @@
             <tbody>{invoices.map((i) => <tr key={i.id} className="border-b border-[var(--border)] last:border-0"><td className="px-5 py-3 font-mono text-xs text-[var(--text)]">{i.number}</td><td className="px-4 py-3 text-[var(--muted)]">{i.period}</td><td className="px-4 py-3 text-right font-semibold tabular-nums text-[var(--text)]">{fmtUSD(i.amount)}</td><td className="px-4 py-3"><StatusBadge s={B.effStatus(i)} /></td><td className="px-4 py-3 text-right"><button onClick={() => setPreview(i)} className="rounded-md border border-[var(--border)] bg-[var(--chip)] px-2 py-1 text-xs font-medium text-[var(--text)] hover:bg-[var(--panel-hi)]">View</button></td></tr>)}</tbody>
           </table></div>
         </Card>
-        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460}>{preview && <InvoicePreview inv={preview} client={c} eff={B.effStatus} onClose={() => setPreview(null)} />}</Modal>
+        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460} label="Invoice preview">{preview && <InvoicePreview inv={preview} client={c} eff={B.effStatus} onClose={() => setPreview(null)} />}</Modal>
       </div>
     );
   }
@@ -538,7 +553,7 @@
     const Field = ({ label, ph }) => (<label className="block"><span className="text-xs text-[var(--muted)]">{label}</span><input placeholder={ph} className="mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm text-[var(--text)] outline-none placeholder:text-[var(--faint)]" /></label>);
     return (
       <div>
-        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="font-semibold text-[var(--text)]">Add payment method</div><button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="font-semibold text-[var(--text)]">Add payment method</div><button type="button" aria-label="Close" onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
         <div className="space-y-4 px-5 py-5">
           <div className="flex flex-wrap gap-1.5">{KINDS.map(([k, l]) => <button key={k} onClick={() => setKind(k)} className={cx("rounded-lg border px-3 py-1.5 text-sm font-medium", kind === k ? "border-[var(--accent-line)] bg-[var(--accent-soft)] text-[var(--accent-fg)]" : "border-[var(--border)] bg-[var(--chip)] text-[var(--muted)]")}>{l}</button>)}</div>
           {kind === "card" && <><Field label="Card number" ph="4242 4242 4242 4242" /><div className="grid grid-cols-2 gap-3"><Field label="Expiry" ph="12 / 28" /><Field label="CVC" ph="123" /></div></>}
@@ -616,7 +631,7 @@
             );
           })}
         </div>
-        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460}>{preview && <InvoicePreview inv={preview} client={c} eff={B.effStatus} onClose={() => setPreview(null)} />}</Modal>
+        <Modal open={!!preview} onClose={() => setPreview(null)} maxWidth={460} label="Invoice preview">{preview && <InvoicePreview inv={preview} client={c} eff={B.effStatus} onClose={() => setPreview(null)} />}</Modal>
       </Card>
     );
   }
@@ -641,7 +656,7 @@
           </div>
           <div className="flex items-start gap-2 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="mt-0.5 flex-none text-[var(--faint)]" /> Billed on <span className="inline-flex items-center gap-1">{client.acct.netTerms} <InfoDot label={NET_TIP} /></span>{client.acct.poNumber ? ` against PO ${client.acct.poNumber}` : ""}. {client.acct.type === "Government" ? "Government orders support GPC and PO with compliance documentation." : "Usage is metered by Metronome and invoiced monthly."}</div>
         </Card>
-        <Modal open={adding} onClose={() => setAdding(false)} maxWidth={420}>
+        <Modal open={adding} onClose={() => setAdding(false)} maxWidth={420} label="Add payment method">
           {adding && <AddMethodModal client={client} onClose={() => setAdding(false)} onAdd={(m) => B.addMethod(client.id, m)} />}
         </Modal>
       </div>
@@ -658,7 +673,7 @@
     const pct = Math.round((Math.min(i, phases.length) / phases.length) * 100);
     return (
       <div>
-        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="coins" size={16} className="text-[var(--accent-fg)]" /> Top up {(pack.credits / 1000).toFixed(0)}k credits</div><button onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
+        <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4"><div className="flex items-center gap-2 font-semibold text-[var(--text)]"><Icon name="coins" size={16} className="text-[var(--accent-fg)]" /> Top up {(pack.credits / 1000).toFixed(0)}k credits</div><button type="button" aria-label="Close" onClick={onClose} className="text-[var(--faint)] hover:text-[var(--text)]"><Icon name="x" size={18} /></button></div>
         <div className="px-5 py-5">
           {!done ? (
             <>
@@ -721,7 +736,7 @@
             <Icon name="plus" size={15} /> Buy {(CREDIT_PACKS[pack].credits / 1000).toFixed(0)}k credits · {fmtUSD(CREDIT_PACKS[pack].price)}
           </button>
         </Card>
-        <Modal open={buying} onClose={() => setBuying(false)} maxWidth={420}>{buying && <TopUpModal client={client} pack={CREDIT_PACKS[pack]} onClose={() => setBuying(false)} onDone={(credits) => B.addTopup(client.id, credits)} />}</Modal>
+        <Modal open={buying} onClose={() => setBuying(false)} maxWidth={420} label="Top up credits">{buying && <TopUpModal client={client} pack={CREDIT_PACKS[pack]} onClose={() => setBuying(false)} onDone={(credits) => B.addTopup(client.id, credits)} />}</Modal>
       </div>
     );
   }

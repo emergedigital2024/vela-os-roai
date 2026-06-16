@@ -137,7 +137,7 @@
             className="mt-2 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
             An <span className="font-medium">Emerge Digital</span> company ↗
           </a>
-          <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=tiein" target="_blank" rel="noopener"
+          <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=footer" target="_blank" rel="noopener"
             className="mt-1 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
             Part of the <span className="font-medium">Agentforce practice</span> ↗
           </a>
@@ -157,7 +157,7 @@
     );
     return (
       <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-[var(--border)] bg-[var(--bg-blur)] px-4 backdrop-blur-xl sm:px-6">
-        <button onClick={() => setNavOpen(true)} className="flex h-9 w-9 flex-none items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)] lg:hidden"><Icon name="menu" size={18} /></button>
+        <button type="button" aria-label="Open menu" onClick={() => setNavOpen(true)} className="flex h-9 w-9 flex-none items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)] lg:hidden"><Icon name="menu" size={18} /></button>
         <div className="min-w-0">
           {mode === "client"
             ? <div className="flex items-center gap-2 text-base"><span className="font-semibold text-[var(--text)]">{CLIENT_TITLES[clientSection] || "Customer portal"}</span><span className="rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-medium text-emerald-400">Client view</span></div>
@@ -180,10 +180,10 @@
           <a href={CAL_URL} target="_blank" rel="noopener" className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--accent-hover)]">
             <Icon name="calendar" size={15} /><span className="hidden sm:inline">Book a discovery call</span>
           </a>
-          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)]">
+          <button type="button" aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"} onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)]">
             <Icon name={theme === "dark" ? "sun" : "moon"} size={16} />
           </button>
-          <button className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)]">
+          <button type="button" aria-label="Notifications" className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)]">
             <Icon name="bell" size={16} /><span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-rose-400" />
           </button>
         </div>
@@ -344,7 +344,7 @@
         <Sidebar section={section} setSection={(s) => { setSection(s); setSelected(null); }} mode={mode} setMode={setMode} clientSection={clientSection} setClientSection={setClientSection} portalClient={portalClient} setTab={setTab} navOpen={navOpen} setNavOpen={setNavOpen} />
         <div className="lg:pl-[244px]">
           <Topbar mode={mode} setMode={setMode} theme={theme} setTheme={setTheme} filters={filters} setFilters={setFilters} section={section} selected={selected} onBack={() => setSelected(null)} clientSection={clientSection} setNavOpen={setNavOpen} />
-          <main className="mx-auto max-w-[1320px] px-4 py-7 sm:px-6">{main}</main>
+          <main id="main" tabIndex={-1} className="mx-auto max-w-[1320px] px-4 py-7 outline-none sm:px-6">{main}</main>
         </div>
       </div>
       </window.Store.BillingProvider>

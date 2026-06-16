@@ -8,11 +8,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vela OS · FPT CX Services — Demo Guide</title>
 <meta name="description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first customer experience offering. Dual-mode agency + client portal with live usage-based billing." />
+<link rel="canonical" href="https://roai.emergedigital.ae/guide" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Vela OS · FPT CX Services" />
+<meta property="og:title" content="Vela OS · FPT CX Services — Demo Guide" />
+<meta property="og:description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first CX offering. Dual-mode agency + client portal with live usage-based billing." />
+<meta property="og:url" content="https://roai.emergedigital.ae/guide" />
+<meta property="og:image" content="https://roai.emergedigital.ae/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Vela OS · FPT CX Services — Demo Guide" />
+<meta name="twitter:description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first CX offering. Dual-mode agency + client portal with live usage-based billing." />
+<meta name="twitter:image" content="https://roai.emergedigital.ae/og.png" />
 <style>
   :root{
     --bg:#08080b; --panel:#111118; --panel2:#0c0c12; --panel-hi:#17171f;
     --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
-    --text:#f3f3f6; --muted:#9c9caa; --faint:#6b6b77;
+    --text:#f3f3f6; --muted:#9c9caa; --faint:#8a8a96;
     --accent:#4f46e5; --accent2:#6366f1; --accent-fg:#a5b4fc;
     --accent-soft:rgba(99,102,241,.13); --accent-line:rgba(99,102,241,.28);
     --emerald:#34d399; --emerald-soft:rgba(52,211,153,.12);
@@ -132,9 +143,13 @@
   footer{padding:48px 0 70px}
   .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
   .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
+  .skip-link{position:absolute;left:12px;top:-48px;z-index:100;padding:9px 14px;border-radius:10px;background:var(--accent);color:#fff;font-weight:600;font-size:14px;transition:top .15s ease}
+  .skip-link:focus{top:12px;outline:2px solid #fff;outline-offset:2px}
+  main:focus{outline:none}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header>
   <div class="wrap bar">
     <a class="brand" href="#top">
@@ -153,6 +168,7 @@
   </div>
 </header>
 
+<main id="main" tabindex="-1">
 <a id="top"></a>
 <div class="hero">
   <div class="wrap">
@@ -401,13 +417,14 @@
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap foot">
     <div>
       <div class="brand" style="font-size:15px"><span class="logo" style="width:30px;height:30px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 19 M12 3 L4 19 M7.5 13 H16.5"/></svg></span>Vela <span class="accent">OS</span></div>
       <div class="note">Interactive demo built by <a href="https://vision.emergedigital.ae?utm_source=vela&utm_medium=corp" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Emerge Digital</a> for FPT CX Services. ROAI = Return on AI Investment. Live billing data is a Metronome sandbox; client names and portfolio figures are illustrative.</div>
-      <div class="note" style="margin-top:8px">Part of the Emerge Digital <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=tiein" target="_blank" rel="noopener" style="color:var(--accent-fg);text-decoration:none;border-bottom:1px solid var(--accent-line)">Agentforce practice →</a></div>
+      <div class="note" style="margin-top:8px">Part of the Emerge Digital <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent-fg);text-decoration:none;border-bottom:1px solid var(--accent-line)">Agentforce practice →</a></div>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <a class="btn btn-primary" href="https://cal.com/rami-alcheikh/strategy-call?utm_source=vela&utm_medium=cta" target="_blank" rel="noopener">Book a discovery call →</a>
