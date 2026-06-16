@@ -49,6 +49,38 @@
 <body>
   <div id="root"></div>
 
+  <!-- ── Funnel attribution: capture incoming utm_* (and click IDs) BEFORE the SPA
+       rewrites window.location.search, so they survive the cleaned deep-link URL and
+       can be forwarded onto the "Book a call" outbound CTA. Exposes window.VelaUTM. ── -->
+  <script>
+    (function () {
+      var KEY = "velaos-utm";
+      // utm_* are the funnel params; click IDs + ref are kept for completeness.
+      var TRACKED = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "gclid", "fbclid", "ref"];
+      var stored = {};
+      try { stored = JSON.parse(sessionStorage.getItem(KEY) || "{}"); } catch (e) {}
+      var incoming = new URLSearchParams(window.location.search);
+      var captured = false;
+      TRACKED.forEach(function (k) {
+        var v = incoming.get(k);
+        if (v) { stored[k] = v; captured = true; }
+      });
+      if (captured) { try { sessionStorage.setItem(KEY, JSON.stringify(stored)); } catch (e) {} }
+      window.VelaUTM = {
+        params: stored,
+        // Forward captured attribution onto an outbound URL. Incoming utm_* take
+        // precedence over the link's own defaults so the originating campaign is kept.
+        decorate: function (url) {
+          try {
+            var u = new URL(url, window.location.href);
+            Object.keys(stored).forEach(function (k) { u.searchParams.set(k, stored[k]); });
+            return u.toString();
+          } catch (e) { return url; }
+        }
+      };
+    })();
+  </script>
+
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
@@ -70,5 +102,12 @@
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(<App />);
   </script>
+
+  <!-- ── Cloudflare Web Analytics beacon — measures the future → Vela → book funnel.
+       PLACEHOLDER: replace the token below with the beacon token Rami provides from the
+       Cloudflare dashboard (Analytics & Logs → Web Analytics → your site → Manage site).
+       Privacy-friendly, cookieless; no GA4/consent banner required. ── -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon='{"token": "REPLACE_WITH_CLOUDFLARE_BEACON_TOKEN"}'></script>
 </body>
 </html>

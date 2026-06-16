@@ -39,7 +39,12 @@
   }
   const Overview = window.Overview, DeepDive = window.DeepDive, Portal = window.Portal;
 
+  // Outbound booking CTA — the end of the future → Vela → book funnel.
+  // The base link carries Vela's own default attribution (utm_source=vela); any
+  // incoming utm_* from the visit are forwarded via window.VelaUTM and take precedence,
+  // so the originating campaign (e.g. the "future" site) is preserved through to booking.
   const CAL_URL = "https://cal.com/rami-alcheikh/strategy-call?utm_source=vela&utm_medium=cta";
+  const bookACallHref = () => (window.VelaUTM ? window.VelaUTM.decorate(CAL_URL) : CAL_URL);
 
   const INDUSTRIES = ["All", ...Array.from(new Set(CLIENTS.map((c) => c.industry)))];
   const TIERS = ["All", "Elite", "Strong", "Stable", "At risk"];
@@ -173,7 +178,7 @@
             <button onClick={() => setMode("internal")} className={cx("flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors", mode === "internal" ? "bg-[var(--accent)] text-white shadow-sm" : "text-[var(--muted)] hover:text-[var(--text)]")}><Icon name="briefcase" size={15} />Agency view</button>
             <button onClick={() => setMode("client")} className={cx("flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors", mode === "client" ? "bg-[var(--accent)] text-white shadow-sm" : "text-[var(--muted)] hover:text-[var(--text)]")}><Icon name="user" size={15} />Client view</button>
           </div>
-          <a href={CAL_URL} target="_blank" rel="noopener" className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--accent-hover)]">
+          <a href={bookACallHref()} target="_blank" rel="noopener" data-cta="book-a-call" className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--accent-hover)]">
             <Icon name="calendar" size={15} /><span className="hidden sm:inline">Book a discovery call</span>
           </a>
           <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--chip)] text-[var(--muted)] transition-colors hover:text-[var(--text)]">

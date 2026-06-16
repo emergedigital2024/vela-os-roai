@@ -81,6 +81,43 @@ public/
 
 Routing is a lightweight `URLSearchParams` + `history` sync in `app.jsx` (no router library).
 
+## Funnel measurement (analytics + UTM)
+
+The `future → Vela → book` funnel is instrumented so we can measure how many
+visitors land on Vela and click through to book a call.
+
+- **Analytics beacon — Cloudflare Web Analytics.** A cookieless, privacy-friendly
+  beacon is scaffolded at the end of `public/index.html`. It ships with a clearly
+  marked placeholder token:
+
+  ```html
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon='{"token": "REPLACE_WITH_CLOUDFLARE_BEACON_TOKEN"}'></script>
+  ```
+
+  Replace `REPLACE_WITH_CLOUDFLARE_BEACON_TOKEN` with the beacon token from the
+  Cloudflare dashboard (**Analytics & Logs → Web Analytics → Manage site**). No
+  consent banner is required. (If GA4 is preferred instead, drop the GA4 gtag.js
+  snippet in the same spot and use the measurement ID Rami provides.)
+
+- **UTM capture & forwarding.** An inline script near the top of `<body>` in
+  `public/index.html` reads incoming `utm_*` params (plus `gclid`/`fbclid`/`ref`)
+  **before** the SPA rewrites the URL, persists them to `sessionStorage`, and
+  exposes `window.VelaUTM`. The **Book a discovery call** CTA in the top bar
+  (`public/app.jsx`) forwards those params onto its outbound link via
+  `window.VelaUTM.decorate(...)`, so attribution survives the whole funnel.
+  Incoming `utm_*` take precedence over the link's own defaults
+  (`utm_source=vela&utm_medium=cta`), which act as the fallback for direct visits.
+
+  Test locally, e.g.:
+
+  ```
+  http://localhost:8788/?utm_source=future&utm_medium=site&utm_campaign=launch
+  ```
+
+  The captured params are appended to the outbound booking URL
+  (`CAL_URL` in `public/app.jsx`).
+
 ## Develop & deploy
 
 ```bash
