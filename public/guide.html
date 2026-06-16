@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vela OS · FPT CX Services — Demo Guide</title>
+<meta name="description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first customer experience offering. Dual-mode agency + client portal with live usage-based billing." />
+<style>
+  :root{
+    --bg:#08080b; --panel:#111118; --panel2:#0c0c12; --panel-hi:#17171f;
+    --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
+    --text:#f3f3f6; --muted:#9c9caa; --faint:#6b6b77;
+    --accent:#4f46e5; --accent2:#6366f1; --accent-fg:#a5b4fc;
+    --accent-soft:rgba(99,102,241,.13); --accent-line:rgba(99,102,241,.28);
+    --emerald:#34d399; --emerald-soft:rgba(52,211,153,.12);
+    --amber:#fbbf24;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.55;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-fg)}
+  h1,h2,h3{letter-spacing:-.02em;line-height:1.12;margin:0}
+  h1{font-size:clamp(34px,5vw,56px);font-weight:800}
+  h2{font-size:clamp(24px,3.2vw,34px);font-weight:800}
+  h3{font-size:18px;font-weight:700}
+  p{color:var(--muted);margin:.5em 0}
+  .muted{color:var(--muted)} .faint{color:var(--faint)}
+  .accent{color:var(--accent-fg)} .em{color:var(--emerald)}
+
+  /* top bar */
+  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(9,9,13,.72);border-bottom:1px solid var(--border)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .logo{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#6366f1,#4f46e5);box-shadow:0 4px 14px rgba(79,70,229,.4)}
+  .brand small{display:block;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.02em}
+  .navlinks{display:flex;gap:22px;align-items:center}
+  .navlinks a{font-size:14px;color:var(--muted);font-weight:500}
+  .navlinks a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;border-radius:10px;padding:10px 16px;border:1px solid var(--border2);background:var(--panel-hi);color:var(--text);cursor:pointer;transition:.15s}
+  .btn:hover{background:#1e1e28;border-color:var(--border2)}
+  .btn-primary{background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;box-shadow:0 6px 20px rgba(79,70,229,.35)}
+  .btn-primary:hover{filter:brightness(1.08)}
+  @media(max-width:760px){.navlinks{display:none}}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:88px 0 64px;border-bottom:1px solid var(--border);
+    background:radial-gradient(900px 420px at 75% -10%,rgba(99,102,241,.22),transparent 60%),linear-gradient(160deg,#101019,#08080b 70%)}
+  .hero .chip{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--accent-fg);background:var(--accent-soft);border:1px solid var(--accent-line);padding:6px 12px;border-radius:999px}
+  .hero h1{margin-top:18px;max-width:18ch}
+  .hero .sub{font-size:clamp(16px,2vw,20px);max-width:60ch;margin-top:18px}
+  .cta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+  .formula{margin-top:30px;display:inline-flex;flex-direction:column;gap:4px;padding:16px 20px;border:1px solid var(--border);border-radius:14px;background:var(--panel2)}
+  .formula code{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:14px;color:var(--text)}
+  .formula span{font-size:12.5px;color:var(--faint)}
+
+  section{padding:64px 0;border-bottom:1px solid var(--border)}
+  .sec-head{max-width:62ch}
+  .sec-head h2{margin-bottom:8px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+  .stat{padding:22px;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
+  .stat .n{font-size:34px;font-weight:800;letter-spacing:-.02em;background:linear-gradient(120deg,#a5b4fc,#6366f1);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:13.5px;color:var(--muted);margin-top:4px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px}
+  .card{padding:22px;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
+  .card.mode{background:linear-gradient(165deg,#14141d,#0d0d13)}
+  .card .tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .card h3{margin:8px 0 6px}
+  .card ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+  .card ul li{margin:4px 0}
+
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+  .pillar{padding:18px;border:1px solid var(--border);border-radius:14px;background:var(--panel)}
+  .pillar .k{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px}
+  .dot{width:9px;height:9px;border-radius:3px;flex:none}
+  .pillar p{font-size:13px;margin:8px 0 0}
+  .agents{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .agent{font-size:12.5px;font-weight:600;color:var(--accent-fg);background:var(--accent-soft);border:1px solid var(--accent-line);padding:6px 11px;border-radius:999px}
+
+  .roai-box{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:center;margin-top:24px}
+  .roai-vis{padding:26px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(165deg,#14141d,#0c0c13)}
+  .roai-vis .big{font-size:52px;font-weight:800;color:var(--emerald);letter-spacing:-.03em}
+  .track{height:10px;border-radius:999px;background:#1c1c26;overflow:hidden;margin:14px 0 6px}
+  .track>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#6366f1,#34d399)}
+
+  .cases{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:28px}
+  .case{padding:22px;border:1px solid var(--border);border-radius:16px;background:var(--panel);position:relative}
+  .case .solution{font-size:12px;font-weight:700;color:var(--accent-fg);letter-spacing:.04em}
+  .case .head{font-size:20px;font-weight:800;margin:6px 0 6px;letter-spacing:-.01em}
+  .case .who{font-size:12.5px;color:var(--faint)}
+  .case .metrics{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .case .metrics span{font-size:12px;color:var(--muted);background:var(--panel-hi);border:1px solid var(--border);padding:4px 9px;border-radius:8px}
+
+  .partners{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:24px}
+  .partners .p{font-size:13px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--border);padding:8px 13px;border-radius:10px}
+  .partners .p small{color:var(--faint);font-weight:500}
+  .totals{display:flex;gap:26px;margin-top:18px}
+  .totals .t b{font-size:24px;font-weight:800;color:var(--text)} .totals .t span{display:block;font-size:12.5px;color:var(--muted)}
+
+  /* demo script */
+  .steps{counter-reset:step;margin-top:28px;display:flex;flex-direction:column;gap:14px}
+  .step{display:grid;grid-template-columns:46px 1fr auto;gap:16px;align-items:center;padding:18px 20px;border:1px solid var(--border);border-radius:16px;background:var(--panel);transition:.15s}
+  .step:hover{border-color:var(--accent-line);background:var(--panel-hi)}
+  .step .num{counter-increment:step;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(140deg,#6366f1,#4f46e5)}
+  .step .num::before{content:counter(step)}
+  .step h3{font-size:16px}
+  .step p{margin:3px 0 0;font-size:13.5px}
+  .step .say{color:var(--faint);font-style:italic}
+  .step .go{white-space:nowrap}
+  @media(max-width:760px){
+    .stats,.grid2,.pillars,.cases,.roai-box{grid-template-columns:1fr}
+    .step{grid-template-columns:38px 1fr;}
+    .step .go{grid-column:1/-1}
+  }
+  footer{padding:48px 0 70px}
+  .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
+  .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top">
+      <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 19 M12 3 L4 19 M7.5 13 H16.5"/></svg></span>
+      <span>Vela <span class="accent">OS</span><small>FPT CX Services · ROAI Analytics</small></span>
+    </a>
+    <nav class="navlinks">
+      <a href="#what">Platform</a>
+      <a href="#roai">ROAI</a>
+      <a href="#billing">Live billing</a>
+      <a href="#proof">Proof</a>
+      <a href="#demo">Demo script</a>
+    </nav>
+    <a class="btn btn-primary" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=home" target="_blank" rel="noopener">Open live demo →</a>
+  </div>
+</header>
+
+<a id="top"></a>
+<div class="hero">
+  <div class="wrap">
+    <span class="chip">● &nbsp;Live, interactive demo — agency + client portal</span>
+    <h1>The operating system for AI-first customer experience.</h1>
+    <p class="sub">Vela OS turns FPT's full CX offering into one measurable surface — a dual-mode agency command center and customer portal, where every AI engagement is priced, delivered, and proven in <span class="accent">ROAI</span> (Return on AI Investment).</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=home" target="_blank" rel="noopener">Open the live demo →</a>
+      <a class="btn" href="#demo">Follow the 7-step demo script</a>
+    </div>
+    <div class="formula">
+      <code>ROAI = (Value delivered − AI cost) ÷ AI cost</code>
+      <span>A 5.0× ROAI means every $1 of AI spend returned $5 of measured value — hours saved + revenue uplift.</span>
+    </div>
+  </div>
+</div>
+
+<!-- OPPORTUNITY -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">The opportunity</span><h2>CX leaders don't just win on experience — they win on growth.</h2>
+    <p>Buyers expect AI-grade, cross-channel experiences. The gap is proof: most AI spend can't show what it returned. Vela OS closes that gap.</p></div>
+    <div class="stats">
+      <div class="stat"><div class="n">2–3×</div><div class="l">higher revenue growth for CX leaders</div></div>
+      <div class="stat"><div class="n">~70%</div><div class="l">rate experience as important as product or price</div></div>
+      <div class="stat"><div class="n">~60%</div><div class="l">of customer interactions span multiple channels</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT IS -->
+<section id="what">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">What it is</span><h2>One platform, two modes.</h2>
+    <p>The same engagement, seen from both sides of the table — so FPT runs the portfolio and the customer sees their own outcomes, in real time.</p></div>
+    <div class="grid2">
+      <div class="card mode">
+        <div class="tag accent">Agency command center</div>
+        <h3>Run the whole portfolio</h3>
+        <ul>
+          <li>Portfolio ROAI, revenue and margin across every client</li>
+          <li>Client directory with health tiers and per-account deep dives</li>
+          <li>ROAI analytics — value created per $ of AI invested</li>
+          <li>Billing: invoices, contracts, and <b>live usage data from Metronome</b></li>
+        </ul>
+      </div>
+      <div class="card mode">
+        <div class="tag em" style="color:var(--emerald)">Customer portal</div>
+        <h3>Show the customer their outcomes</h3>
+        <ul>
+          <li>A personal ROAI Center — "your AI is paying for itself"</li>
+          <li>Active projects across the six CX pillars</li>
+          <li>An AI marketplace to launch new agents in a click</li>
+          <li>Self-serve billing, usage, credits and top-ups</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="pillars">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">The offering</span><h2>Six CX pillars, powered by the ON.Ecosystem.</h2>
+    <p>FPT's end-to-end customer-experience capability — from strategy to run — with agentic AI products layered across the funnel.</p></div>
+    <div class="pillars">
+      <div class="pillar"><div class="k"><span class="dot" style="background:#6366f1"></span>Experience Strategy</div><p>Maturity assessment, marketecture and journey analysis.</p></div>
+      <div class="pillar"><div class="k"><span class="dot" style="background:#8b5cf6"></span>Experience Design</div><p>Research, adaptive UI, design systems and usability testing.</p></div>
+      <div class="pillar"><div class="k"><span class="dot" style="background:#06b6d4"></span>Experience Platform</div><p>DXP build/re-platform, MarTech and DX engineering.</p></div>
+      <div class="pillar"><div class="k"><span class="dot" style="background:#10b981"></span>Commerce Platform</div><p>Composable commerce build, B2B/B2C, accelerators.</p></div>
+      <div class="pillar"><div class="k"><span class="dot" style="background:#f59e0b"></span>Experience Insights</div><p>CDP &amp; Customer 360, analytics portals, AI agents.</p></div>
+      <div class="pillar"><div class="k"><span class="dot" style="background:#ef4444"></span>Run &amp; Optimize</div><p>L1–L3 maintenance, 24×7 monitoring and ops support.</p></div>
+    </div>
+    <div class="agents">
+      <span class="agent">ON.Optima — Answer Engine Optimization</span>
+      <span class="agent">ON.X — Agentic Assistant</span>
+      <span class="agent">ON.E — Commerce Accelerator</span>
+      <span class="agent">ON.Match — AI Recommendations</span>
+      <span class="agent">ON.Browser — Agentic Browser</span>
+    </div>
+  </div>
+</section>
+
+<!-- ROAI -->
+<section id="roai">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">The differentiator</span><h2>Every engagement, measured in ROAI.</h2>
+    <p>Return on AI Investment is the metric that runs through the whole platform — hours saved plus revenue uplift, divided by what the AI cost. It's on every client card, every deep dive, and the customer's own portal.</p></div>
+    <div class="roai-box">
+      <div class="roai-vis">
+        <div class="faint" style="font-size:13px;font-weight:600">Example client · blended ROAI</div>
+        <div class="big">5.4×</div>
+        <div class="track"><i style="width:84%"></i></div>
+        <div class="faint" style="font-size:12.5px">$1 invested → <span class="em">$5.40</span> of measured value returned</div>
+      </div>
+      <div>
+        <div class="formula" style="margin-top:0;display:flex">
+          <code>ROAI = (Value − AI cost) ÷ AI cost</code>
+          <span>Value = hours saved + revenue uplift, measured per engagement.</span>
+        </div>
+        <p style="margin-top:16px">Because the number is consistent across the portfolio and the customer view, FPT and the client are always looking at the <b style="color:var(--text)">same source of truth</b> — which makes renewals and expansion a data conversation, not a debate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE BILLING -->
+<section id="billing">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Not a mockup</span><h2>Live usage-based billing, wired to Metronome.</h2>
+    <p>The Billing → Live panel reads a real Metronome account through a secure, read-only Worker proxy — the API key never reaches the browser. Customers, contracts, commits, credits, usage drawdown and invoices are all real billing objects.</p></div>
+    <div class="grid2">
+      <div class="card">
+        <div class="tag accent">What's live</div>
+        <ul>
+          <li>7 customers on prepaid-commit (Enterprise/Gov) or hybrid (platform fee + usage) models</li>
+          <li>Finalized + draft invoices with real totals — and 6 months of revenue history</li>
+          <li>Commit/credit balances drawing down against metered usage</li>
+          <li>A full offering catalog: billable metrics, products, rate cards and packages</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="tag" style="color:var(--emerald)">Why it matters</div>
+        <p>It proves the commercial model is real, not painted on: usage-based pricing, committed-spend drawdown, government Net-60/PO flows and self-serve top-ups all run on production billing infrastructure. The same proxy pattern drops into a real deployment unchanged.</p>
+        <a class="btn" style="margin-top:14px" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=billing&tab=live" target="_blank" rel="noopener">See the live billing panel →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section id="proof">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Proof</span><h2>Real FPT outcomes behind the demo.</h2>
+    <p>The case results surfaced in the dashboard are drawn from FPT's actual engagements across AEO, commerce and Data &amp; AI.</p></div>
+    <div class="cases">
+      <div class="case">
+        <div class="solution">ON.Optima · AEO</div>
+        <div class="head">+200% click-through rate</div>
+        <div class="who">Global technology leader · Technology</div>
+        <p style="font-size:13.5px">Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.</p>
+        <div class="metrics"><span>Site ranking #6 (+18)</span><span>CTR 3.2% (+200%)</span><span>Featured snippets 30%</span></div>
+      </div>
+      <div class="case">
+        <div class="solution">ON.Optima · AEO</div>
+        <div class="head">Cited across 120+ markets</div>
+        <div class="who">Global health F&amp;B leader · Food &amp; beverage</div>
+        <p style="font-size:13.5px">Won AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.</p>
+        <div class="metrics"><span>120+ markets</span><span>Consistent answer boxes</span><span>Acquisition cost ↓</span></div>
+      </div>
+      <div class="case">
+        <div class="solution">ON.E · Commerce</div>
+        <div class="head">MVP in 2 months, not 10</div>
+        <div class="who">KSA megaproject (PIF) · Real estate</div>
+        <p style="font-size:13.5px">Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.</p>
+        <div class="metrics"><span>Time to MVP 2 mo (vs 10)</span><span>Build time −55%</span><span>Requirements −40%</span></div>
+      </div>
+      <div class="case">
+        <div class="solution">Data &amp; AI CoE</div>
+        <div class="head">Campaign cycles: weeks → minutes</div>
+        <div class="who">FPT × Salesforce ASEAN CoE · Cross-industry</div>
+        <p style="font-size:13.5px">First ASEAN Salesforce Data &amp; AI CoE — reusable accelerators across Sales, Service, Marketing, Data Cloud and Agentforce.</p>
+        <div class="metrics"><span>First in ASEAN</span><span>Weeks → minutes</span><span>~100 Agentforce certs by 2026</span></div>
+      </div>
+    </div>
+    <div class="partners">
+      <span class="p">Adobe <small>· Specialized</small></span>
+      <span class="p">Sitecore <small>· Platinum (APAC)</small></span>
+      <span class="p">Salesforce <small>· First ASEAN Data &amp; AI CoE</small></span>
+      <span class="p">Liferay <small>· Global Platinum</small></span>
+      <span class="p">Shopify <small>· Plus</small></span>
+    </div>
+    <div class="totals">
+      <div class="t"><b>1,000+</b><span>certified engineers</span></div>
+      <div class="t"><b>1,500+</b><span>platform certifications</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO SCRIPT -->
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Run the demo</span><h2>A 7-step walkthrough.</h2>
+    <p>Each step opens the exact view in a new tab. Read the italics aloud as your talk track. Total run time ≈ 6–8 minutes.</p></div>
+    <div class="steps">
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>Agency overview — the portfolio at a glance</h3><p>Open on blended ROAI, revenue and margin across all clients.</p><p class="say">"This is how FPT sees the whole book of business — and the headline is ROAI, not just revenue."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=home" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>ROAI analytics — how value is measured</h3><p>Show the formula, the trend, and the per-pillar breakdown.</p><p class="say">"Every dollar of AI spend is tied to measured value — hours saved plus revenue uplift."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=analytics" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>Client deep dive — drill into one account</h3><p>Open Verdano Foods: ROAI, active services, and the real AEO case result.</p><p class="say">"Here's a single client — projects, spend, return, and the proof behind it."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&client=helios" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>Billing → Live — real Metronome data</h3><p>Pick a customer; show finalized invoices and commit drawdown.</p><p class="say">"This isn't mocked — it's a live billing account read through a secure proxy."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=billing&tab=live" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>Switch to the customer portal</h3><p>Same engagement, the customer's view — their ROAI Center.</p><p class="say">"Now flip the table — this is exactly what the client logs in and sees."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=client&client=helios&section=roai" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>AI marketplace — launch an agent</h3><p>Walk the launch flow for a new ON.Ecosystem agent.</p><p class="say">"Expansion is self-serve — the customer can add an agent in a click."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=client&client=helios&section=marketplace" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+      <div class="step">
+        <div class="num"></div>
+        <div><h3>Customer billing &amp; usage — the loop closes</h3><p>Show credits, usage drawdown and a top-up.</p><p class="say">"Usage, credits and invoices — the same numbers the agency side bills on."</p></div>
+        <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=client&client=helios&section=billing&tab=usage" target="_blank" rel="noopener">Open ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="font-size:15px"><span class="logo" style="width:30px;height:30px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 19 M12 3 L4 19 M7.5 13 H16.5"/></svg></span>Vela <span class="accent">OS</span></div>
+      <div class="note">Interactive demo built by Emerge Digital for FPT CX Services. ROAI = Return on AI Investment. Live billing data is a Metronome sandbox; client names and portfolio figures are illustrative.</div>
+    </div>
+    <a class="btn btn-primary" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=home" target="_blank" rel="noopener">Open the live demo →</a>
+  </div>
+</footer>
+</body>
+</html>
