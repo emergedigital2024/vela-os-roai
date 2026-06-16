@@ -47,12 +47,14 @@ async function handleApi(request, env, url) {
     if (route === "invoices") {
       if (!id) return j({ error: "customer_id required" }, 400);
       const limit = url.searchParams.get("limit") || "12";
-      const r = await mt("/customers/" + encodeURIComponent(id) + "/invoices?sort=date_desc&limit=" + encodeURIComponent(limit), env);
+      // date_asc → leads with the finalized current-period invoice + near-term drafts rather than far-future scheduled ones.
+      const r = await mt("/customers/" + encodeURIComponent(id) + "/invoices?sort=date_asc&limit=" + encodeURIComponent(limit), env);
       return j(r.ok ? r.body : { error: "upstream", status: r.status }, r.ok ? 200 : 502);
     }
     if (route === "balances") {
       if (!id) return j({ error: "customer_id required" }, 400);
-      const r = await mt("/contracts/customerBalances/list", env, { method: "POST", body: { customer_id: id } });
+      // include_balance → adds the flat numeric `balance` (remaining); include_ledgers → drawdown entries.
+      const r = await mt("/contracts/customerBalances/list", env, { method: "POST", body: { customer_id: id, include_balance: true, include_ledgers: true } });
       return j(r.ok ? r.body : { error: "upstream", status: r.status }, r.ok ? 200 : 502);
     }
     return j({ error: "not_found" }, 404);

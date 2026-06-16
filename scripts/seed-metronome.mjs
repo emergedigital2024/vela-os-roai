@@ -41,8 +41,9 @@ const state = existsSync(STATE_PATH) ? JSON.parse(readFileSync(STATE_PATH, "utf8
 const saveState = () => writeFileSync(STATE_PATH, JSON.stringify(state, null, 2) + "\n");
 
 let TOKEN;
+const V2 = "https://api.metronome.com/v2"; // a few ops (contract edit) live on v2
 async function api(method, path, body) {
-  const res = await fetch(BASE + path, {
+  const res = await fetch(path.startsWith("http") ? path : BASE + path, {
     method,
     headers: { authorization: "Bearer " + TOKEN, ...(body ? { "content-type": "application/json" } : {}) },
     body: body ? JSON.stringify(body) : undefined,
@@ -56,20 +57,25 @@ async function api(method, path, body) {
   return json;
 }
 
-// ---- demo clients (mirror data.jsx CLIENTS); amounts in USD cents; usage in metric units ----
+// ---- demo clients (mirror data.jsx CLIENTS); amounts in USD cents; usage `daily` in metric units/day ----
+// Commercial model mirrors data.jsx: Enterprise/Government => "commit" (prepaid + monthly installment invoicing);
+// Standard => "hybrid" (monthly platform subscription fee + usage drawdown). `fee` is the monthly scheduled
+// charge that produces a POSITIVE draft invoice (commits/credits only draw down usage, never fixed fees).
 const SEED = [
-  { slug: "northwind", name: "Northwind Retail",   commit: 12_000_00,  usage: [4200, 3100, 5200] },
-  { slug: "verdano",   name: "Verdano Foods",      commit: 300_000_00,                usage: [9800, 11200, 8700] },
-  { slug: "atelier",   name: "Atelier Noir",       credit: 30_000_00,  usage: [2600, 3300, 2900] },
-  { slug: "madinat",   name: "Madinat Estates",    commit: 500_000_00,                usage: [14200, 12800, 15600] },
-  { slug: "brightside",name: "Brightside Media",   credit: 20_000_00,  usage: [3400, 2800, 3900] },
-  { slug: "aurora",    name: "Aurora Beauty",      credit: 18_000_00,  commit: 6_000_00, usage: [2100, 2500, 1900] },
-  { slug: "meridian",  name: "Meridian Travel",    commit: 8_000_00,   usage: [1600, 1400, 1800] },
+  { slug: "northwind", name: "Northwind Retail", commit: 12_000_00,                    fee: 1_000_00,  feeLabel: "Committed spend — monthly installment", daily: 3000 },
+  { slug: "verdano",   name: "Verdano Foods",    commit: 300_000_00,                   fee: 25_000_00, feeLabel: "Committed spend — monthly installment", daily: 8000 },
+  { slug: "atelier",   name: "Atelier Noir",     credit: 30_000_00,                    fee: 2_500_00,  feeLabel: "Platform subscription",                 daily: 1500 },
+  { slug: "madinat",   name: "Madinat Estates",  commit: 500_000_00,                   fee: 41_667_00, feeLabel: "Committed spend — monthly installment", daily: 12000 },
+  { slug: "brightside",name: "Brightside Media", credit: 20_000_00,                    fee: 2_000_00,  feeLabel: "Platform subscription",                 daily: 2000 },
+  { slug: "aurora",    name: "Aurora Beauty",    credit: 18_000_00, commit: 6_000_00,  fee: 2_200_00,  feeLabel: "Platform subscription",                 daily: 1800 },
+  { slug: "meridian",  name: "Meridian Travel",  commit: 8_000_00,                     fee: 667_00,    feeLabel: "Committed spend — monthly installment", daily: 1200 },
 ];
 
 const WIN = { starting_at: "2026-06-01T00:00:00.000Z", ending_before: "2026-12-01T00:00:00.000Z" };
 const CONTRACT_START = "2026-06-01T00:00:00.000Z"; // backdated to current month → DRAFT invoice auto-exists
-const USAGE_DAYS = ["2026-06-08", "2026-06-11", "2026-06-14"];
+const FEE_WIN = { starting_at: "2026-06-01T00:00:00.000Z", ending_before: "2027-06-01T00:00:00.000Z" }; // 12 monthly charges
+// Dense usage so commit/credit drawdown is visible: one event per day, Jun 1–15 2026 (within the contract term).
+const USAGE_DAYS = Array.from({ length: 15 }, (_, i) => `2026-06-${String(i + 1).padStart(2, "0")}`);
 
 async function ensureGlobals() {
   const g = state.global;
@@ -90,6 +96,11 @@ async function ensureGlobals() {
   if (!g.commitProductId) {
     const r = await api("POST", "/contract-pricing/products/create", { name: "Committed spend", type: "FIXED" });
     g.commitProductId = r.data?.id || r.id; saveState(); log("• product (FIXED, for commits/credits)", g.commitProductId);
+  }
+  if (!g.feeProductId) {
+    // FIXED product that powers the monthly scheduled charge (platform fee / commit installment).
+    const r = await api("POST", "/contract-pricing/products/create", { name: "Platform & subscription fees", type: "FIXED" });
+    g.feeProductId = r.data?.id || r.id; saveState(); log("• product (FIXED, for scheduled charges)", g.feeProductId);
   }
   if (!g.rateCardId) {
     const r = await api("POST", "/contract-pricing/rate-cards/create", { name: "Vela demo rate card" });
@@ -141,16 +152,39 @@ async function seedClient(c) {
     });
     st.creditId = r.data?.id || r.id; saveState();
   }
-  // usage (idempotent via transaction_id)
-  const events = c.usage.map((amt, i) => ({
-    transaction_id: `${alias}-${USAGE_DAYS[i]}-1`, customer_id: alias, event_type: "api_call",
-    timestamp: USAGE_DAYS[i] + "T12:00:00Z", properties: { amount: String(amt), region: ["us-east", "eu-west", "ap-south"][i % 3] },
-  }));
+  // monthly scheduled charge (platform fee / commit installment) → POSITIVE draft invoice.
+  // Contract editing is ADDITIVE (no overwrite), so guard with st.feeAmended to stay idempotent on re-run.
+  // (v1 amend is disabled on this account; the go-forward path is POST /v2/contracts/edit.)
+  if (c.fee && !st.feeAmended) {
+    try {
+      await api("POST", V2 + "/contracts/edit", {
+        customer_id: cid, contract_id: st.contractId,
+        add_scheduled_charges: [{
+          product_id: state.global.feeProductId, name: c.feeLabel,
+          schedule: { recurring_schedule: { frequency: "MONTHLY", amount_distribution: "EACH", ...FEE_WIN, quantity: 1, unit_price: c.fee } },
+        }],
+      });
+      st.feeAmended = true; saveState();
+    } catch (e) { console.error(`  ⚠ ${c.name} scheduled charge: ${e.message}`); }
+  }
+  // usage: one event per day (idempotent via transaction_id), deterministic jitter so the curve isn't flat.
+  const events = USAGE_DAYS.map((day, i) => {
+    const amt = Math.round(c.daily * (0.7 + ((i * 37) % 60) / 100)); // 0.70×–1.29× of daily
+    return {
+      transaction_id: `${alias}-d-${day}`, customer_id: alias, event_type: "api_call",
+      timestamp: day + "T12:00:00Z", properties: { amount: String(amt), region: ["us-east", "eu-west", "ap-south"][i % 3] },
+    };
+  });
   await api("POST", "/ingest", events);
-  // read back balance
+  const totalUnits = events.reduce((s, e) => s + Number(e.properties.amount), 0);
+  // read back remaining balance (include_balance → flat numeric `balance`)
   let bal = "n/a";
-  try { const b = await api("POST", "/contracts/customerBalances/list", { customer_id: cid }); bal = (b && b.data ? b.data.length : 0) + " balance(s)"; } catch (_) {}
-  log(`✓ ${c.name.padEnd(18)} cust=${cid}  ${st.commitId ? "commit " : ""}${st.creditId ? "credit " : ""}usage×${events.length}  → ${bal}`);
+  try {
+    const b = await api("POST", "/contracts/customerBalances/list", { customer_id: cid, include_balance: true });
+    const rows = (b && b.data) || [];
+    bal = rows.map((x) => "$" + Math.round((x.balance || 0) / 100).toLocaleString()).join(" + ") || "0";
+  } catch (_) {}
+  log(`✓ ${c.name.padEnd(18)} ${st.commitId ? "commit " : ""}${st.creditId ? "credit " : ""}${st.feeAmended ? "fee$" + (c.fee / 100).toLocaleString() + "/mo " : ""}usage×${events.length}(${totalUnits.toLocaleString()}u)  bal=${bal}`);
 }
 
 async function main() {

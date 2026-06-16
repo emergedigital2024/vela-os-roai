@@ -390,7 +390,8 @@
       return { ok: res.ok, status: res.status, data };
     } catch (_) { return { ok: false, status: 0, data: null }; }
   }
-  const num = (v) => (typeof v === "number" ? fmtUSD(Math.round(v)) : v != null ? String(v) : "—");
+  // Metronome amounts are in USD cents; fmtUSD expects dollars → divide by 100.
+  const num = (v) => (typeof v === "number" ? fmtUSD(Math.round(v) / 100) : v != null ? String(v) : "—");
 
   function MetronomeLive() {
     const [conn, setConn] = useState("loading"); // loading | connected | notconfigured | error
@@ -458,23 +459,50 @@
                 <div>
                   <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--faint)]">Invoices ({detail.invoices.length})</div>
                   <div className="space-y-1.5">
-                    {detail.invoices.length === 0 ? <div className="text-sm text-[var(--muted)]">No invoices.</div> : detail.invoices.slice(0, 10).map((iv) => (
-                      <div key={iv.id} className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm">
-                        <span className="text-[var(--muted)]"><Badge tone="neutral">{iv.status || "—"}</Badge></span>
-                        <span className="font-semibold tabular-nums text-[var(--text)]">{num(iv.total)}</span>
-                      </div>
-                    ))}
+                    {detail.invoices.length === 0 ? <div className="text-sm text-[var(--muted)]">No invoices.</div> : detail.invoices.slice(0, 10).map((iv) => {
+                      const date = (iv.issued_at || iv.start_timestamp || "").slice(0, 10);
+                      const tone = iv.status === "FINALIZED" ? "emerald" : iv.status === "VOID" ? "rose" : "amber";
+                      const kind = iv.type === "USAGE" ? "Usage" : iv.type === "SCHEDULED" ? "Subscription" : (iv.type ? iv.type[0] + iv.type.slice(1).toLowerCase() : "Invoice");
+                      return (
+                        <div key={iv.id} className="flex items-center justify-between gap-2 rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm">
+                          <span className="flex min-w-0 items-center gap-2">
+                            <Badge tone={tone}>{iv.status || "—"}</Badge>
+                            <span className="min-w-0 truncate text-[var(--muted)]">{kind}{date ? " · " + date : ""}</span>
+                          </span>
+                          <span className="flex-none font-semibold tabular-nums text-[var(--text)]">{num(iv.total)}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 <div>
                   <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--faint)]">Balances ({detail.balances.length})</div>
                   <div className="space-y-1.5">
-                    {detail.balances.length === 0 ? <div className="text-sm text-[var(--muted)]">No active commits or credits.</div> : detail.balances.slice(0, 10).map((b, i) => (
-                      <div key={i} className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm">
-                        <span className="truncate text-[var(--muted)]">{(b.product && b.product.name) || b.type || b.name || "Balance"}</span>
-                        <span className="font-semibold tabular-nums text-[var(--text)]">{num(b.balance && (b.balance.excluding_pending != null ? b.balance.excluding_pending : b.balance.including_pending) != null ? (b.balance.excluding_pending != null ? b.balance.excluding_pending : b.balance.including_pending) : b.total)}</span>
-                      </div>
-                    ))}
+                    {detail.balances.length === 0 ? <div className="text-sm text-[var(--muted)]">No active commits or credits.</div> : detail.balances.slice(0, 10).map((b, i) => {
+                      // v1 returns `balance` as a flat cents number (remaining); fall back to legacy object/total shapes.
+                      const remaining = typeof b.balance === "number" ? b.balance
+                        : b.balance && b.balance.excluding_pending != null ? b.balance.excluding_pending
+                        : b.balance && b.balance.including_pending != null ? b.balance.including_pending
+                        : b.total;
+                      const granted = b.access_schedule && Array.isArray(b.access_schedule.schedule_items)
+                        ? b.access_schedule.schedule_items.reduce((s, it) => s + (it.amount || 0), 0) : null;
+                      const pct = granted ? Math.max(0, Math.min(100, Math.round((remaining / granted) * 100))) : null;
+                      const tone = b.type === "PREPAID" ? "indigo" : "emerald";
+                      return (
+                        <div key={i} className="rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-2 text-sm">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="flex min-w-0 items-center gap-1.5 text-[var(--muted)]"><Badge tone={tone}>{b.type === "PREPAID" ? "Commit" : b.type === "CREDIT" ? "Credit" : (b.type || "Balance")}</Badge><span className="truncate">{(b.product && b.product.name) || b.name || ""}</span></span>
+                            <span className="flex-none font-semibold tabular-nums text-[var(--text)]">{num(remaining)}</span>
+                          </div>
+                          {granted != null && granted > 0 && (
+                            <div className="mt-1.5">
+                              <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--chip)]"><div className="h-full rounded-full bg-emerald-400" style={{ width: (pct == null ? 0 : pct) + "%" }} /></div>
+                              <div className="mt-1 text-[11px] text-[var(--faint)]">{num(remaining)} remaining of {num(granted)}</div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
