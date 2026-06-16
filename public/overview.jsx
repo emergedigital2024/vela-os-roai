@@ -2,7 +2,7 @@
 (function () {
   const { useState, useMemo } = React;
   const Icon = window.Icon;
-  const { CLIENTS, PORTFOLIO, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, MARKET_STATS } = window.AGENCY;
+  const { CLIENTS, PORTFOLIO, CASE_STUDIES, PARTNERS, PARTNER_TOTALS, FPT, MARKET_STATS } = window.AGENCY;
   const { fmtUSD, fmtMult, fmtPct, fmtNum, fmtCompact } = window.FMT;
   const U = window.UI;
   const { Card, Badge, TierBadge, DeltaPill, HealthBar, Sparkline, LineArea, Segmented, SectionTitle, MetronomeBadge, InfoDot, ROAI_TIP, C, cx } = U;
@@ -281,6 +281,9 @@
                 <div className="mt-2 text-[11px] leading-snug text-[var(--faint)]">{p.note}</div>
               </div>
             ))}
+          </div>
+          <div className="mt-3 border-t border-[var(--border)] pt-3 text-[11px] leading-snug text-[var(--faint)]">
+            Part of <span className="font-semibold text-[var(--muted)]">FPT Corporation</span> — {FPT.revenue} revenue · {FPT.employees} employees worldwide.
           </div>
         </Card>
       </div>
