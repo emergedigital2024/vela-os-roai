@@ -363,20 +363,23 @@
   }
 
   // ---------- Modal (overlay dialog) ----------
-  function Modal({ open, onClose, children, maxWidth = 460 }) {
+  function Modal({ open, onClose, children, maxWidth = 460, label = "Dialog", labelledby }) {
+    const panelRef = useRef(null);
     useEffect(() => {
       if (!open) return;
       const onKey = (e) => { if (e.key === "Escape") onClose && onClose(); };
       document.addEventListener("keydown", onKey);
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
+      if (panelRef.current) panelRef.current.focus();
       return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
     }, [open, onClose]);
     if (!open) return null;
     return (
-      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true">
+      <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true"
+        {...(labelledby ? { "aria-labelledby": labelledby } : { "aria-label": label })}>
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-        <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--panel)] shadow-2xl" style={{ maxWidth }}>
+        <div ref={panelRef} tabIndex={-1} className="relative w-full overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--panel)] shadow-2xl outline-none" style={{ maxWidth }}>
           {children}
         </div>
       </div>

@@ -1,0 +1,11 @@
+# Short cache on the in-browser-compiled .jsx assets so repeat views within a
+# session avoid full re-downloads (interim until a build step emits content-hashed,
+# immutable bundles). HTML stays revalidated so deploys are picked up immediately.
+/*.jsx
+  Cache-Control: public, max-age=300
+
+/og.png
+  Cache-Control: public, max-age=86400
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

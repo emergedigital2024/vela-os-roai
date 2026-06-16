@@ -194,7 +194,7 @@
             <PillarChip pillar={svc.pillar} />
             <div><div className="font-semibold text-[var(--text)]">{svc.name}</div><div className="text-xs text-[var(--muted)]">{svc.pillar}{svc.onEco && svc.stage ? " · " + svc.stage : ""}</div></div>
           </div>
-          <button onClick={onClose} className="text-[var(--faint)] transition-colors hover:text-[var(--text)]"><Icon name="x" size={18} /></button>
+          <button type="button" aria-label="Close" onClick={onClose} className="text-[var(--faint)] transition-colors hover:text-[var(--text)]"><Icon name="x" size={18} /></button>
         </div>
         <div className="px-5 py-5">
           {!done ? (
@@ -277,7 +277,7 @@
           ))}
         </div>
 
-        <Modal open={!!launching} onClose={() => setLaunching(null)} maxWidth={440}>
+        <Modal open={!!launching} onClose={() => setLaunching(null)} maxWidth={440} label="Launch agent">
           {launching && <LaunchModal svc={launching} onClose={() => setLaunching(null)} onDone={B.launch} />}
         </Modal>
 
