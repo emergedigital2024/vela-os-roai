@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Generate demo-support collateral for Vela OS:
-  - docs/Vela-OS-Demo-Deck.pptx   (dark, branded slide deck)
-  - docs/Vela-OS-One-Pager.pdf    (clean light executive brief)
+"""Generate demo-support collateral for Vela OS, into public/downloads/ so the Worker
+serves them (and the /guide page can link them as downloads):
+  - public/downloads/Vela-OS-Demo-Deck.pptx   (dark, branded slide deck)
+  - public/downloads/Vela-OS-One-Pager.pdf    (clean light executive brief)
 Content mirrors public/guide.html and the real proof data in public/data.jsx.
   python3 scripts/build-explainers.py
 """
@@ -15,7 +16,7 @@ from fpdf.enums import XPos, YPos
 MC = dict(new_x=XPos.LMARGIN, new_y=YPos.NEXT)  # keep cursor at left margin after multi_cell
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "..", "docs")
+OUT = os.path.join(HERE, "..", "public", "downloads")
 os.makedirs(OUT, exist_ok=True)
 
 LIVE = "https://vela-os-roai.emerge-digital.workers.dev"

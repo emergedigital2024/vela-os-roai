@@ -120,6 +120,12 @@
     .step{grid-template-columns:38px 1fr;}
     .step .go{grid-column:1/-1}
   }
+  .dl{display:block;transition:.15s}
+  .dl:hover{border-color:var(--accent-line);background:var(--panel-hi);transform:translateY(-2px)}
+  .dl .tag{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .dl h3{margin:8px 0 6px}
+  .dl p{font-size:13.5px;margin:0}
+  .dlbtn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:10px;padding:9px 15px}
   footer{padding:48px 0 70px}
   .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
   .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
@@ -138,6 +144,7 @@
       <a href="#billing">Live billing</a>
       <a href="#proof">Proof</a>
       <a href="#demo">Demo script</a>
+      <a href="#downloads">Downloads</a>
     </nav>
     <a class="btn btn-primary" href="https://vela-os-roai.emerge-digital.workers.dev/?view=agency&section=home" target="_blank" rel="noopener">Open live demo →</a>
   </div>
@@ -363,6 +370,28 @@
         <div><h3>Customer billing &amp; usage — the loop closes</h3><p>Show credits, usage drawdown and a top-up.</p><p class="say">"Usage, credits and invoices — the same numbers the agency side bills on."</p></div>
         <a class="btn go" href="https://vela-os-roai.emerge-digital.workers.dev/?view=client&client=helios&section=billing&tab=usage" target="_blank" rel="noopener">Open ↗</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOADS -->
+<section id="downloads">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Take it with you</span><h2>Leave-behinds.</h2>
+    <p>The same story, packaged two ways — a deck for the room and a one-pager to forward afterward.</p></div>
+    <div class="grid2">
+      <a class="card dl" href="/downloads/Vela-OS-Demo-Deck.pptx" download>
+        <div class="tag accent">PPTX · 9 slides</div>
+        <h3>Vela OS — Demo Deck ↓</h3>
+        <p>Branded presentation: opportunity → platform → ROAI → live billing → proof → demo flow.</p>
+        <span class="dlbtn">Download deck (.pptx)</span>
+      </a>
+      <a class="card dl" href="/downloads/Vela-OS-One-Pager.pdf" download>
+        <div class="tag" style="color:var(--emerald)">PDF · 2 pages</div>
+        <h3>Vela OS — One-Pager ↓</h3>
+        <p>Executive brief with the pitch, six pillars, real proof and the demo steps — print &amp; share friendly.</p>
+        <span class="dlbtn">Download one-pager (.pdf)</span>
+      </a>
     </div>
   </div>
 </section>
