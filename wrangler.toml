@@ -2,6 +2,7 @@ name = "vela-os-roai"
 account_id = "4a75e91d6fca8bc58467fb80ce1b9c2e"
 compatibility_date = "2025-06-15"
 main = "src/index.js"
+workers_dev = true  # keep the *.workers.dev URL enabled alongside the custom domain
 
 [assets]
 directory = "./public"
