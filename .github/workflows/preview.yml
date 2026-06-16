@@ -24,6 +24,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app bundle
+        # Bundles app/ → public/assets/vela-<hash>.js + public/index.html (both git-ignored).
+        run: npm run build
 
       - name: Upload preview version
         id: upload

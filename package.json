@@ -1,0 +1,20 @@
+{
+  "name": "vela-os-roai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vela OS · FPT CX Services — ROAI dashboard on Cloudflare Workers Static Assets, with a read-only Metronome proxy worker.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && npx --yes wrangler@4 dev",
+    "deploy": "npm run build && npx --yes wrangler@4 deploy",
+    "preview": "npm run build && npx --yes wrangler@4 versions upload"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}
