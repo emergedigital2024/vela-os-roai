@@ -1,0 +1,96 @@
+{
+  "$schema_note": "Canonical single source of truth for Vela OS / FPT CX Services proof + brand facts. Shared by Vela (public/) and future (data/). Resolved per issue #5; signed off by Rami 2026-06-16.",
+  "$issue": "https://github.com/emergedigital2024/vela-os-roai/issues/5",
+  "version": "1.0.0",
+  "as_of": "2026-06-16",
+  "signed_off_by": "Rami Alcheikh",
+
+  "brand": {
+    "practice_name": "FPT CX Services",
+    "product_name": "Vela OS",
+    "tagline": "Return on AI Investment, measured.",
+    "built_by": "Emerge Digital"
+  },
+
+  "roai": {
+    "term": "ROAI",
+    "expansion": "Return on AI Investment",
+    "headline_form": "multiple",
+    "definition": "ROAI = Value delivered ÷ AI cost",
+    "example": "$4 of value per $1 of AI spend = 4.0×",
+    "derived_percent": {
+      "definition": "ROAI % = (Value delivered − AI cost) ÷ AI cost × 100",
+      "usage": "secondary / derived view only"
+    }
+  },
+
+  "credentials": {
+    "headline": { "engineers": "1,000+", "certs": "1,500+", "scope": "across all CX-practice platform partners" },
+    "salesforce_callout": { "experts": "340+", "certs": "760+", "scope": "Salesforce certified experts" },
+    "agentforce_certs": "~100 by 2026",
+    "per_partner": [
+      { "name": "Adobe",      "tier": "Specialized partner",       "engineers": "200+", "certs": "160+", "note": "AEM Cloud migration · Commerce" },
+      { "name": "Sitecore",   "tier": "Platinum · APAC strategic", "engineers": "200+", "certs": "70+",  "note": "1st in Asia on XM Cloud · 1st Global Elite Reseller (2026)" },
+      { "name": "Salesforce", "tier": "FDE Network Partner",        "engineers": "330+", "certs": "770+", "note": "First ASEAN Data & AI CoE" },
+      { "name": "Liferay",    "tier": "Global Platinum",            "engineers": "150+", "certs": "180+", "note": "1st in VN + Japan to Global Platinum" },
+      { "name": "Shopify",    "tier": "Shopify Plus",               "engineers": "200+", "certs": "40+",  "note": "Plus · custom storefronts · migration" }
+    ]
+  },
+
+  "fpt_parent": {
+    "parent_revenue": { "value": "$2.47B", "label": "FPT Corporation revenue" },
+    "employees": { "value": "80,000+", "label": "FPT Corporation employees" },
+    "agentforce_arr": {
+      "value": "$1.4B",
+      "yoy": "330%",
+      "label": "Salesforce global Agentforce ARR (YoY growth)",
+      "scope": "ecosystem context — Salesforce-wide, NOT an FPT-specific result; must be labeled as such wherever shown"
+    }
+  },
+
+  "case_studies": [
+    { "client": "Global technology leader", "sector": "Technology", "solution": "ON.Optima · AEO", "icon": "search",
+      "headline": "+200% click-through rate",
+      "blurb": "Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.",
+      "metrics": [["Site ranking", "#6 (+18)"], ["Click-through", "3.2% (+200%)"], ["Featured snippets", "30%"]] },
+    { "client": "Global health F&B leader", "sector": "Food & beverage", "solution": "ON.Optima · AEO", "icon": "sparkles",
+      "headline": "Cited across 120+ markets",
+      "blurb": "Deployed AEO to win AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.",
+      "metrics": [["Markets", "120+"], ["AI answer boxes", "Consistent"], ["Acquisition cost", "Reduced"]] },
+    { "client": "KSA megaproject (PIF)", "sector": "Real estate & construction", "solution": "ON.E · Commerce", "icon": "grid",
+      "headline": "MVP in 2 months, not 10",
+      "blurb": "Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.",
+      "metrics": [["Time to MVP", "2 mo (vs 10)"], ["Build time", "−55%"], ["Requirements", "−40%"]] },
+    { "client": "FPT × Salesforce ASEAN CoE", "sector": "Banking & cross-industry", "solution": "Data & AI CoE", "icon": "chart",
+      "headline": "Campaign cycles: weeks → minutes",
+      "blurb": "First ASEAN Salesforce Data & AI CoE — reusable accelerators across Sales, Service, Marketing, Data Cloud and Agentforce.",
+      "metrics": [["First in", "ASEAN"], ["Launch cycles", "Weeks → min"], ["Agentforce certs", "~100 by 2026"]] }
+  ],
+
+  "pricing_tiers": {
+    "ladder": ["Starter", "Growth", "Scale", "Enterprise"],
+    "descriptions": {
+      "Starter": "Entry tier — single-agent pilots and AEO visibility (ON.Optima).",
+      "Growth": "Multi-agent CX with usage-based scaling across the funnel.",
+      "Scale": "Full ON.Ecosystem with committed volume and priority support.",
+      "Enterprise": "Custom commercial terms, governance, and dedicated success."
+    },
+    "billing_models": ["Hybrid (seat-based)", "Enterprise commit"],
+    "credit_packs": [
+      { "credits": 250000, "price_usd": 1500 },
+      { "credits": 500000, "price_usd": 2800 },
+      { "credits": 1000000, "price_usd": 5000 }
+    ]
+  },
+
+  "methodology_lifecycle": {
+    "cx_pillars": ["Experience Strategy", "Experience Design", "Experience Platform", "Commerce Platform", "Experience Insights", "Run & Optimize"],
+    "on_ecosystem_stages": ["Attract", "Discover", "Engage", "Convert", "Optimize"]
+  },
+
+  "market_stats": [
+    { "stat": "2–3×", "label": "higher revenue growth for CX leaders" },
+    { "stat": "~70%", "label": "rate experience as important as product or price" },
+    { "stat": "~60%", "label": "of interactions span multiple channels" }
+  ]
+}
