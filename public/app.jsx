@@ -131,6 +131,10 @@
             <div className="min-w-0 flex-1 leading-tight"><div className="truncate text-sm font-medium text-[var(--text)]">Jordan Diaz</div><div className="truncate text-xs text-[var(--muted)]">RevOps Lead</div></div>
             <Icon name="settings" size={15} className="text-[var(--faint)]" />
           </button>
+          <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=tiein" target="_blank" rel="noopener"
+            className="mt-2 block px-2 text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
+            Part of the Emerge Digital Agentforce practice ↗
+          </a>
         </div>
       </aside>
     );
