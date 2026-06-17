@@ -11,3 +11,6 @@ qa/
 
 # VO segment build intermediates (final = assets/vo.wav)
 assets/seg/
+
+# unused block reference art (we use vela-phone/vela-laptop.png)
+models/hyperframes-*.png
