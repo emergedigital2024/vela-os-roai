@@ -92,7 +92,7 @@
           {isClient ? (
             <>
               <div className="flex items-center justify-between px-2 pb-2">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--faint)]">Client portal</span>
+                <span className="font-label text-[10px] font-medium uppercase tracking-wider text-[var(--faint)]">Client portal</span>
                 <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">Client view</span>
               </div>
               {portalClient && (
@@ -110,12 +110,12 @@
             </>
           ) : (
             <>
-              <div className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--faint)]">Agency</div>
+              <div className="font-label px-2 pb-1.5 text-[10px] font-medium uppercase tracking-wider text-[var(--faint)]">Agency</div>
               <NavItem icon="dashboard" label="Overview" active={section === "home"} onClick={() => { setMode("internal"); setSection("home"); }} />
               <NavItem icon="users" label="Clients" badge={CLIENTS.length} active={section === "clients"} onClick={() => { setMode("internal"); setSection("clients"); }} />
               <NavItem icon="chart" label="ROAI analytics" active={section === "analytics"} onClick={() => { setMode("internal"); setSection("analytics"); }} />
               <NavItem icon="card" label="Billing" active={section === "billing"} onClick={() => { setMode("internal"); setSection("billing"); setTab("overview"); }} />
-              <div className="px-2 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-wider text-[var(--faint)]">Client-facing</div>
+              <div className="font-label px-2 pb-1.5 pt-4 text-[10px] font-medium uppercase tracking-wider text-[var(--faint)]">Client-facing</div>
               <NavItem icon="user" label="Customer portal" onClick={() => setMode("client")} />
             </>
           )}
@@ -134,8 +134,15 @@
             <Icon name="settings" size={15} className="text-[var(--faint)]" />
           </button>
           <a href="https://vision.emergedigital.ae?utm_source=vela&utm_medium=corp" target="_blank" rel="noopener"
-            className="mt-2 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
-            An <span className="font-medium">Emerge Digital</span> company ↗
+            className="group mt-2 flex items-center justify-center gap-1.5 px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
+            <span className="inline-flex h-4 w-4 flex-none overflow-hidden rounded-[4px]">
+              <svg viewBox="0 0 556.86 502.33" role="img" aria-label="Emerge Digital" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+                <defs><linearGradient id="edmark-tiein" x1="424.88" y1="-88.26" x2="130.94" y2="593.03" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#00C2C7"/><stop offset="0.99" stopColor="#0A1F3D"/></linearGradient></defs>
+                <rect width="556.86" height="502.33" fill="url(#edmark-tiein)"/>
+                <path fill="#fff" d="M203.6,385.73V327.36c46.58-5.85,92.81-11.64,139-17.49,25.79-3.26,36.86-15.39,37.15-41,.19-16.77.15-33.53,0-50.3-.26-25.92-11.14-38.2-36.62-41.41-45.84-5.79-91.7-11.5-138.93-17.42v-58.5c52.5,11.85,105,22,156.53,35.95,32.18,8.74,52.81,41.34,53.67,75.66q.78,30.33,0,60.7c-.85,35.89-22.73,68.41-56.46,77.2C307.34,364,255.86,374.07,203.6,385.73Zm91.19-199.67v49h49.77V193.41Zm-91-8.93v57.93H289V185.81ZM294,252.07v48.18l51.43-8.65V252.07Zm-89.93,0V310.8l85.07-10.55V252.07Zm-46.14-76.54,37.9-15V101.15l-37.9,20.11Zm0,12.63v48.65h37.9V175.53Zm0,113.68,37.9,13.57V250.85h-37.9Zm0,63.62,37.9,23.39V328.51l-37.9-15Z"/>
+              </svg>
+            </span>
+            An <span className="font-medium text-[var(--muted)] group-hover:text-[var(--accent-fg)]">Emerge Digital</span> company ↗
           </a>
           <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=footer" target="_blank" rel="noopener"
             className="mt-1 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
