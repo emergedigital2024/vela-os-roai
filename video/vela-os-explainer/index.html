@@ -15,19 +15,17 @@
       @font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block; src: url("assets/fonts/jbmono-500.woff2") format("woff2"); }
       @font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block; src: url("assets/fonts/jbmono-700.woff2") format("woff2"); }
 
-      /* ── Emerge Digital canonical tokens (../../brand/design-tokens.json) ── */
       :root {
         --bg: #06122A; --bg-deep: #03081A; --surface: #0A1F3D;
         --ink: #F7F9FC; --muted: #9FAFC2; --hair: rgba(255,255,255,0.10);
         --accent: #00C2C7; --accent-2: #3DDCE3; --glow: #00F5FF;
-        --emerald: #3FCF8E;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg-deep); }
       body { font-family: "Lexend", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
 
       #root {
-        position: relative; width: 1920px; height: 1080px;
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
         background:
           radial-gradient(ellipse 90% 70% at 80% 0%, rgba(0,194,199,0.18), transparent 60%),
           radial-gradient(ellipse 70% 60% at 8% 95%, rgba(61,220,227,0.10), transparent 65%),
@@ -36,7 +34,7 @@
       .scene {
         position: absolute; inset: 0;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        text-align: center; padding: 120px 180px;
+        text-align: center; padding: 120px 180px; will-change: transform, filter;
       }
       .eyebrow { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 600; font-size: 22px; color: var(--accent-2); }
       .headline { font-weight: 700; font-size: 66px; line-height: 1.06; letter-spacing: -0.025em; max-width: 1400px; }
@@ -66,20 +64,50 @@
       .proof .big { font-size: 46px; font-weight: 700; }
       .proof .lbl { font-size: 22px; color: var(--muted); margin-top: 6px; }
 
-      .footrule { position: absolute; bottom: 64px; left: 180px; right: 180px; display: flex; justify-content: space-between; align-items: center; font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 18px; color: var(--muted); }
-      .cta { display: inline-block; margin-top: 44px; background: linear-gradient(90deg, #00C2C7, #3DDCE3); color: #0A1F3D; font-weight: 700; font-size: 28px; padding: 22px 44px; border-radius: 9999px; }
+      .cta { display: inline-block; margin-top: 44px; background: linear-gradient(90deg, #00C2C7, #3DDCE3); color: #0A1F3D; font-weight: 700; font-size: 28px; padding: 22px 44px; border-radius: 9999px; box-shadow: 0 16px 50px rgba(0,194,199,0.35); }
+
+      /* ── close: logo-outro techniques (glow bloom + url pill) ── */
+      .outro-glow { position: absolute; width: 760px; height: 760px; border-radius: 50%; background: radial-gradient(circle, rgba(0,194,199,0.30), transparent 65%); filter: blur(20px); }
+      .url-pill { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; padding: 14px 28px; border-radius: 9999px; border: 1px solid var(--accent-line, rgba(0,194,199,0.4)); background: rgba(0,194,199,0.10); font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 18px; color: var(--accent-2); }
+      .url-pill .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+
+      /* ── catalog component: shimmer-sweep ── */
+      .shimmer-sweep-target { position: relative; display: inline-block; }
+      .shimmer-sweep-target .shimmer-mask {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        background: linear-gradient(120deg, transparent 0%,
+          transparent calc(var(--shimmer-pos, -20%) - 11%),
+          rgba(255,255,255,0.55) var(--shimmer-pos, -20%),
+          transparent calc(var(--shimmer-pos, -20%) + 11%), transparent 100%);
+        mix-blend-mode: overlay;
+      }
+
+      /* ── catalog captions: lower-third clip-wipe (premium-sized) ── */
+      #cap { position: absolute; left: 0; right: 0; bottom: 76px; z-index: 80; display: flex; justify-content: center; pointer-events: none; }
+      .cap-line {
+        position: absolute; visibility: hidden;
+        font-family: "Prompt", "Lexend", sans-serif; font-weight: 500; font-size: 30px; letter-spacing: 0.01em;
+        color: rgba(247,249,252,0.96); padding: 12px 26px; border-radius: 12px;
+        background: rgba(3,8,26,0.45); border: 1px solid var(--hair); backdrop-filter: blur(6px);
+        clip-path: inset(0 100% 0 0); white-space: nowrap;
+      }
+
+      /* ── catalog component: vignette ── */
+      #hf-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 90;
+        background: radial-gradient(ellipse at center, transparent 52%, rgba(0,0,0,0.55) 100%); }
+      /* ── transition: light-leak / flash overlay ── */
+      #flash { position: absolute; inset: 0; pointer-events: none; z-index: 95; background: #EAFEFF; opacity: 0; }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="66.6" data-width="1920" data-height="1080">
 
-      <!-- voiceover (en-US-Chirp3-HD-Aoede, segment-synced, 66.6s = full video length) -->
       <audio id="vo" class="clip" src="assets/vo.wav" data-start="0" data-duration="66.6" data-track-index="0" data-has-audio="true"></audio>
 
       <!-- SCENE 1 — brand open (0–8.5) -->
       <div class="scene clip" data-start="0" data-duration="8.5" data-track-index="1">
         <div class="tile s1a">ED</div>
-        <div class="wordmark s1b">Vela <span class="teal">OS</span></div>
+        <div class="wordmark s1b"><span class="shimmer-sweep-target">Vela <span class="teal">OS</span></span></div>
         <div class="sub s1c" style="margin-top:24px;">Return on AI Investment, measured.</div>
         <div class="eyebrow s1d" style="margin-top:40px;">An Emerge Digital company · Powered by FPT CX Services</div>
       </div>
@@ -95,7 +123,7 @@
       <div class="scene clip" data-start="18.0" data-duration="9.29" data-track-index="1">
         <div class="eyebrow s3a">Every engagement, measured in ROAI</div>
         <div class="formula s3b" style="margin-top:30px;">ROAI = <span class="teal">Value delivered</span> ÷ AI cost</div>
-        <div class="mult s3c" style="margin-top:24px;">4.0×</div>
+        <div class="mult s3c" style="margin-top:24px;"><span class="shimmer-sweep-target">4.0×</span></div>
         <div class="sub s3d" style="margin-top:10px;">$4 of value per $1 of AI spend — the framework example.</div>
       </div>
 
@@ -150,56 +178,102 @@
         </div>
       </div>
 
-      <!-- SCENE 8 — close / CTA (60.0–66.6) -->
+      <!-- SCENE 8 — close / logo-outro (60.0–66.6) -->
       <div class="scene clip" data-start="60.0" data-duration="6.6" data-track-index="1">
-        <div class="wordmark s8a" style="font-size:104px;">Vela <span class="teal">OS</span></div>
-        <div class="sub s8b" style="margin-top:20px;">Return on AI Investment, measured.</div>
+        <div class="outro-glow s8glow"></div>
+        <div class="tile s8tile" style="margin-bottom:34px;">ED</div>
+        <div class="wordmark s8a" style="font-size:104px;"><span class="shimmer-sweep-target">Vela <span class="teal">OS</span></span></div>
+        <div class="sub s8b" style="margin-top:18px;">Return on AI Investment, measured.</div>
         <div class="cta s8c">Book a discovery call</div>
-        <div class="footrule s8d"><span>An Emerge Digital company</span><span class="mono" style="letter-spacing:0;">roai.emergedigital.ae</span></div>
+        <div class="url-pill s8d"><span class="dot"></span>roai.emergedigital.ae</div>
       </div>
 
+      <!-- ── catalog captions (lower-third, clip-wipe) ── -->
+      <div id="cap">
+        <div class="cap-line" data-i="0">Vela OS — Return on AI Investment, measured.</div>
+        <div class="cap-line" data-i="1">The operating system for AI-first customer experience.</div>
+        <div class="cap-line" data-i="2">Every engagement, measured in ROAI — value ÷ AI cost.</div>
+        <div class="cap-line" data-i="3">Two modes: an agency command center and a customer portal.</div>
+        <div class="cap-line" data-i="4">24 services across 6 CX pillars — the ON.Ecosystem.</div>
+        <div class="cap-line" data-i="5">Usage-based billing, wired to Metronome.</div>
+        <div class="cap-line" data-i="6">Proven: +200% CTR, MVP in 2 months, backed by FPT.</div>
+        <div class="cap-line" data-i="7">Vela OS — book a discovery call.</div>
+      </div>
+
+      <!-- ── catalog component overlays ── -->
+      <div id="hf-vignette"></div>
+      <div id="flash"></div>
     </div>
 
     <script>
+      // catalog component: shimmer-sweep — auto-inject the sweep mask
+      document.querySelectorAll(".shimmer-sweep-target").forEach((el) => {
+        if (!el.querySelector(".shimmer-mask")) { const m = document.createElement("div"); m.className = "shimmer-mask"; el.appendChild(m); }
+      });
+
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
       const EXPO = "expo.out";
-      const enter = (sel, at, opts = {}) =>
-        tl.from(sel, Object.assign({ opacity: 0, y: 44, duration: 0.7, ease: EXPO }, opts), at);
+      const enter = (sel, at, opts = {}) => tl.from(sel, Object.assign({ opacity: 0, y: 44, duration: 0.7, ease: EXPO }, opts), at);
+      const shimmer = (sel, at) => tl.fromTo(sel, { "--shimmer-pos": "-20%" }, { "--shimmer-pos": "120%", duration: 1.2, ease: "power2.inOut" }, at);
+      // transition: white light-leak flash at a cut
+      const flash = (at) => tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.55, duration: 0.12, ease: "power2.out" }, at).to("#flash", { opacity: 0, duration: 0.5, ease: "power2.in" }, at + 0.12);
+      // catalog captions: clip-wipe reveal in, wipe out
+      const STARTS = [0, 8.5, 18.0, 27.3, 35.0, 45.2, 52.4, 60.0];
+      const DURS = [8.5, 9.5, 9.29, 7.69, 10.2, 7.19, 7.6, 6.6];
+      STARTS.forEach((s, i) => {
+        const sel = `.cap-line[data-i="${i}"]`;
+        const end = s + DURS[i];
+        tl.set(sel, { visibility: "visible" }, s + 0.35);
+        tl.fromTo(sel, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power2.out" }, s + 0.35);
+        tl.to(sel, { clipPath: "inset(0 0 0 100%)", duration: 0.3, ease: "power2.in" }, end - 0.45);
+        tl.set(sel, { visibility: "hidden" }, end - 0.12);
+      });
 
       // S1 — brand open (voice ~0.3)
-      tl.from(".s1a", { opacity: 0, scale: 0.94, duration: 0.6, ease: EXPO }, 0.2);
+      tl.from(".s1a", { opacity: 0, scale: 0.9, duration: 0.7, ease: "back.out(1.5)" }, 0.2);
       enter(".s1b", 0.5); enter(".s1c", 0.75); enter(".s1d", 1.05, { y: 24 });
+      shimmer(".s1b .shimmer-sweep-target", 1.5);
 
-      // S2 — thesis (voice ~8.5)
-      enter(".s2a", 8.6, { y: 20 }); enter(".s2b", 8.8); enter(".s2c", 9.1);
+      // S2 — thesis · whip-pan IN (slide + directional blur)
+      tl.from(".s2a", { opacity: 0, x: 220, filter: "blur(14px)", duration: 0.55, ease: EXPO }, 8.55);
+      tl.from(".s2b", { opacity: 0, x: 260, filter: "blur(16px)", duration: 0.6, ease: EXPO }, 8.7);
+      enter(".s2c", 9.2);
 
-      // S3 — ROAI framework (voice ~18.0); "4.0×" lands on "Four dollars…" (~23.0)
+      // S3 — ROAI framework; "4.0×" lands on "Four dollars…" (~23.0) with a shimmer
       enter(".s3a", 18.1, { y: 20 }); enter(".s3b", 18.4);
-      tl.from(".s3c", { opacity: 0, scale: 0.9, duration: 0.7, ease: "back.out(1.5)" }, 23.0);
-      enter(".s3d", 23.5, { y: 20 });
+      tl.from(".s3c", { opacity: 0, scale: 0.85, duration: 0.7, ease: "back.out(1.6)" }, 23.0);
+      shimmer(".s3c .shimmer-sweep-target", 23.3);
+      enter(".s3d", 23.7, { y: 20 });
 
-      // S4 — two modes (voice ~27.3)
-      enter(".s4a", 27.4);
-      enter(".s4b", 27.6, { x: -28, y: 0 }); enter(".s4c", 27.75, { x: 28, y: 0 });
+      // S4 — two modes · cinematic zoom-blur in + flash at the cut
+      flash(27.3);
+      tl.from(".s4a", { opacity: 0, scale: 1.08, filter: "blur(10px)", duration: 0.6, ease: EXPO }, 27.45);
+      enter(".s4b", 27.7, { x: -28, y: 0 }); enter(".s4c", 27.85, { x: 28, y: 0 });
 
-      // S5 — ON.Ecosystem (voice ~35.0)
-      enter(".s5a", 35.1, { y: 18 }); enter(".s5b", 35.3);
-      tl.from([".s5c", ".s5d", ".s5e", ".s5f"], { opacity: 0, x: -36, duration: 0.55, ease: EXPO, stagger: 0.45 }, 35.8);
+      // S5 — ON.Ecosystem · whip-pan IN from left
+      tl.from(".s5a", { opacity: 0, x: -200, filter: "blur(14px)", duration: 0.55, ease: EXPO }, 35.05);
+      enter(".s5b", 35.35);
+      tl.from([".s5c", ".s5d", ".s5e", ".s5f"], { opacity: 0, x: -36, duration: 0.55, ease: EXPO, stagger: 0.45 }, 35.85);
 
-      // S6 — metered billing (voice ~45.2)
+      // S6 — metered billing
       enter(".s6a", 45.3, { y: 18 }); enter(".s6b", 45.6);
       tl.from(".s6c > .card", { opacity: 0, y: 36, duration: 0.6, ease: EXPO, stagger: 0.35 }, 46.1);
 
-      // S7 — proof (voice ~52.4)
-      enter(".s7a", 52.5, { y: 18 });
-      tl.from([".s7b", ".s7c", ".s7d", ".s7e"], { opacity: 0, y: 32, duration: 0.6, ease: EXPO, stagger: 0.5 }, 52.8);
+      // S7 — proof · flash + zoom-in
+      flash(52.4);
+      tl.from(".s7a", { opacity: 0, scale: 1.06, filter: "blur(8px)", duration: 0.55, ease: EXPO }, 52.55);
+      tl.from([".s7b", ".s7c", ".s7d", ".s7e"], { opacity: 0, y: 32, duration: 0.6, ease: EXPO, stagger: 0.5 }, 52.9);
 
-      // S8 — close (voice ~60.0)
-      enter(".s8a", 60.1, { scale: 0.96, y: 0 });
-      enter(".s8b", 60.4, { y: 20 });
-      tl.from(".s8c", { opacity: 0, scale: 0.92, duration: 0.6, ease: "back.out(1.6)" }, 60.8);
-      enter(".s8d", 61.2, { y: 16 });
+      // S8 — close · logo-outro techniques (glow bloom, piece-by-piece, url pill) + shimmer
+      flash(60.0);
+      tl.fromTo(".s8glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 60.1);
+      tl.from(".s8tile", { opacity: 0, scale: 0.7, rotate: -8, duration: 0.6, ease: "back.out(1.7)" }, 60.2);
+      enter(".s8a", 60.5, { scale: 0.96, y: 0 });
+      shimmer(".s8a .shimmer-sweep-target", 61.0);
+      enter(".s8b", 60.9, { y: 20 });
+      tl.from(".s8c", { opacity: 0, scale: 0.92, duration: 0.6, ease: "back.out(1.6)" }, 61.3);
+      tl.from(".s8d", { opacity: 0, y: 16, duration: 0.6, ease: EXPO }, 61.7);
 
       window.__timelines["main"] = tl;
     </script>
