@@ -127,22 +127,17 @@
         <div class="sub s3d" style="margin-top:10px;">$4 of value per $1 of AI spend — the framework example.</div>
       </div>
 
-      <!-- SCENE 4 — two modes (27.3–34.99) -->
-      <div class="scene clip" data-start="27.3" data-duration="7.69" data-track-index="1">
-        <div class="headline s4a" style="font-size:58px;">One platform, <span class="teal">two modes.</span></div>
-        <div class="row">
-          <div class="card s4b" style="width:560px;">
-            <div class="k">Agency command center</div>
-            <h3>Run the whole portfolio</h3>
-            <p>ROAI, revenue, margin and health across every client — live.</p>
-          </div>
-          <div class="card s4c" style="width:560px;">
-            <div class="k">Customer portal</div>
-            <h3>Show the customer their outcomes</h3>
-            <p>Value delivered, active agents and self-serve billing, per account.</p>
-          </div>
-        </div>
-      </div>
+      <!-- SCENE 4 — two modes · vfx-iphone-device showcase: the real Vela OS dashboard on 3D devices (27.3–34.99) -->
+      <div
+        data-composition-id="devices-canvas"
+        data-composition-src="compositions/vfx-iphone-device.html"
+        class="clip"
+        data-start="27.3"
+        data-duration="7.69"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
 
       <!-- SCENE 5 — ON.Ecosystem (35.0–45.2) -->
       <div class="scene clip" data-start="35.0" data-duration="10.2" data-track-index="1">
@@ -246,10 +241,8 @@
       shimmer(".s3c .shimmer-sweep-target", 23.3);
       enter(".s3d", 23.7, { y: 20 });
 
-      // S4 — two modes · cinematic zoom-blur in + flash at the cut
+      // S4 — two modes · vfx-iphone-device nested showcase (its own "devices-canvas" timeline); flash at the cut
       flash(27.3);
-      tl.from(".s4a", { opacity: 0, scale: 1.08, filter: "blur(10px)", duration: 0.6, ease: EXPO }, 27.45);
-      enter(".s4b", 27.7, { x: -28, y: 0 }); enter(".s4c", 27.85, { x: 28, y: 0 });
 
       // S5 — ON.Ecosystem · whip-pan IN from left
       tl.from(".s5a", { opacity: 0, x: -200, filter: "blur(14px)", duration: 0.55, ease: EXPO }, 35.05);
