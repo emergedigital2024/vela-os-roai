@@ -10,6 +10,11 @@ scripts/seed-state.json
 # Node
 node_modules/
 
+# Build output (esbuild bundles emitted into the served public/ dir).
+# Keeps stray content-hashed bundles (e.g. public/assets/vela-<hash>.js) from
+# being committed. The build migration that populates this dir lands in PR #15.
+/public/assets/
+
 # OS
 .DS_Store
 Thumbs.db
