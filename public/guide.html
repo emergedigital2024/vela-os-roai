@@ -148,6 +148,10 @@
   .dl h3{margin:8px 0 6px}
   .dl p{font-size:13.5px;margin:0}
   .dlbtn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(135deg,#3DDCE3,#00C2C7);border-radius:10px;padding:9px 15px}
+  /* inline explainer */
+  .video-frame{position:relative;margin-top:28px;aspect-ratio:16/9;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .video-frame:focus-within{border-color:var(--accent-line)}
+  .video-frame video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;background:#000}
   footer{padding:48px 0 70px}
   .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
   .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
@@ -165,6 +169,7 @@
       <span>Vela <span class="accent">OS</span><small>FPT CX Services · ROAI Analytics</small></span>
     </a>
     <nav class="navlinks">
+      <a href="#watch">Watch</a>
       <a href="#what">Platform</a>
       <a href="#roai">ROAI</a>
       <a href="#billing">Live billing</a>
@@ -194,6 +199,22 @@
     </div>
   </div>
 </div>
+
+<!-- WATCH -->
+<section id="watch">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Watch first</span><h2>The 66-second tour.</h2>
+    <p>A motion walkthrough of the whole platform — dual-mode command center and customer portal, the ON.Ecosystem, live usage-based billing, and the ROAI proof — before you open the live demo.</p></div>
+    <div class="video-frame">
+      <video controls preload="metadata" playsinline
+             poster="/downloads/Vela-OS-Explainer-poster.jpg"
+             aria-label="Vela OS explainer video">
+        <source src="/downloads/Vela-OS-Explainer.mp4" type="video/mp4" />
+        Your browser can't play embedded video — <a href="/downloads/Vela-OS-Explainer.mp4">download the explainer (.mp4)</a> instead.
+      </video>
+    </div>
+  </div>
+</section>
 
 <!-- OPPORTUNITY -->
 <section id="why">
@@ -408,12 +429,12 @@
 <section id="downloads">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">Take it with you</span><h2>Leave-behinds.</h2>
-    <p>The same story, packaged three ways — a 44-second explainer to watch, a deck for the room, and a one-pager to forward.</p></div>
+    <p>The same story, packaged three ways — a 66-second explainer to watch, a deck for the room, and a one-pager to forward.</p></div>
     <div class="grid2">
       <a class="card dl" href="/downloads/Vela-OS-Explainer.mp4" target="_blank" rel="noopener">
-        <div class="tag accent">MP4 · 0:44</div>
+        <div class="tag accent">MP4 · 1:06</div>
         <h3>Vela OS — Explainer ↗</h3>
-        <p>A 44-second motion tour: dual-mode platform, the ON.Ecosystem, usage-based billing and real proof.</p>
+        <p>A 66-second motion tour: dual-mode platform, the ON.Ecosystem, usage-based billing and real proof.</p>
         <span class="dlbtn">Watch the explainer (.mp4)</span>
       </a>
       <a class="card dl" href="/downloads/Vela-OS-Demo-Deck.pptx" download>
