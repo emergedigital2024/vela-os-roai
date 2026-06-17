@@ -32,8 +32,8 @@
     --bg:#08080b; --panel:#111118; --panel2:#0c0c12; --panel-hi:#17171f;
     --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
     --text:#f3f3f6; --muted:#9c9caa; --faint:#8a8a96;
-    --accent:#4f46e5; --accent2:#6366f1; --accent-fg:#a5b4fc;
-    --accent-soft:rgba(99,102,241,.13); --accent-line:rgba(99,102,241,.28);
+    --accent:#00C2C7; --accent2:#3DDCE3; --accent-fg:#7EEEF0;
+    --accent-soft:rgba(0,194,199,.13); --accent-line:rgba(0,194,199,.28);
     --emerald:#34d399; --emerald-soft:rgba(52,211,153,.12);
     --amber:#fbbf24;
     --maxw:1080px;
@@ -60,20 +60,20 @@
   header{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(9,9,13,.72);border-bottom:1px solid var(--border)}
   .bar{display:flex;align-items:center;justify-content:space-between;height:62px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:800}
-  .logo{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#6366f1,#4f46e5);box-shadow:0 4px 14px rgba(79,70,229,.4)}
+  .logo{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#3DDCE3,#00C2C7);box-shadow:0 4px 14px rgba(0,194,199,.4)}
   .brand small{display:block;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.02em}
   .navlinks{display:flex;gap:22px;align-items:center}
   .navlinks a{font-size:14px;color:var(--muted);font-weight:500}
   .navlinks a:hover{color:var(--text)}
   .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;border-radius:10px;padding:10px 16px;border:1px solid var(--border2);background:var(--panel-hi);color:var(--text);cursor:pointer;transition:.15s}
   .btn:hover{background:#1e1e28;border-color:var(--border2)}
-  .btn-primary{background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;box-shadow:0 6px 20px rgba(79,70,229,.35)}
+  .btn-primary{background:linear-gradient(135deg,#3DDCE3,#00C2C7);border:none;color:#fff;box-shadow:0 6px 20px rgba(0,194,199,.35)}
   .btn-primary:hover{filter:brightness(1.08)}
   @media(max-width:760px){.navlinks{display:none}}
 
   /* hero */
   .hero{position:relative;overflow:hidden;padding:88px 0 64px;border-bottom:1px solid var(--border);
-    background:radial-gradient(900px 420px at 75% -10%,rgba(99,102,241,.22),transparent 60%),linear-gradient(160deg,#101019,#08080b 70%)}
+    background:radial-gradient(900px 420px at 75% -10%,rgba(0,194,199,.22),transparent 60%),linear-gradient(160deg,#101019,#08080b 70%)}
   .hero .chip{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--accent-fg);background:var(--accent-soft);border:1px solid var(--accent-line);padding:6px 12px;border-radius:999px}
   .hero h1{margin-top:18px;max-width:18ch}
   .hero .sub{font-size:clamp(16px,2vw,20px);max-width:60ch;margin-top:18px}
@@ -88,7 +88,7 @@
 
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
   .stat{padding:22px;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
-  .stat .n{font-size:34px;font-weight:800;letter-spacing:-.02em;background:linear-gradient(120deg,#a5b4fc,#6366f1);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .n{font-size:34px;font-weight:800;letter-spacing:-.02em;background:linear-gradient(120deg,#7EEEF0,#3DDCE3);-webkit-background-clip:text;background-clip:text;color:transparent}
   .stat .l{font-size:13.5px;color:var(--muted);margin-top:4px}
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px}
@@ -111,7 +111,7 @@
   .roai-vis{padding:26px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(165deg,#14141d,#0c0c13)}
   .roai-vis .big{font-size:52px;font-weight:800;color:var(--emerald);letter-spacing:-.03em}
   .track{height:10px;border-radius:999px;background:#1c1c26;overflow:hidden;margin:14px 0 6px}
-  .track>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#6366f1,#34d399)}
+  .track>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#3DDCE3,#34d399)}
 
   .cases{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:28px}
   .case{padding:22px;border:1px solid var(--border);border-radius:16px;background:var(--panel);position:relative}
@@ -131,7 +131,7 @@
   .steps{counter-reset:step;margin-top:28px;display:flex;flex-direction:column;gap:14px}
   .step{display:grid;grid-template-columns:46px 1fr auto;gap:16px;align-items:center;padding:18px 20px;border:1px solid var(--border);border-radius:16px;background:var(--panel);transition:.15s}
   .step:hover{border-color:var(--accent-line);background:var(--panel-hi)}
-  .step .num{counter-increment:step;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(140deg,#6366f1,#4f46e5)}
+  .step .num{counter-increment:step;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(140deg,#3DDCE3,#00C2C7)}
   .step .num::before{content:counter(step)}
   .step h3{font-size:16px}
   .step p{margin:3px 0 0;font-size:13.5px}
@@ -147,7 +147,7 @@
   .dl .tag{font-family:"Prompt","Lexend",system-ui,sans-serif;font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
   .dl h3{margin:8px 0 6px}
   .dl p{font-size:13.5px;margin:0}
-  .dlbtn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:10px;padding:9px 15px}
+  .dlbtn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(135deg,#3DDCE3,#00C2C7);border-radius:10px;padding:9px 15px}
   footer{padding:48px 0 70px}
   .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
   .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
@@ -244,7 +244,7 @@
     <div class="sec-head"><span class="eyebrow">The offering</span><h2>Six CX pillars, powered by the ON.Ecosystem.</h2>
     <p>FPT's end-to-end customer-experience capability — from strategy to run — with agentic AI products layered across the funnel.</p></div>
     <div class="pillars">
-      <div class="pillar"><div class="k"><span class="dot" style="background:#6366f1"></span>Experience Strategy</div><p>Maturity assessment, marketecture and journey analysis.</p></div>
+      <div class="pillar"><div class="k"><span class="dot" style="background:#3DDCE3"></span>Experience Strategy</div><p>Maturity assessment, marketecture and journey analysis.</p></div>
       <div class="pillar"><div class="k"><span class="dot" style="background:#8b5cf6"></span>Experience Design</div><p>Research, adaptive UI, design systems and usability testing.</p></div>
       <div class="pillar"><div class="k"><span class="dot" style="background:#06b6d4"></span>Experience Platform</div><p>DXP build/re-platform, MarTech and DX engineering.</p></div>
       <div class="pillar"><div class="k"><span class="dot" style="background:#10b981"></span>Commerce Platform</div><p>Composable commerce build, B2B/B2C, accelerators.</p></div>
@@ -408,8 +408,14 @@
 <section id="downloads">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">Take it with you</span><h2>Leave-behinds.</h2>
-    <p>The same story, packaged two ways — a deck for the room and a one-pager to forward afterward.</p></div>
+    <p>The same story, packaged three ways — a 44-second explainer to watch, a deck for the room, and a one-pager to forward.</p></div>
     <div class="grid2">
+      <a class="card dl" href="/downloads/Vela-OS-Explainer.mp4" target="_blank" rel="noopener">
+        <div class="tag accent">MP4 · 0:44</div>
+        <h3>Vela OS — Explainer ↗</h3>
+        <p>A 44-second motion tour: dual-mode platform, the ON.Ecosystem, usage-based billing and real proof.</p>
+        <span class="dlbtn">Watch the explainer (.mp4)</span>
+      </a>
       <a class="card dl" href="/downloads/Vela-OS-Demo-Deck.pptx" download>
         <div class="tag accent">PPTX · 9 slides</div>
         <h3>Vela OS — Demo Deck ↓</h3>

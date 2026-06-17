@@ -6,7 +6,7 @@
   const U = window.UI;
   const { Card, Badge, TierBadge, DeltaPill, HealthBar, LineArea, CategoryBars, Donut, Progress, Ring, SectionTitle, MetronomeBadge, InfoDot, ROAI_TIP, C, cx } = U;
 
-  const MODEL_COLORS = [C.indigoDeep || "#4f46e5", C.indigo, C.sky, C.slate];
+  const MODEL_COLORS = [C.indigoDeep || "#008A8E", C.indigo, C.sky, C.slate];
 
   function MetricCard({ label, value, sub, tone, icon, tip, foot }) {
     return (

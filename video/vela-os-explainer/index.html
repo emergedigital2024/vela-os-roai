@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* local brand fonts (captured .woff2 — offline-render safe) */
+      @font-face { font-family: "Lexend"; font-weight: 400; font-display: block; src: url("assets/fonts/lexend-400.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend"; font-weight: 600; font-display: block; src: url("assets/fonts/lexend-600.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend"; font-weight: 700; font-display: block; src: url("assets/fonts/lexend-700.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend Zetta"; font-weight: 700; font-display: block; src: url("assets/fonts/lexendzetta-700.woff2") format("woff2"); }
+      @font-face { font-family: "Prompt"; font-weight: 500; font-display: block; src: url("assets/fonts/prompt-500.woff2") format("woff2"); }
+      @font-face { font-family: "Prompt"; font-weight: 600; font-display: block; src: url("assets/fonts/prompt-600.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block; src: url("assets/fonts/jbmono-500.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block; src: url("assets/fonts/jbmono-700.woff2") format("woff2"); }
+
+      /* ── Emerge Digital canonical tokens (../../brand/design-tokens.json) ── */
+      :root {
+        --bg: #06122A; --bg-deep: #03081A; --surface: #0A1F3D;
+        --ink: #F7F9FC; --muted: #9FAFC2; --hair: rgba(255,255,255,0.10);
+        --accent: #00C2C7; --accent-2: #3DDCE3; --glow: #00F5FF;
+        --emerald: #3FCF8E;
+        --f-sans: "Lexend", system-ui, sans-serif;
+        --f-wide: "Lexend Zetta", "Lexend", sans-serif;
+        --f-label: "Prompt", "Lexend", sans-serif;
+        --f-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg-deep); }
+      body { font-family: "Lexend", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+      #root {
+        position: relative; width: 1920px; height: 1080px;
+        background:
+          radial-gradient(ellipse 90% 70% at 80% 0%, rgba(0,194,199,0.18), transparent 60%),
+          radial-gradient(ellipse 70% 60% at 8% 95%, rgba(61,220,227,0.10), transparent 65%),
+          linear-gradient(160deg, #06122A 0%, #0A1F3D 55%, #06122A 100%);
+      }
+      /* every scene fills the frame, centred, with generous safe-area padding */
+      .scene {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 120px 180px;
+      }
+      .eyebrow {
+        font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.18em;
+        font-weight: 600; font-size: 22px; color: var(--accent-2);
+      }
+      .headline { font-weight: 700; font-size: 66px; line-height: 1.06; letter-spacing: -0.025em; max-width: 1400px; }
+      .sub { font-weight: 400; font-size: 30px; line-height: 1.45; color: var(--muted); max-width: 1120px; }
+      .teal { color: var(--accent); }
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+      /* ── scene 1 — brand open ── */
+      .wordmark { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 132px; letter-spacing: -0.02em; line-height: 1; }
+      .tile {
+        width: 132px; height: 119px; border-radius: 28px; margin-bottom: 40px;
+        background: linear-gradient(150deg, #00C2C7 0%, #0A1F3D 99%);
+        box-shadow: 0 24px 80px rgba(0,194,199,0.32);
+        display: flex; align-items: center; justify-content: center;
+        font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 58px; color: #fff;
+      }
+
+      /* ── card rows ── */
+      .row { display: flex; gap: 28px; margin-top: 56px; }
+      .card {
+        background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+        border: 1px solid var(--hair); border-radius: 20px; padding: 36px 40px;
+        text-align: left; box-shadow: 0 30px 80px -30px rgba(0,194,199,0.18);
+      }
+      .card h3 { font-size: 30px; font-weight: 700; }
+      .card p { font-size: 22px; color: var(--muted); margin-top: 12px; line-height: 1.4; }
+      .card .k { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.16em; font-size: 16px; color: var(--accent-2); margin-bottom: 14px; }
+
+      /* ── agent / rate rows ── */
+      .agent { display: flex; align-items: baseline; justify-content: space-between; gap: 40px; width: 1240px; padding: 18px 4px; border-bottom: 1px solid var(--hair); }
+      .agent .nm { font-size: 30px; font-weight: 700; }
+      .agent .st { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.12em; font-size: 16px; color: var(--muted); margin-left: 18px; }
+      .agent .rate { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 24px; color: var(--accent); }
+
+      /* ── ROAI formula ── */
+      .formula { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 92px; letter-spacing: -0.02em; }
+      .mult { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 200px; line-height: 1; color: var(--accent); text-shadow: 0 0 80px rgba(0,194,199,0.45); }
+
+      /* ── proof grid ── */
+      .proof { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 56px; width: 1320px; margin-top: 48px; }
+      .proof .item { text-align: left; border-left: 3px solid var(--accent); padding-left: 24px; }
+      .proof .big { font-size: 46px; font-weight: 700; }
+      .proof .lbl { font-size: 22px; color: var(--muted); margin-top: 6px; }
+
+      .footrule { position: absolute; bottom: 64px; left: 180px; right: 180px; display: flex; justify-content: space-between; align-items: center; font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 18px; color: var(--muted); }
+      .cta { display: inline-block; margin-top: 44px; background: linear-gradient(90deg, #00C2C7, #3DDCE3); color: #0A1F3D; font-weight: 700; font-size: 28px; padding: 22px 44px; border-radius: 9999px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="45" data-width="1920" data-height="1080">
+
+      <!-- SCENE 1 — brand open (0–5) -->
+      <div class="scene clip" data-start="0" data-duration="5" data-track-index="1">
+        <div class="tile s1a">ED</div>
+        <div class="wordmark s1b">Vela <span class="teal">OS</span></div>
+        <div class="sub s1c" style="margin-top:24px;">Return on AI Investment, measured.</div>
+        <div class="eyebrow s1d" style="margin-top:40px;">An Emerge Digital company · Powered by FPT CX Services</div>
+      </div>
+
+      <!-- SCENE 2 — thesis (5–10) -->
+      <div class="scene clip" data-start="5" data-duration="5" data-track-index="1">
+        <div class="eyebrow s2a">Dual-mode · agency + client</div>
+        <div class="headline s2b" style="margin-top:28px;">The operating system for<br /><span class="teal">AI-first customer experience.</span></div>
+        <div class="sub s2c" style="margin-top:32px;">One platform that runs the whole portfolio — and shows each client the outcomes.</div>
+      </div>
+
+      <!-- SCENE 3 — ROAI framework (10–15.5) -->
+      <div class="scene clip" data-start="10" data-duration="5.5" data-track-index="1">
+        <div class="eyebrow s3a">Every engagement, measured in ROAI</div>
+        <div class="formula s3b" style="margin-top:30px;">ROAI = <span class="teal">Value delivered</span> ÷ AI cost</div>
+        <div class="mult s3c" style="margin-top:24px;">4.0×</div>
+        <div class="sub s3d" style="margin-top:10px;">$4 of value per $1 of AI spend — the framework example.</div>
+      </div>
+
+      <!-- SCENE 4 — two modes (15.5–21) -->
+      <div class="scene clip" data-start="15.5" data-duration="5.5" data-track-index="1">
+        <div class="headline s4a" style="font-size:58px;">One platform, <span class="teal">two modes.</span></div>
+        <div class="row">
+          <div class="card s4b" style="width:560px;">
+            <div class="k">Agency command center</div>
+            <h3>Run the whole portfolio</h3>
+            <p>ROAI, revenue, margin and health across every client — live.</p>
+          </div>
+          <div class="card s4c" style="width:560px;">
+            <div class="k">Customer portal</div>
+            <h3>Show the customer their outcomes</h3>
+            <p>Value delivered, active agents and self-serve billing, per account.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 5 — ON.Ecosystem (21–27) -->
+      <div class="scene clip" data-start="21" data-duration="6" data-track-index="1">
+        <div class="eyebrow s5a">Six CX pillars · 24 productized SKUs</div>
+        <div class="headline s5b" style="font-size:54px;margin-top:22px;">Powered by the <span class="teal">ON.Ecosystem.</span></div>
+        <div style="margin-top:40px;">
+          <div class="agent s5c"><div><span class="nm">ON.Optima</span><span class="st">Attract · AEO</span></div><span class="rate">$0.02 / request</span></div>
+          <div class="agent s5d"><div><span class="nm">ON.X</span><span class="st">Engage · agentic assistant</span></div><span class="rate">$0.25 / session</span></div>
+          <div class="agent s5e"><div><span class="nm">ON.E</span><span class="st">Convert · commerce</span></div><span class="rate">$0.03 / API call</span></div>
+          <div class="agent s5f"><div><span class="nm">ON.Match</span><span class="st">Optimize · recommendations</span></div><span class="rate">$0.01 / rec</span></div>
+        </div>
+      </div>
+
+      <!-- SCENE 6 — metered billing (27–32.5) -->
+      <div class="scene clip" data-start="27" data-duration="5.5" data-track-index="1">
+        <div class="eyebrow s6a">Wired to Metronome</div>
+        <div class="headline s6b" style="font-size:58px;margin-top:24px;">Usage-based billing,<br /><span class="teal">priced to the unit.</span></div>
+        <div class="row s6c">
+          <div class="card" style="width:360px;"><div class="k">Tiers</div><h3>Starter → Enterprise</h3><p>Single-agent pilots to full committed volume.</p></div>
+          <div class="card" style="width:360px;"><div class="k">Hybrid seats</div><h3>20k credits / seat / mo</h3><p>Pooled credits + usage top-ups.</p></div>
+          <div class="card" style="width:360px;"><div class="k">Enterprise commit</div><h3>3-yr, ramped</h3><p>Prepaid drawdown, installments, rollover.</p></div>
+        </div>
+      </div>
+
+      <!-- SCENE 7 — proof (32.5–39.5) -->
+      <div class="scene clip" data-start="32.5" data-duration="7" data-track-index="1">
+        <div class="eyebrow s7a">Real outcomes behind the platform</div>
+        <div class="proof">
+          <div class="item s7b"><div class="big teal">+200%</div><div class="lbl">click-through · ON.Optima AEO</div></div>
+          <div class="item s7c"><div class="big teal">2 mo</div><div class="lbl">MVP vs 10 · KSA PIF megaproject (ON.E)</div></div>
+          <div class="item s7d"><div class="big">340+ / 760+</div><div class="lbl">Salesforce experts / certs · 1st ASEAN Data &amp; AI CoE</div></div>
+          <div class="item s7e"><div class="big">$2.47B · 80k+</div><div class="lbl">backed by FPT Corporation</div></div>
+        </div>
+      </div>
+
+      <!-- SCENE 8 — close / CTA (39.5–45) -->
+      <div class="scene clip" data-start="39.5" data-duration="5.5" data-track-index="1">
+        <div class="wordmark s8a" style="font-size:104px;">Vela <span class="teal">OS</span></div>
+        <div class="sub s8b" style="margin-top:20px;">Return on AI Investment, measured.</div>
+        <div class="cta s8c">Book a discovery call</div>
+        <div class="footrule s8d"><span>An Emerge Digital company</span><span class="mono" style="letter-spacing:0;">roai.emergedigital.ae</span></div>
+      </div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EXPO = "expo.out";
+
+      // helper: entrance for a group at absolute time `at`
+      const enter = (sel, at, opts = {}) =>
+        tl.from(sel, Object.assign({ opacity: 0, y: 44, duration: 0.7, ease: EXPO }, opts), at);
+
+      // S1 — brand open
+      tl.from(".s1a", { opacity: 0, scale: 0.94, duration: 0.6, ease: EXPO }, 0.2);
+      enter(".s1b", 0.45); enter(".s1c", 0.65); enter(".s1d", 0.9, { y: 24 });
+
+      // S2 — thesis
+      enter(".s2a", 5.2, { y: 20 }); enter(".s2b", 5.4); enter(".s2c", 5.7);
+
+      // S3 — ROAI framework
+      enter(".s3a", 10.2, { y: 20 }); enter(".s3b", 10.4);
+      tl.from(".s3c", { opacity: 0, scale: 0.9, duration: 0.7, ease: "back.out(1.5)" }, 10.8);
+      enter(".s3d", 11.2, { y: 20 });
+
+      // S4 — two modes
+      enter(".s4a", 15.7);
+      enter(".s4b", 16.0, { x: -28, y: 0 }); enter(".s4c", 16.15, { x: 28, y: 0 });
+
+      // S5 — ON.Ecosystem (staggered rate rows)
+      enter(".s5a", 21.2, { y: 18 }); enter(".s5b", 21.4);
+      tl.from([".s5c", ".s5d", ".s5e", ".s5f"], { opacity: 0, x: -36, duration: 0.55, ease: EXPO, stagger: 0.16 }, 21.8);
+
+      // S6 — metered billing
+      enter(".s6a", 27.2, { y: 18 }); enter(".s6b", 27.4);
+      tl.from(".s6c > .card", { opacity: 0, y: 36, duration: 0.6, ease: EXPO, stagger: 0.14 }, 27.9);
+
+      // S7 — proof
+      enter(".s7a", 32.7, { y: 18 });
+      tl.from([".s7b", ".s7c", ".s7d", ".s7e"], { opacity: 0, y: 32, duration: 0.6, ease: EXPO, stagger: 0.18 }, 33.0);
+
+      // S8 — close
+      enter(".s8a", 39.7, { scale: 0.96, y: 0 });
+      enter(".s8b", 40.0, { y: 20 });
+      tl.from(".s8c", { opacity: 0, scale: 0.92, duration: 0.6, ease: "back.out(1.6)" }, 40.4);
+      enter(".s8d", 40.8, { y: 16 });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -48,7 +48,7 @@
   function Brand({ collapsed }) {
     return (
       <div className="flex items-center gap-2.5 px-1">
-        <div className="relative flex h-9 w-9 flex-none items-center justify-center rounded-xl shadow-sm" style={{ background: "linear-gradient(140deg,#6366f1,#4f46e5)" }}>
+        <div className="relative flex h-9 w-9 flex-none items-center justify-center rounded-xl shadow-sm" style={{ background: "linear-gradient(140deg,#3DDCE3,#00C2C7)" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 3 L20 19 M12 3 L4 19 M7.5 13 H16.5" />
           </svg>

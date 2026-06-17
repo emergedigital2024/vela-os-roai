@@ -162,7 +162,7 @@
         {/* hero / portfolio summary */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           <Card className="relative overflow-hidden p-6 lg:col-span-5" style={{ background: "var(--hero)" }}>
-            <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full" style={{ background: "radial-gradient(circle, rgba(99,102,241,.28), transparent 70%)" }} />
+            <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full" style={{ background: "radial-gradient(circle, rgba(0,194,199,.28), transparent 70%)" }} />
             <div className="flex items-center gap-2 text-sm font-medium text-[var(--accent-fg)]">
               <Icon name="sparkles" size={15} /> Portfolio Return on AI Investment <InfoDot label={ROAI_TIP} />
             </div>

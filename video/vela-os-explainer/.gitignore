@@ -1,0 +1,10 @@
+# deps + provisioned binaries (re-create with: npm install --no-save ffmpeg-static ffprobe-static)
+node_modules/
+bin/
+package-lock.json
+
+# render output + QA scratch (final MP4 lives in ../../public/downloads/)
+renders/
+qa/
+
+# keep: index.html, package.json, meta.json, hyperframes.json, AGENTS.md, CLAUDE.md, assets/fonts/*.woff2
