@@ -316,6 +316,26 @@
       firstRun.current = false; fromPop.current = false;
     }, [mode, section, selected, portalId, clientSection, tab]);
 
+    // ---- per-view document.title (SEO + tab/history clarity) ----
+    useEffect(() => {
+      const BRAND = "Vela OS · FPT CX Services";
+      let label;
+      if (mode === "client") {
+        label = (CLIENT_TITLES[clientSection] || "Customer portal") + " · Client portal";
+      } else if (selected) {
+        label = selected.name + " · ROAI deep dive";
+      } else if (section === "home") {
+        label = "Agency overview";
+      } else if (section === "clients") {
+        label = "Clients";
+      } else if (section === "analytics") {
+        label = "ROAI analytics";
+      } else if (section === "billing") {
+        label = "Billing";
+      }
+      document.title = label ? label + " — " + BRAND : BRAND + " — ROAI Analytics";
+    }, [mode, section, selected, clientSection]);
+
     useEffect(() => {
       const onPop = () => {
         const s = parseURL();
