@@ -8,7 +8,9 @@
 
   // chart palette
   const C = {
-    indigo: "#6366f1", indigoDeep: "#4f46e5", emerald: "#10b981",
+    // brand accent — these keys hold the canonical Emerge Digital teal (was indigo);
+    // recoloured per design.md "teal on every surface incl. the roai product UI".
+    indigo: "#00C2C7", indigoDeep: "#008A8E", emerald: "#10b981",
     amber: "#f59e0b", rose: "#f43f5e", sky: "#38bdf8", violet: "#a78bfa",
     slate: "#94a3b8",
   };
