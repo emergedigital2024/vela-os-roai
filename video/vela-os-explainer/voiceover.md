@@ -1,46 +1,36 @@
 # Vela OS explainer — voiceover
 
-Status: **DONE (2026-06-17)** — synthesized with `en-US-Studio-O` (Cloud TTS), saved to `assets/vo.mp3`, wired as the `<audio id="vo">` track; scenes re-timed to the narration breaks (≈59s), rendered (audio muxed, mean −22 dB) + deployed. Re-synth with the command below. Voice direction: calm, confident, specific (per Emerge brand voice — not breathless).
+**Status: DONE + deployed.** Voice **`en-US-Chirp3-HD-Aoede`** (Google Cloud TTS / Vertex) — natural, warm. The video is **66.6s** with the VO synced scene-by-scene.
 
-## Script (per scene, for sync)
-1. **0–5** · "Vela OS. Return on AI Investment — measured. Built by Emerge Digital, powered by FPT CX Services."
-2. **5–10** · "The operating system for AI-first customer experience — one platform that runs the whole portfolio, and shows every client their outcomes."
-3. **10–15.5** · "Every engagement is measured in ROAI: value delivered, divided by AI cost. Four dollars of value for every dollar spent."
-4. **15.5–21** · "Two modes — an agency command center for the team, and a customer portal that proves the value, account by account."
-5. **21–27** · "Twenty-four productized services across six CX pillars, powered by the ON.Ecosystem — from answer-engine optimization to agentic commerce."
-6. **27–32.5** · "Billing is usage-based, wired to Metronome — priced to the unit, from seat plans to enterprise commitments."
-7. **32.5–39.5** · "And it's proven: two hundred percent more click-throughs, an MVP in two months instead of ten — backed by FPT."
-8. **39.5–45** · "Vela OS. Return on AI Investment, measured. Book a discovery call."
+## Why the build is segment-based + muxed (important)
+1. **Chirp 3 HD voices ignore SSML `<break>`** (text-only), so a single synth gives no reliable inter-topic boundaries to sync scenes to.
+2. **Hyperframes truncates in-render audio by ~10s** (the `<audio>` element renders ~10s short regardless of file/format — MP3 *and* WAV both lost ~10s). So the production audio is **muxed in with ffmpeg after the render**, not via the in-render `<audio>` track.
 
-> Proof discipline: this is the canonical proof only (no demo-dashboard client metrics, no financials beyond FPT's public parent figures).
+So: synth each of the 8 segments separately → pad each to its scene slot (bakes in ~0.5s topic pauses) → concat (re-encode) into one `assets/vo.wav` (66.6s) whose segment offsets match the scene `data-start`s → render the video → **ffmpeg-mux `vo.wav` over the rendered video**.
 
-## Synthesize (Google Cloud Text-to-Speech / Vertex) — run after `gcloud auth login`
-Recommended voice: `en-US-Studio-O` (warm female) or `en-US-Chirp3-HD-Charon` (newer). Enable once: `gcloud services enable texttospeech.googleapis.com`.
+## Script (8 segments — must match the order in build-vo)
+1. Vela O S. Return on A I Investment — measured. Built by Emerge Digital, powered by F P T C X Services.
+2. The operating system for A I-first customer experience: one platform that runs the whole portfolio, and shows every client their outcomes.
+3. Every engagement is measured in ROAI — value delivered, divided by A I cost. Four dollars of value for every dollar spent.
+4. Two modes. An agency command center for the team, and a customer portal that proves the value, account by account.
+5. Twenty-four productized services across six C X pillars, powered by the ON Ecosystem — from answer-engine optimization to agentic commerce.
+6. Billing is usage-based, wired to Metronome, and priced to the unit — from seat plans to enterprise commitments.
+7. And it's proven. Two hundred percent more click-throughs. An M V P in two months instead of ten. Backed by F P T.
+8. Vela O S. Return on A I Investment, measured. Book a discovery call.
 
+> Proof discipline: canonical proof only (no demo-dashboard client metrics, no financials beyond FPT's public parent figures).
+
+## Rebuild (after `gcloud auth login`)
 ```bash
-# SSML keeps the VO aligned to scene boundaries via <break>. Save as assets/vo.ssml then:
-TOKEN=$(gcloud auth print-access-token)
-PROJECT=$(gcloud config get-value project)
-curl -s -X POST "https://texttospeech.googleapis.com/v1/text:synthesize" \
-  -H "Authorization: Bearer $TOKEN" -H "x-goog-user-project: $PROJECT" \
-  -H "Content-Type: application/json" -d @- <<'JSON' | python3 -c "import sys,json,base64;open('assets/vo.mp3','wb').write(base64.b64decode(json.load(sys.stdin)['audioContent']))"
-{
-  "input": { "ssml": "<speak>Vela O S. Return on A I Investment — measured. Built by Emerge Digital, powered by F P T C X Services. <break time=\"700ms\"/> The operating system for A I-first customer experience — one platform that runs the whole portfolio, and shows every client their outcomes. <break time=\"600ms\"/> Every engagement is measured in ROAI: value delivered, divided by A I cost. Four dollars of value for every dollar spent. <break time=\"500ms\"/> Two modes — an agency command center for the team, and a customer portal that proves the value, account by account. <break time=\"500ms\"/> Twenty-four productized services across six C X pillars, powered by the ON Ecosystem — from answer-engine optimization to agentic commerce. <break time=\"500ms\"/> Billing is usage-based, wired to Metronome — priced to the unit, from seat plans to enterprise commitments. <break time=\"500ms\"/> And it's proven: two hundred percent more click-throughs, an M V P in two months instead of ten — backed by F P T. <break time=\"500ms\"/> Vela O S. Return on A I Investment, measured. Book a discovery call.</speak>" },
-  "voice": { "languageCode": "en-US", "name": "en-US-Studio-O" },
-  "audioConfig": { "audioEncoding": "MP3", "speakingRate": 1.0, "sampleRateHertz": 44100 }
-}
-JSON
-# probe the resulting length and (if needed) nudge speakingRate so it lands ~44s:
-ffprobe -i assets/vo.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+# 1) synth each segment → assets/seg/sN.wav (en-US-Chirp3-HD-Aoede, LINEAR16), print durations
+#    (python: POST texttospeech.googleapis.com/v1/text:synthesize with input.text; one call per segment)
+# 2) pad each segment to its scene slot and concat (RE-ENCODE, not -c copy — copy embeds WAV headers mid-stream → truncation):
+slots=(8.5 9.5 9.3 7.7 10.2 7.2 7.6 6.6)   # = scene data-durations; seg1 gets a 0.3s lead (adelay)
+#    ffmpeg -i sN.wav -af apad -t <slot> pN.wav   (seg1: -af "adelay=300:all=1,apad")
+#    ffmpeg -f concat -safe 0 -i list.txt -c:a pcm_s16le -ar 24000 -ac 1 assets/vo.wav
+# 3) render video, then mux the full VO over it:
+PATH="$PWD/bin:$PATH" npm run render
+ffmpeg -y -i renders/<latest>.mp4 -i assets/vo.wav -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -ar 48000 \
+  ../../public/downloads/Vela-OS-Explainer.mp4
 ```
-
-## Wire into the composition + re-render
-Add inside `#root` (a track below the scenes), then re-render:
-```html
-<audio class="clip" src="assets/vo.mp3" data-start="0" data-duration="45" data-track-index="0" data-has-audio="true"></audio>
-```
-```bash
-npm run check
-PATH="$PWD/bin:$PATH" npm run render   # ffmpeg muxes the audio track
-```
-Then copy the new MP4 to `../../public/downloads/Vela-OS-Explainer.mp4` and re-commit. (If the VO total ≠ 45s, adjust scene `data-duration`s or `speakingRate` so audio and motion land together.)
+Verify (no `-loglevel error` — it hides detector output): `ffmpeg -i out.mp4 -af volumedetect -f null -` (mean ≈ −22 dB) and stream durations both ≈ 66.6s. Scene `data-start`s in `index.html` must equal the cumulative `slots`. To change voice: swap the `name` in the synth call (any `en-US-Chirp3-HD-*`).
