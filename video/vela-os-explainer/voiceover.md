@@ -1,6 +1,6 @@
 # Vela OS explainer — voiceover
 
-Status: **script ready; synth pending `gcloud auth login`** (token expired 2026-06-17). Once GCP auth is restored and Text-to-Speech is enabled, synthesize → drop `assets/vo.mp3` in → re-render. Voice direction: calm, confident, specific (per Emerge brand voice — not breathless). ~120 words ≈ the 45s timeline.
+Status: **DONE (2026-06-17)** — synthesized with `en-US-Studio-O` (Cloud TTS), saved to `assets/vo.mp3`, wired as the `<audio id="vo">` track; scenes re-timed to the narration breaks (≈59s), rendered (audio muxed, mean −22 dB) + deployed. Re-synth with the command below. Voice direction: calm, confident, specific (per Emerge brand voice — not breathless).
 
 ## Script (per scene, for sync)
 1. **0–5** · "Vela OS. Return on AI Investment — measured. Built by Emerge Digital, powered by FPT CX Services."

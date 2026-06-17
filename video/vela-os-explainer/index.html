@@ -21,10 +21,6 @@
         --ink: #F7F9FC; --muted: #9FAFC2; --hair: rgba(255,255,255,0.10);
         --accent: #00C2C7; --accent-2: #3DDCE3; --glow: #00F5FF;
         --emerald: #3FCF8E;
-        --f-sans: "Lexend", system-ui, sans-serif;
-        --f-wide: "Lexend Zetta", "Lexend", sans-serif;
-        --f-label: "Prompt", "Lexend", sans-serif;
-        --f-mono: "JetBrains Mono", ui-monospace, monospace;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg-deep); }
@@ -37,53 +33,34 @@
           radial-gradient(ellipse 70% 60% at 8% 95%, rgba(61,220,227,0.10), transparent 65%),
           linear-gradient(160deg, #06122A 0%, #0A1F3D 55%, #06122A 100%);
       }
-      /* every scene fills the frame, centred, with generous safe-area padding */
       .scene {
         position: absolute; inset: 0;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         text-align: center; padding: 120px 180px;
       }
-      .eyebrow {
-        font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.18em;
-        font-weight: 600; font-size: 22px; color: var(--accent-2);
-      }
+      .eyebrow { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 600; font-size: 22px; color: var(--accent-2); }
       .headline { font-weight: 700; font-size: 66px; line-height: 1.06; letter-spacing: -0.025em; max-width: 1400px; }
       .sub { font-weight: 400; font-size: 30px; line-height: 1.45; color: var(--muted); max-width: 1120px; }
       .teal { color: var(--accent); }
       .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
 
-      /* ── scene 1 — brand open ── */
       .wordmark { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 132px; letter-spacing: -0.02em; line-height: 1; }
-      .tile {
-        width: 132px; height: 119px; border-radius: 28px; margin-bottom: 40px;
-        background: linear-gradient(150deg, #00C2C7 0%, #0A1F3D 99%);
-        box-shadow: 0 24px 80px rgba(0,194,199,0.32);
-        display: flex; align-items: center; justify-content: center;
-        font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 58px; color: #fff;
-      }
+      .tile { width: 132px; height: 119px; border-radius: 28px; margin-bottom: 40px; background: linear-gradient(150deg, #00C2C7 0%, #0A1F3D 99%); box-shadow: 0 24px 80px rgba(0,194,199,0.32); display: flex; align-items: center; justify-content: center; font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 58px; color: #fff; }
 
-      /* ── card rows ── */
       .row { display: flex; gap: 28px; margin-top: 56px; }
-      .card {
-        background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border: 1px solid var(--hair); border-radius: 20px; padding: 36px 40px;
-        text-align: left; box-shadow: 0 30px 80px -30px rgba(0,194,199,0.18);
-      }
+      .card { background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border: 1px solid var(--hair); border-radius: 20px; padding: 36px 40px; text-align: left; box-shadow: 0 30px 80px -30px rgba(0,194,199,0.18); }
       .card h3 { font-size: 30px; font-weight: 700; }
       .card p { font-size: 22px; color: var(--muted); margin-top: 12px; line-height: 1.4; }
       .card .k { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.16em; font-size: 16px; color: var(--accent-2); margin-bottom: 14px; }
 
-      /* ── agent / rate rows ── */
       .agent { display: flex; align-items: baseline; justify-content: space-between; gap: 40px; width: 1240px; padding: 18px 4px; border-bottom: 1px solid var(--hair); }
       .agent .nm { font-size: 30px; font-weight: 700; }
       .agent .st { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.12em; font-size: 16px; color: var(--muted); margin-left: 18px; }
       .agent .rate { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 24px; color: var(--accent); }
 
-      /* ── ROAI formula ── */
       .formula { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 92px; letter-spacing: -0.02em; }
       .mult { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 200px; line-height: 1; color: var(--accent); text-shadow: 0 0 80px rgba(0,194,199,0.45); }
 
-      /* ── proof grid ── */
       .proof { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 56px; width: 1320px; margin-top: 48px; }
       .proof .item { text-align: left; border-left: 3px solid var(--accent); padding-left: 24px; }
       .proof .big { font-size: 46px; font-weight: 700; }
@@ -94,33 +71,36 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="45" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="59" data-width="1920" data-height="1080">
 
-      <!-- SCENE 1 — brand open (0–5) -->
-      <div class="scene clip" data-start="0" data-duration="5" data-track-index="1">
+      <!-- voiceover track (en-US-Studio-O) — scenes re-timed to its narration boundaries -->
+      <audio id="vo" class="clip" src="assets/vo.mp3" data-start="0" data-duration="59" data-track-index="0" data-has-audio="true"></audio>
+
+      <!-- SCENE 1 — brand open (0–7.1) -->
+      <div class="scene clip" data-start="0" data-duration="7.1" data-track-index="1">
         <div class="tile s1a">ED</div>
         <div class="wordmark s1b">Vela <span class="teal">OS</span></div>
         <div class="sub s1c" style="margin-top:24px;">Return on AI Investment, measured.</div>
         <div class="eyebrow s1d" style="margin-top:40px;">An Emerge Digital company · Powered by FPT CX Services</div>
       </div>
 
-      <!-- SCENE 2 — thesis (5–10) -->
-      <div class="scene clip" data-start="5" data-duration="5" data-track-index="1">
+      <!-- SCENE 2 — thesis (7.1–15.9) -->
+      <div class="scene clip" data-start="7.1" data-duration="8.8" data-track-index="1">
         <div class="eyebrow s2a">Dual-mode · agency + client</div>
         <div class="headline s2b" style="margin-top:28px;">The operating system for<br /><span class="teal">AI-first customer experience.</span></div>
         <div class="sub s2c" style="margin-top:32px;">One platform that runs the whole portfolio — and shows each client the outcomes.</div>
       </div>
 
-      <!-- SCENE 3 — ROAI framework (10–15.5) -->
-      <div class="scene clip" data-start="10" data-duration="5.5" data-track-index="1">
+      <!-- SCENE 3 — ROAI framework (15.9–24.95) -->
+      <div class="scene clip" data-start="15.9" data-duration="9.0" data-track-index="1">
         <div class="eyebrow s3a">Every engagement, measured in ROAI</div>
         <div class="formula s3b" style="margin-top:30px;">ROAI = <span class="teal">Value delivered</span> ÷ AI cost</div>
         <div class="mult s3c" style="margin-top:24px;">4.0×</div>
         <div class="sub s3d" style="margin-top:10px;">$4 of value per $1 of AI spend — the framework example.</div>
       </div>
 
-      <!-- SCENE 4 — two modes (15.5–21) -->
-      <div class="scene clip" data-start="15.5" data-duration="5.5" data-track-index="1">
+      <!-- SCENE 4 — two modes (24.95–31.9) -->
+      <div class="scene clip" data-start="24.95" data-duration="6.95" data-track-index="1">
         <div class="headline s4a" style="font-size:58px;">One platform, <span class="teal">two modes.</span></div>
         <div class="row">
           <div class="card s4b" style="width:560px;">
@@ -136,8 +116,8 @@
         </div>
       </div>
 
-      <!-- SCENE 5 — ON.Ecosystem (21–27) -->
-      <div class="scene clip" data-start="21" data-duration="6" data-track-index="1">
+      <!-- SCENE 5 — ON.Ecosystem (31.9–41.2) -->
+      <div class="scene clip" data-start="31.9" data-duration="9.3" data-track-index="1">
         <div class="eyebrow s5a">Six CX pillars · 24 productized SKUs</div>
         <div class="headline s5b" style="font-size:54px;margin-top:22px;">Powered by the <span class="teal">ON.Ecosystem.</span></div>
         <div style="margin-top:40px;">
@@ -148,8 +128,8 @@
         </div>
       </div>
 
-      <!-- SCENE 6 — metered billing (27–32.5) -->
-      <div class="scene clip" data-start="27" data-duration="5.5" data-track-index="1">
+      <!-- SCENE 6 — metered billing (41.2–47.45) -->
+      <div class="scene clip" data-start="41.2" data-duration="6.25" data-track-index="1">
         <div class="eyebrow s6a">Wired to Metronome</div>
         <div class="headline s6b" style="font-size:58px;margin-top:24px;">Usage-based billing,<br /><span class="teal">priced to the unit.</span></div>
         <div class="row s6c">
@@ -159,8 +139,8 @@
         </div>
       </div>
 
-      <!-- SCENE 7 — proof (32.5–39.5) -->
-      <div class="scene clip" data-start="32.5" data-duration="7" data-track-index="1">
+      <!-- SCENE 7 — proof (47.45–54.15) -->
+      <div class="scene clip" data-start="47.45" data-duration="6.65" data-track-index="1">
         <div class="eyebrow s7a">Real outcomes behind the platform</div>
         <div class="proof">
           <div class="item s7b"><div class="big teal">+200%</div><div class="lbl">click-through · ON.Optima AEO</div></div>
@@ -170,8 +150,8 @@
         </div>
       </div>
 
-      <!-- SCENE 8 — close / CTA (39.5–45) -->
-      <div class="scene clip" data-start="39.5" data-duration="5.5" data-track-index="1">
+      <!-- SCENE 8 — close / CTA (54.15–59) -->
+      <div class="scene clip" data-start="54.15" data-duration="4.85" data-track-index="1">
         <div class="wordmark s8a" style="font-size:104px;">Vela <span class="teal">OS</span></div>
         <div class="sub s8b" style="margin-top:20px;">Return on AI Investment, measured.</div>
         <div class="cta s8c">Book a discovery call</div>
@@ -184,44 +164,42 @@
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
       const EXPO = "expo.out";
-
-      // helper: entrance for a group at absolute time `at`
       const enter = (sel, at, opts = {}) =>
         tl.from(sel, Object.assign({ opacity: 0, y: 44, duration: 0.7, ease: EXPO }, opts), at);
 
-      // S1 — brand open
+      // S1 — brand open (0–7.1)
       tl.from(".s1a", { opacity: 0, scale: 0.94, duration: 0.6, ease: EXPO }, 0.2);
-      enter(".s1b", 0.45); enter(".s1c", 0.65); enter(".s1d", 0.9, { y: 24 });
+      enter(".s1b", 0.45); enter(".s1c", 0.7); enter(".s1d", 1.0, { y: 24 });
 
-      // S2 — thesis
-      enter(".s2a", 5.2, { y: 20 }); enter(".s2b", 5.4); enter(".s2c", 5.7);
+      // S2 — thesis (speech resumes ~7.54)
+      enter(".s2a", 7.7, { y: 20 }); enter(".s2b", 7.9); enter(".s2c", 8.2);
 
-      // S3 — ROAI framework
-      enter(".s3a", 10.2, { y: 20 }); enter(".s3b", 10.4);
-      tl.from(".s3c", { opacity: 0, scale: 0.9, duration: 0.7, ease: "back.out(1.5)" }, 10.8);
-      enter(".s3d", 11.2, { y: 20 });
+      // S3 — ROAI framework (resumes ~16.3); "4.0x" lands on "Four dollars…" (~20.4)
+      enter(".s3a", 16.2, { y: 20 }); enter(".s3b", 16.5);
+      tl.from(".s3c", { opacity: 0, scale: 0.9, duration: 0.7, ease: "back.out(1.5)" }, 20.5);
+      enter(".s3d", 21.0, { y: 20 });
 
-      // S4 — two modes
-      enter(".s4a", 15.7);
-      enter(".s4b", 16.0, { x: -28, y: 0 }); enter(".s4c", 16.15, { x: 28, y: 0 });
+      // S4 — two modes (resumes ~25.27)
+      enter(".s4a", 25.4);
+      enter(".s4b", 25.7, { x: -28, y: 0 }); enter(".s4c", 25.85, { x: 28, y: 0 });
 
-      // S5 — ON.Ecosystem (staggered rate rows)
-      enter(".s5a", 21.2, { y: 18 }); enter(".s5b", 21.4);
-      tl.from([".s5c", ".s5d", ".s5e", ".s5f"], { opacity: 0, x: -36, duration: 0.55, ease: EXPO, stagger: 0.16 }, 21.8);
+      // S5 — ON.Ecosystem (resumes ~32.2)
+      enter(".s5a", 32.1, { y: 18 }); enter(".s5b", 32.4);
+      tl.from([".s5c", ".s5d", ".s5e", ".s5f"], { opacity: 0, x: -36, duration: 0.55, ease: EXPO, stagger: 0.4 }, 32.9);
 
-      // S6 — metered billing
-      enter(".s6a", 27.2, { y: 18 }); enter(".s6b", 27.4);
-      tl.from(".s6c > .card", { opacity: 0, y: 36, duration: 0.6, ease: EXPO, stagger: 0.14 }, 27.9);
+      // S6 — metered billing (resumes ~41.52)
+      enter(".s6a", 41.6, { y: 18 }); enter(".s6b", 41.9);
+      tl.from(".s6c > .card", { opacity: 0, y: 36, duration: 0.6, ease: EXPO, stagger: 0.3 }, 42.4);
 
-      // S7 — proof
-      enter(".s7a", 32.7, { y: 18 });
-      tl.from([".s7b", ".s7c", ".s7d", ".s7e"], { opacity: 0, y: 32, duration: 0.6, ease: EXPO, stagger: 0.18 }, 33.0);
+      // S7 — proof (resumes ~47.76)
+      enter(".s7a", 47.8, { y: 18 });
+      tl.from([".s7b", ".s7c", ".s7d", ".s7e"], { opacity: 0, y: 32, duration: 0.6, ease: EXPO, stagger: 0.45 }, 48.1);
 
-      // S8 — close
-      enter(".s8a", 39.7, { scale: 0.96, y: 0 });
-      enter(".s8b", 40.0, { y: 20 });
-      tl.from(".s8c", { opacity: 0, scale: 0.92, duration: 0.6, ease: "back.out(1.6)" }, 40.4);
-      enter(".s8d", 40.8, { y: 16 });
+      // S8 — close (resumes ~54.47)
+      enter(".s8a", 54.5, { scale: 0.96, y: 0 });
+      enter(".s8b", 54.8, { y: 20 });
+      tl.from(".s8c", { opacity: 0, scale: 0.92, duration: 0.6, ease: "back.out(1.6)" }, 55.2);
+      enter(".s8d", 55.6, { y: 16 });
 
       window.__timelines["main"] = tl;
     </script>
