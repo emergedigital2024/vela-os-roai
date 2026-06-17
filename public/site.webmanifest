@@ -1,0 +1,17 @@
+{
+  "name": "Vela OS · FPT CX Services — ROAI Analytics",
+  "short_name": "Vela OS",
+  "description": "Dual-mode agency command center and customer portal where every AI engagement is priced, delivered, and proven in ROAI (Return on AI Investment).",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#08080b",
+  "background_color": "#08080b",
+  "icons": [
+    {
+      "src": "/og.png",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ]
+}
