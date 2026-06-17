@@ -39,10 +39,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { darkMode: "class", theme: { extend: { fontFamily: { sans: ["Geist", "system-ui", "sans-serif"], mono: ["Geist Mono", "ui-monospace", "monospace"] } } } };
-  </script>
+  <!-- Tailwind stylesheet — static, purged build emitted by scripts/build.mjs.
+       Replaces the render-blocking cdn.tailwindcss.com Play CDN (forbidden in prod).
+       The build replaces the marker below with <link rel="stylesheet"
+       href="/assets/vela-<hash>.css">. -->
+  <!-- build:css -->
   <style>
     :root, html.dark {
       --bg: #08080b; --bg-blur: rgba(9,9,13,0.72);

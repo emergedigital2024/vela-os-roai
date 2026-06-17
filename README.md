@@ -57,16 +57,19 @@ threshold alerts; Net 30 / Net 60, ACH, wire, corporate card, Government GPC and
 
 ## Tech
 
-Vanilla **React 18 + Tailwind (via CDN)**, bundled by **esbuild**. Each component file is a
+Vanilla **React 18 + Tailwind**, bundled by **esbuild**. Each component file is a
 plain IIFE that registers a `window.*` global and reads the globals registered before it, so
 **load order matters** (the canonical order lives in `app/entry.js`). The build concatenates
 React + the 11 modules in that order, transpiles JSX (classic runtime → `React.createElement`),
 and minifies everything into one content-hashed asset — there is no in-browser Babel anymore.
+**Tailwind is generated at build time** (static, purged via the Tailwind CLI) into a
+content-hashed stylesheet — no more render-blocking `cdn.tailwindcss.com` Play CDN.
 Hand-built SVG charts. Theme via CSS variables (dark default, light supported).
 
 ```
 app/                  # source (not served)
-  index.html          # template — the build injects the hashed <script> at the <!-- build:js --> marker
+  index.html          # template — the build injects the hashed <script>/<link> at the <!-- build:js -->/<!-- build:css --> markers
+  tailwind.css        # @tailwind base/components/utilities — input for the static Tailwind build
   entry.js            # import order: _globals → data → icons → … → app → _bootstrap
   _globals.js         # puts React / ReactDOM on window (the IIFEs reference a global `React`)
   _bootstrap.js       # ReactDOM.createRoot(#root).render(<App/>)  — runs last
@@ -83,12 +86,14 @@ app/                  # source (not served)
   app.jsx             # window.App — shell, sidebar (morphing + mobile drawer), topbar, routing
 
 public/               # served by Cloudflare — static assets + build output
-  assets/vela-*.js    # generated: the hashed, minified bundle           (git-ignored)
-  index.html          # generated from app/index.html with the hash injected (git-ignored)
+  assets/vela-*.js    # generated: the hashed, minified JS bundle         (git-ignored)
+  assets/vela-*.css   # generated: the hashed, purged Tailwind stylesheet (git-ignored)
+  index.html          # generated from app/index.html with the hashes injected (git-ignored)
   _headers            # immutable 1-year cache on /assets/*; HTML revalidated
   og.png, guide.html, robots.txt, sitemap.xml, canonical-facts.json, downloads/
 
-scripts/build.mjs     # the esbuild build (bundle + minify + hash, then render index.html)
+scripts/build.mjs     # the build: esbuild bundles JS + Tailwind CLI purges CSS, then renders index.html
+tailwind.config.js    # Tailwind v3 config — content globs + fontFamily theme extend
 src/index.js          # the Worker: serves public/ + the read-only Metronome /api proxy
 ```
 
@@ -98,7 +103,7 @@ Routing is a lightweight `URLSearchParams` + `history` sync in `app.jsx` (no rou
 
 ```bash
 npm install          # one-time
-npm run build        # bundle app/ → public/assets/vela-<hash>.js + public/index.html
+npm run build        # build app/ → public/assets/vela-<hash>.{js,css} + public/index.html
 npm run dev          # build, then `wrangler dev` (serves public/ + the /api proxy locally)
 npm run deploy       # build, then `wrangler deploy`
 ```

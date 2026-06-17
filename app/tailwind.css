@@ -1,0 +1,7 @@
+/* Tailwind entry for the static build. The build (scripts/build.mjs) runs this
+   through the Tailwind CLI against tailwind.config.js, purging to only the classes
+   used in app/**, then emits the minified result to public/assets/vela-<hash>.css.
+   Mirrors what the Tailwind Play CDN injected at runtime (base = preflight). */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
