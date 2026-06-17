@@ -1,4 +1,4 @@
-# Content-hashed app bundles emitted by the build (public/assets/vela-<hash>.js).
+# Content-hashed assets emitted by the build (public/assets/vela-<hash>.{js,css}).
 # The filename changes whenever the contents change, so caching it forever is safe.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
