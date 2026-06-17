@@ -4,6 +4,25 @@
 
 const MT_BASE = "https://api.metronome.com/v1";
 
+// The Metronome proxy backs the Vela dashboard only. Accept callers whose
+// Origin/Referer is the production host (or the Worker's own host, so
+// same-origin fetches on preview deploys keep working) and reject the rest.
+const ALLOWED_HOST = "roai.emergedigital.ae";
+
+function hostOf(value) {
+  if (!value) return null;
+  try { return new URL(value).host; } catch (_) { return null; }
+}
+
+function isAllowedCaller(request, url) {
+  const allowed = new Set([ALLOWED_HOST, url.host]);
+  const origin = hostOf(request.headers.get("origin"));
+  const referer = hostOf(request.headers.get("referer"));
+  // Require at least one of Origin/Referer to be present and match — a request
+  // with neither header can't be proven same-origin, so it's rejected.
+  return [origin, referer].some((h) => h && allowed.has(h));
+}
+
 function j(obj, status) {
   return new Response(JSON.stringify(obj), {
     status: status || 200,
@@ -27,6 +46,7 @@ async function mt(path, env, init) {
 }
 
 async function handleApi(request, env, url) {
+  if (!isAllowedCaller(request, url)) return j({ error: "forbidden" }, 403);
   if (request.method !== "GET") return j({ error: "method_not_allowed" }, 405);
   if (!env.METRONOME_API_KEY) return j({ configured: false, error: "METRONOME_API_KEY is not set" }, 503);
 
