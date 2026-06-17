@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 — Not found · Vela OS</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#08080b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Prompt:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#08080b; --text:#f3f3f6; --muted:#9c9caa; --accent:#4f46e5; --accent-hover:#4338ca; --accent-fg:#a5b4fc; --border:rgba(255,255,255,.12); }
+    * { box-sizing: border-box; margin: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: "Lexend", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(120% 120% at 50% 0%, #14141f 0%, var(--bg) 55%);
+      color: var(--text); display: grid; place-items: center; text-align: center;
+      padding: 2rem; -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 33rem; }
+    .eyebrow { font-family: "Prompt", sans-serif; letter-spacing: .22em; text-transform: uppercase;
+      font-size: .72rem; color: var(--accent-fg); margin-bottom: 1.25rem; }
+    .code { font-size: clamp(4.5rem, 18vw, 8rem); font-weight: 700; line-height: .9;
+      letter-spacing: -.03em; color: #fff; }
+    h1 { font-size: clamp(1.3rem, 4vw, 1.7rem); font-weight: 500; margin: 1rem 0 .65rem; }
+    p { color: var(--muted); line-height: 1.6; margin-bottom: 2rem; }
+    .actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+    a.btn { display: inline-block; padding: .8rem 1.5rem; border-radius: .6rem; font-weight: 500;
+      text-decoration: none; transition: transform .15s ease, background .15s ease; }
+    a.primary { background: var(--accent); color: #fff; }
+    a.primary:hover { transform: translateY(-1px); background: var(--accent-hover); }
+    a.ghost { color: var(--text); border: 1px solid var(--border); }
+    a.ghost:hover { border-color: var(--accent-fg); color: var(--accent-fg); }
+    .brand { margin-top: 3rem; font-size: .82rem; color: var(--muted); }
+    .brand b { color: #fff; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="eyebrow">Vela OS · ROAI Demo</div>
+    <div class="code">404</div>
+    <h1>That view doesn't exist.</h1>
+    <p>The page you're after has moved or never existed. Head back to the live Vela OS demo or the walkthrough.</p>
+    <div class="actions">
+      <a class="btn primary" href="/">Open the demo</a>
+      <a class="btn ghost" href="/guide">Read the guide</a>
+    </div>
+    <div class="brand"><b>Vela OS</b> · an Emerge Digital company</div>
+  </main>
+</body>
+</html>
