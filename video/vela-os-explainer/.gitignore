@@ -8,3 +8,6 @@ renders/
 qa/
 
 # keep: index.html, package.json, meta.json, hyperframes.json, AGENTS.md, CLAUDE.md, assets/fonts/*.woff2
+
+# VO segment build intermediates (final = assets/vo.wav)
+assets/seg/
