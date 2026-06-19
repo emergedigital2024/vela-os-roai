@@ -30,6 +30,40 @@ function j(obj, status) {
   });
 }
 
+// Cached Salesforce OAuth token (client-credentials). Module scope so it
+// survives across requests on a warm isolate; refreshed ~60s before expiry so
+// we don't do a token exchange on every proxied request.
+let sfToken = null; // { access_token, instance_url, expires_at }
+
+// Exchange client credentials for a Salesforce access token + instance_url.
+// Returns { access_token, instance_url } — never the secret. Throws on failure.
+async function sf(env) {
+  const now = Date.now();
+  if (sfToken && sfToken.expires_at - 60000 > now) return sfToken;
+  const body = new URLSearchParams({
+    grant_type: "client_credentials",
+    client_id: env.SF_CLIENT_ID,
+    client_secret: env.SF_CLIENT_SECRET,
+  });
+  const res = await fetch(env.SF_TOKEN_URL, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+  let data = null;
+  try { data = await res.json(); } catch (_) { /* non-JSON upstream */ }
+  if (!res.ok || !data || !data.access_token || !data.instance_url) {
+    throw new Error("sf_token_failed");
+  }
+  const ttl = (Number(data.expires_in) || 0) * 1000;
+  sfToken = {
+    access_token: data.access_token,
+    instance_url: data.instance_url,
+    expires_at: now + (ttl > 0 ? ttl : 1800000),
+  };
+  return sfToken;
+}
+
 // Call Metronome with the secret. Returns { ok, status, body } — never the key.
 async function mt(path, env, init) {
   const res = await fetch(MT_BASE + path, {
@@ -83,10 +117,54 @@ async function handleApi(request, env, url) {
   }
 }
 
+// Read-only Salesforce proxy backing the Live ROAI panel. The Salesforce client
+// credentials live only in the SF_* secrets and are never sent to the browser or
+// echoed back.
+async function handleRoai(request, env, url) {
+  if (!isAllowedCaller(request, url)) return j({ error: "forbidden" }, 403);
+  if (request.method !== "GET") return j({ error: "method_not_allowed" }, 405);
+  if (!env.SF_CLIENT_ID || !env.SF_CLIENT_SECRET || !env.SF_TOKEN_URL) {
+    return j({ configured: false, error: "Salesforce credentials are not set" }, 503);
+  }
+
+  const route = url.pathname.replace(/^\/api\/roai\/?/, "");
+  try {
+    if (route === "ping") {
+      try {
+        await sf(env);
+        return j({ configured: true, ok: true });
+      } catch (_) {
+        return j({ configured: true, ok: false });
+      }
+    }
+    if (route === "engagement") {
+      const key = url.searchParams.get("key");
+      const tok = await sf(env);
+      const res = await fetch(
+        tok.instance_url + "/services/apexrest/roai/v1?key=" + encodeURIComponent(key || ""),
+        { headers: { authorization: "Bearer " + tok.access_token } }
+      );
+      let body = null;
+      try { body = await res.json(); } catch (_) { /* non-JSON upstream */ }
+      if (!res.ok) {
+        // Pass the upstream JSON + status through (e.g. 404 not_found / 400
+        // key_required so the UI can distinguish them); fall back to a generic
+        // 502 only when the upstream body is unusable.
+        return j(body || { error: "upstream", status: res.status }, body ? res.status : 502);
+      }
+      return j(body, 200);
+    }
+    return j({ error: "not_found" }, 404);
+  } catch (_) {
+    return j({ error: "proxy_error" }, 502);
+  }
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname.startsWith("/api/metronome")) return handleApi(request, env, url);
+    if (url.pathname.startsWith("/api/roai")) return handleRoai(request, env, url);
     return env.ASSETS.fetch(request);
   },
 };
