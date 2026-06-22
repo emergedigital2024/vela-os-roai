@@ -252,7 +252,7 @@
             <div>
               <Badge tone="emerald" icon="sparkles" className="mb-3">FPT CX offering</Badge>
               <h2 className="text-xl font-bold text-[var(--text)]">Expand across the full CX lifecycle</h2>
-              <p className="mt-1 max-w-lg text-sm text-[var(--muted)]">Six service pillars — Strategy, Design, Platform, Commerce, Insights and Run — plus the ON.Ecosystem AI accelerators and AI-first Sales Enablement packages. Delivered by your FPT team; request one and it's usually live within weeks.</p>
+              <p className="mt-1 max-w-lg text-sm text-[var(--muted)]">Six service pillars — Strategy, Design, Platform, Commerce, Insights and Run — plus ON.Ecosystem AI accelerators and AI-first Sales Enablement. Delivered by your FPT team with governed AI agents, trusted by Government and BFSI across the GCC; request one and it's usually live within weeks.</p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold tabular-nums text-[var(--text)]">{active.size}</div>
@@ -284,7 +284,7 @@
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent-fg)]"><Icon name="bulb" size={17} /></span>
-            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Not sure what to add?</span> <span className="text-[var(--muted)]">Your strategist can recommend the highest-return next agent for your goals.</span></div>
+            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Not sure what to add?</span> <span className="text-[var(--muted)]">Human-governed AI: your FPT strategist recommends the highest-return next agent for your goals.</span></div>
           </div>
           <button className="flex-none rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">Talk to your strategist</button>
         </div>

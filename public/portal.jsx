@@ -58,8 +58,8 @@
             </div>
             <h2 className="text-2xl font-semibold text-[var(--text)]">return this quarter</h2>
             <p className="mx-auto mt-4 max-w-md text-sm text-[var(--muted)]">
-              For every <span className="font-semibold text-[var(--text)]">$1</span> invested in AI, your agents created
-              <span className="font-semibold text-emerald-400"> {fmtUSD(c.roai, { cents: true })}</span> in measurable value.
+              For every <span className="font-semibold text-[var(--text)]">$1</span> invested in AI, your governed agents created
+              <span className="font-semibold text-emerald-400"> {fmtUSD(c.roai, { cents: true })}</span> in measurable value — with a full audit trail.
             </p>
             <div className="mx-auto mt-7 grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
               {[
