@@ -91,9 +91,47 @@ npx wrangler dev --port 8788
 CLOUDFLARE_ACCOUNT_ID=4a75e91d6fca8bc58467fb80ce1b9c2e npx wrangler deploy
 ```
 
-Config: `wrangler.toml` serves `public/` as static assets with SPA fallback
-(`not_found_handling = "single-page-application"`), which is what makes the query-param
-deep links resolve on direct load.
+Config: `wrangler.toml` serves `public/` as static assets, with
+`run_worker_first = ["/api/*"]` routing the API paths (`/api/metronome/*` and
+`/api/roai/*`) to the Worker before static-asset handling, and
+`not_found_handling = "404-page"` for everything else. The query-param deep links
+still resolve on direct load because routing lives in the query string, not the path
+(see above): the URL path stays `/`, so `index.html` is served directly as a static
+asset — no SPA fallback is needed.
 
 Repo: `emergedigital2024/vela-os-roai` (deploys are run manually via `wrangler deploy`;
 pushing to GitHub does not auto-deploy).
+
+## Live ROAI (Salesforce)
+
+The Client portal's ROAI baselines can read from a live Salesforce org through a
+read-only Worker proxy (`src/index.js`, `/api/roai/*`), mirroring the Metronome proxy:
+the Salesforce credentials live only in Worker secrets and are never sent to the browser.
+The Worker mints a token via the OAuth **client-credentials** flow, then fetches the
+engagement and ROAI baselines from a custom Apex REST endpoint.
+
+Set the three secrets (and the Metronome key, if not already set):
+
+```bash
+npx wrangler secret put SF_CLIENT_ID
+npx wrangler secret put SF_CLIENT_SECRET
+npx wrangler secret put SF_TOKEN_URL
+npx wrangler secret put METRONOME_API_KEY   # if not already set
+```
+
+The Consumer Key / Consumer Secret come from the **Vela_ROAI_Bridge** Connected App in
+the `emerge-onboarding-sfdx` Salesforce org (`SF_CLIENT_ID` = Consumer Key,
+`SF_CLIENT_SECRET` = Consumer Secret). `SF_TOKEN_URL` is that org's OAuth token endpoint.
+For local `wrangler dev`, mirror the same names in `.dev.vars` (see `.dev.vars.example`).
+
+Verify the proxy is configured and can reach Salesforce:
+
+```bash
+curl -H "Origin: https://roai.emergedigital.ae" \
+  https://roai.emergedigital.ae/api/roai/ping
+# -> {"configured":true,"ok":true}
+```
+
+> **Scope:** this is a **read-only, demo-data-only** loop — it surfaces the fictional
+> **Masar** engagement and its ROAI baselines for the prototype. Real client data is out of
+> scope pending the UAE/KSA data-residency decision.

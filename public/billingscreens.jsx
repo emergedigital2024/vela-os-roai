@@ -529,10 +529,146 @@
     );
   }
 
+  // ---- live ROAI (via the Worker proxy at /api/roai/*) ----
+  // Reads the same baseline→target we pitch, straight from the Salesforce delivery org.
+  // Credentials live only in the SF_* Worker secrets and never touch the browser.
+  async function roai(path) {
+    try {
+      const res = await fetch("/api/roai/" + path);
+      const data = await res.json().catch(() => null);
+      return { ok: res.ok, status: res.status, data };
+    } catch (_) { return { ok: false, status: 0, data: null }; }
+  }
+  // "% to target" — how far the baseline already sits toward the target, as a percentage.
+  // Direction-aware so the number reads sensibly both ways:
+  //   higher-is-better (target > baseline, e.g. 31→45 NPS): baseline / target  → 69%
+  //   lower-is-better  (target < baseline, e.g. 48→1 hours): target  / baseline → 2%
+  // Defensive: non-numbers, non-positive values, or target===baseline → null (avoids divide-by-zero
+  // and absurd negatives/blow-ups); always clamped 0–100, never negative.
+  function pctToTarget(baseline, target) {
+    if (typeof baseline !== "number" || typeof target !== "number") return null;
+    if (!isFinite(baseline) || !isFinite(target)) return null; // NaN/±Infinity are typeof "number" → screen them out
+    if (target === baseline) return null;            // no gap → "—" (avoid divide-by-zero)
+    if (baseline <= 0 || target <= 0) return null;   // ratios only meaningful for positive magnitudes
+    const ratio = target > baseline ? baseline / target : target / baseline;
+    return Math.max(0, Math.min(100, Math.round(ratio * 100)));
+  }
+
+  function RoaiLive() {
+    const [conn, setConn] = useState("loading"); // loading | connected | notconfigured | error
+    const [data, setData] = useState(null);
+    useEffect(() => {
+      let alive = true;
+      (async () => {
+        const p = await roai("ping");
+        if (!alive) return;
+        if (p.status === 503) return setConn("notconfigured");
+        if (!p.ok || !p.data || !p.data.ok) return setConn("error");
+        setConn("connected");
+        const e = await roai("engagement?key=masar");
+        if (!alive) return;
+        if (!e.ok || !e.data || !e.data.engagement) return setConn("error");
+        setData(e.data);
+      })();
+      return () => { alive = false; };
+    }, []);
+    const badge = conn === "connected" ? <Badge tone="emerald" icon="checkCircle">Connected</Badge>
+      : conn === "notconfigured" ? <Badge tone="amber" icon="alert">Not configured</Badge>
+      : conn === "error" ? <Badge tone="rose" icon="alert">Unreachable</Badge>
+      : <Badge tone="neutral">Connecting…</Badge>;
+    const eng = data && data.engagement;
+    const baselines = (data && Array.isArray(data.roaiBaselines)) ? data.roaiBaselines : [];
+    const healthTone = eng && eng.health === "Green" ? "emerald" : eng && eng.health === "Amber" ? "amber" : eng && eng.health === "Red" ? "rose" : "neutral";
+    const num = (v) => (typeof v === "number" ? fmtNum(v) : v != null ? String(v) : "—");
+    return (
+      <Card className="overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
+          <div className="flex items-center gap-2"><Icon name="target" size={16} className="text-[var(--accent-fg)]" /><span className="text-base font-semibold text-[var(--text)]">Live ROAI engagement</span></div>
+          {badge}
+        </div>
+        {conn === "notconfigured" && (
+          <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">
+            <Icon name="alert" size={22} className="mx-auto text-amber-400" />
+            <div className="mt-2 font-medium text-[var(--text)]">Salesforce credentials not set</div>
+            <div className="mt-1">Add them as Worker secrets, then this panel goes live:</div>
+            <div className="mt-2 flex flex-col items-center gap-1.5">
+              <code className="inline-block rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-1.5 font-mono text-xs text-[var(--text)]">npx wrangler secret put SF_CLIENT_ID</code>
+              <code className="inline-block rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-1.5 font-mono text-xs text-[var(--text)]">npx wrangler secret put SF_CLIENT_SECRET</code>
+              <code className="inline-block rounded-lg border border-[var(--border)] bg-[var(--panel-2)] px-3 py-1.5 font-mono text-xs text-[var(--text)]">npx wrangler secret put SF_TOKEN_URL</code>
+            </div>
+          </div>
+        )}
+        {conn === "error" && <div className="px-5 py-8 text-center text-sm text-[var(--muted)]"><Icon name="alert" size={22} className="mx-auto text-rose-400" /><div className="mt-2 text-[var(--text)]">Couldn't reach the Salesforce delivery org. Check the credentials and try again.</div></div>}
+        {conn === "loading" && <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">Connecting to Salesforce…</div>}
+        {conn === "connected" && !eng && <div className="px-5 py-8 text-center text-sm text-[var(--muted)]">Loading engagement…</div>}
+        {conn === "connected" && eng && (
+          <div>
+            <div className="border-b border-[var(--border)] px-5 py-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-base font-semibold text-[var(--text)]">{eng.name || "—"}</div>
+                  <div className="mt-0.5 text-sm text-[var(--muted)]">{eng.account || "—"}</div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {eng.status != null && <Badge tone="indigo">{eng.status}</Badge>}
+                  {eng.health != null && <Badge tone={healthTone}>{eng.health}</Badge>}
+                </div>
+              </div>
+              {typeof eng.progress === "number" && (
+                <div className="mt-4">
+                  <div className="mb-1.5 flex items-center justify-between text-sm"><span className="text-[var(--muted)]">Progress to walk-ready</span><span className="font-semibold tabular-nums text-[var(--text)]">{eng.progress}%</span></div>
+                  <Progress pct={eng.progress} tone={C.emerald} h={8} />
+                </div>
+              )}
+              {eng.targetWalkReadyDate != null && eng.targetWalkReadyDate !== "" && (
+                <div className="mt-3 flex items-center gap-1.5 text-xs text-[var(--muted)]"><Icon name="calendar" size={13} className="flex-none text-[var(--faint)]" /> Target walk-ready {eng.targetWalkReadyDate}</div>
+              )}
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b border-[var(--border)]"><tr className="text-left text-xs text-[var(--muted)]">
+                  <th className="px-5 py-2.5 font-medium">Metric</th>
+                  <th className="px-4 py-2.5 text-right font-medium">Baseline</th>
+                  <th className="px-4 py-2.5 text-right font-medium">Target</th>
+                  <th className="px-4 py-2.5 font-medium">Unit</th>
+                  <th className="px-4 py-2.5 font-medium">% to target</th>
+                </tr></thead>
+                <tbody>
+                  {baselines.length === 0 ? (
+                    <tr><td colSpan={5} className="px-5 py-6 text-center text-[var(--muted)]">No baselines recorded yet.</td></tr>
+                  ) : baselines.map((b, i) => {
+                    const pct = pctToTarget(b.baseline, b.target);
+                    return (
+                      <tr key={i} className="border-b border-[var(--border)] last:border-0">
+                        <td className="px-5 py-3 font-medium text-[var(--text)]">{b.metric || "—"}</td>
+                        <td className="px-4 py-3 text-right tabular-nums text-[var(--muted)]">{num(b.baseline)}</td>
+                        <td className="px-4 py-3 text-right tabular-nums font-semibold text-[var(--text)]">{num(b.target)}</td>
+                        <td className="px-4 py-3 text-[var(--muted)]">{b.unit || "—"}</td>
+                        <td className="px-4 py-3">
+                          {pct == null ? <span className="text-[var(--muted)]">—</span> : (
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-20 flex-none overflow-hidden rounded-full bg-[var(--track)]"><div className="h-full rounded-full" style={{ width: pct + "%", background: pct >= 66 ? C.emerald : pct >= 33 ? C.amber : C.rose }} /></div>
+                              <span className="tabular-nums text-[var(--muted)]">{pct}%</span>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        <div className="flex items-center gap-2 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted)]"><Icon name="info" size={13} className="flex-none text-[var(--faint)]" /> Live, read-only ROAI from the Salesforce delivery org — the same baseline→target we pitch.</div>
+      </Card>
+    );
+  }
+
   function AgencyBilling({ tab, setTab, onOpenDeepDive }) {
     const [profileId, setProfileId] = useState(null);
     if (profileId) return <ClientBillingProfile client={clientOf(profileId)} onBack={() => setProfileId(null)} onOpenDeepDive={onOpenDeepDive} />;
-    const TABS = [{ k: "overview", label: "Overview" }, { k: "invoices", label: "Invoices" }, { k: "contracts", label: "Contracts" }, { k: "clients", label: "Clients" }, { k: "live", label: "Live" }];
+    const TABS = [{ k: "overview", label: "Overview" }, { k: "invoices", label: "Invoices" }, { k: "contracts", label: "Contracts" }, { k: "clients", label: "Clients" }, { k: "live", label: "Live" }, { k: "liveroai", label: "Live ROAI" }];
     return (
       <div className="space-y-6">
         <Tabs tabs={TABS} value={tab} onChange={setTab} />
@@ -540,6 +676,7 @@
           : tab === "contracts" ? <AgencyContracts onOpen={setProfileId} />
           : tab === "clients" ? <AgencyClients onOpen={setProfileId} />
           : tab === "live" ? <MetronomeLive />
+          : tab === "liveroai" ? <RoaiLive />
           : <AgencyOverview />}
       </div>
     );

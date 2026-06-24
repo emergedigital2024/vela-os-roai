@@ -1,0 +1,10 @@
+# Local secrets for `wrangler dev`. Copy to `.dev.vars` and fill in values.
+# `.dev.vars` is gitignored — NEVER commit real values. Names only here.
+
+# Salesforce live ROAI proxy (Vela_ROAI_Bridge Connected App, emerge-onboarding-sfdx org)
+SF_CLIENT_ID=
+SF_CLIENT_SECRET=
+SF_TOKEN_URL=
+
+# Metronome billing proxy
+METRONOME_API_KEY=
