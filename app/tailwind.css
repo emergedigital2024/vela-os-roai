@@ -1,0 +1,10 @@
+/* Tailwind entry stylesheet. scripts/build.mjs compiles this through Tailwind +
+   PostCSS into a static, purged, minified asset (public/assets/vela-<hash>.css)
+   that index.html links — the production replacement for the cdn.tailwindcss.com
+   Play CDN. Preflight (base) is kept because the components rely on its resets
+   (box-sizing, zeroed borders so `border` utilities work, etc.). The hand-written
+   design-token :root/--var block and scrollbar styling stay inline in index.html
+   and load after this sheet so they win on the few properties that overlap. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
