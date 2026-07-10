@@ -459,7 +459,7 @@
               {customers.map((c) => (
                 <button key={c.id} onClick={() => open(c)} className="flex w-full items-center gap-3 border-b border-[var(--border)] px-5 py-3.5 text-left transition-colors last:border-0 hover:bg-[var(--panel-hi)]">
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-[var(--chip)] text-[11px] font-bold text-[var(--text)]">{(c.name || "?").slice(0, 2).toUpperCase()}</span>
-                  <div className="min-w-0 flex-1"><div className="truncate text-sm font-medium text-[var(--text)]">{c.name || c.id}</div><div className="truncate font-mono text-[11px] text-[var(--muted)]">{c.external_id || c.id}</div></div>
+                  <div className="min-w-0 flex-1"><div className="flex items-center gap-2 text-sm font-medium text-[var(--text)]"><span className="truncate">{c.name || c.id}</span>{(c.name || "").startsWith("Agent wallet") && <span className="flex-none rounded bg-[var(--accent-soft)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--accent-fg)]">agent · x402</span>}</div><div className="truncate font-mono text-[11px] text-[var(--muted)]">{c.external_id || c.id}</div></div>
                   <Icon name="chevronRight" size={15} className="text-[var(--faint)]" />
                 </button>
               ))}
