@@ -320,7 +320,10 @@
             <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent-fg)]"><Icon name="zap" size={17} /></span>
             <div className="text-sm"><span className="font-semibold text-[var(--text)]">Buying as an AI agent?</span> <span className="text-[var(--muted)]">API editions of the ON.Ecosystem products are purchasable per call over the x402 protocol on the XRP Ledger — no account needed; usage is metered in Metronome.</span></div>
           </div>
-          <a href="https://agent-commerce.emergedigital.com" target="_blank" rel="noopener noreferrer" className="flex-none rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">View the agent catalog</a>
+          <div className="flex flex-none flex-wrap gap-2">
+            <a href="https://agent-commerce.emergedigital.com" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">View the agent catalog</a>
+            <a href="https://emergedigital.com/insights/agent-commerce-xrpl-live/?utm_source=roai&utm_medium=marketplace" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--accent-line)] bg-[var(--accent-soft)] px-3.5 py-2 text-sm font-medium text-[var(--accent-fg)] transition-colors hover:opacity-90">Read the launch note</a>
+          </div>
         </div>
       </div>
     );
