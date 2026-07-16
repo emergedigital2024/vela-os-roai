@@ -1,0 +1,206 @@
+/* Local brand fonts (offline-render safe). Frames are typography-free by design —
+   fonts exist only for the ED logo tile and any temp draft-review captions. */
+@font-face { font-family: "Lexend"; font-weight: 400; font-display: block; src: url("assets/fonts/lexend-400.woff2") format("woff2"); }
+@font-face { font-family: "Lexend"; font-weight: 700; font-display: block; src: url("assets/fonts/lexend-700.woff2") format("woff2"); }
+@font-face { font-family: "Lexend Zetta"; font-weight: 700; font-display: block; src: url("assets/fonts/lexendzetta-700.woff2") format("woff2"); }
+
+:root {
+  /* VaultOS palette (vault.emergedigital.com tokens) */
+  --bg: #0d1119; --bg-deep: #07090f; --surface: #10151f;
+  --ink: #e8edf4; --muted: #97a3b4; --hair: rgba(148,180,220,0.12);
+  --accent: #2dd4bf; --accent-2: #5eead4; --glow: #99f6e4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { overflow: hidden; background: var(--bg-deep); } /* size set per shell */
+body { font-family: "Lexend", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+/* Viewport-fixed backdrop: the brand hero gradient. The world pans over it (subtle parallax). */
+#root {
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 80% 0%, rgba(45,212,191,0.13), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 8% 95%, rgba(94,234,212,0.07), transparent 65%),
+    linear-gradient(160deg, #07090f 0%, #0d1119 55%, #07090f 100%);
+}
+
+/* ── The world: one persistent 4200×2100 field; the "camera" is a single transform on it. ── */
+#film { position: absolute; inset: 0; overflow: hidden; }
+#world {
+  position: absolute; top: 0; left: 0; width: 4200px; height: 2100px;
+  transform-origin: 0 0; will-change: transform;
+  background-image:
+    linear-gradient(rgba(247,249,252,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247,249,252,0.028) 1px, transparent 1px);
+  background-size: 120px 120px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 55%, transparent 100%);
+          mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 55%, transparent 100%);
+}
+
+/* Station-local ambient glows (pre-rendered, so blur is free) */
+.halo { position: absolute; border-radius: 50%; filter: blur(30px); pointer-events: none; }
+
+/* ── Hub ── */
+/* z-index keeps the ED tile crisp ABOVE the payoff/outro glow blooms (they render later in DOM). */
+#hub { position: absolute; left: 2100px; top: 1050px; width: 0; height: 0; z-index: 5; }
+#hub .tile {
+  position: absolute; left: -110px; top: -99px; width: 220px; height: 198px; border-radius: 44px;
+  background: linear-gradient(150deg, #2dd4bf 0%, #10151f 99%);
+  box-shadow: 0 0 0 1px rgba(45,212,191,0.5), 0 24px 80px rgba(45,212,191,0.32);
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 92px; color: #fff;
+}
+#hub .halo { left: -330px; top: -330px; width: 660px; height: 660px; background: radial-gradient(circle, rgba(45,212,191,0.28), transparent 65%); }
+.pulse-ring {
+  position: absolute; left: -170px; top: -170px; width: 340px; height: 340px; border-radius: 50%;
+  border: 3px solid rgba(45,212,191,0.55); opacity: 0;
+}
+
+/* ── Generic station chrome ── */
+.station { position: absolute; width: 0; height: 0; }
+.st-tile {
+  position: absolute; left: -80px; top: -72px; width: 160px; height: 144px; border-radius: 32px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
+  border: 1.5px solid rgba(45,212,191,0.35);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 24px 70px rgba(45,212,191,0.18);
+  display: flex; align-items: center; justify-content: center;
+}
+.st-tile svg { width: 76px; height: 76px; stroke: var(--accent-2); }
+.station .halo { left: -240px; top: -240px; width: 480px; height: 480px; background: radial-gradient(circle, rgba(45,212,191,0.16), transparent 65%); }
+
+/* Agentforce: governance orbit ring + checkpoint node */
+#st-af .orbit {
+  position: absolute; left: -140px; top: -140px; width: 280px; height: 280px; border-radius: 50%;
+  border: 2.5px dashed rgba(94,234,212,0.4);
+}
+#st-af .checkpoint {
+  position: absolute; left: -11px; top: -151px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surface); border: 2.5px solid rgba(94,234,212,0.5);
+}
+#st-af .checkpoint-fill { position: absolute; inset: 3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 18px var(--accent); opacity: 0; }
+
+/* Vela: ROAI gauge + value-vs-cost bars */
+#st-vela .bars { position: absolute; left: 120px; top: -60px; display: flex; gap: 22px; align-items: flex-end; height: 120px; }
+#st-vela .bar { width: 30px; border-radius: 7px 7px 3px 3px; transform-origin: bottom; }
+#st-vela .bar.value { height: 120px; background: linear-gradient(180deg, #5eead4 0%, #2dd4bf 100%); box-shadow: 0 0 24px rgba(45,212,191,0.35); }
+#st-vela .bar.cost { height: 34px; background: rgba(247,249,252,0.28); }
+
+/* VaultOS: scattered docs that snap into a governed grid */
+.doc {
+  position: absolute; width: 34px; height: 44px; border-radius: 7px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
+  border: 1.5px solid rgba(94,234,212,0.45);
+}
+.doc::after { content: ""; position: absolute; left: 6px; right: 6px; top: 9px; height: 2.5px; background: rgba(94,234,212,0.5); box-shadow: 0 9px 0 rgba(94,234,212,0.35), 0 18px 0 rgba(94,234,212,0.22); }
+
+/* Beam sweep (constellation pass) — single skewed light bar, one traversal */
+#beam {
+  position: absolute; top: 0; bottom: 0; width: 420px; left: 0; opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(124,243,226,0.10) 45%, rgba(153,246,228,0.16) 50%, rgba(124,243,226,0.10) 55%, transparent);
+  pointer-events: none;
+}
+
+/* Payoff gauge glow (arc itself is SVG) */
+#payoff-glow {
+  position: absolute; left: 1700px; top: 650px; width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.30), transparent 62%); filter: blur(26px); opacity: 0;
+}
+#outro-glow {
+  position: absolute; left: 1660px; top: 610px; width: 880px; height: 880px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.34), transparent 65%); filter: blur(22px); opacity: 0;
+}
+
+svg.world-layer { position: absolute; left: 0; top: 0; width: 4200px; height: 2100px; overflow: visible; }
+.thread { fill: none; stroke: url(#threadGrad); stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0 0 10px rgba(45,212,191,0.45)); }
+.thread-return { fill: none; stroke: rgba(94,234,212,0.55); stroke-width: 3.5; stroke-linecap: round; filter: drop-shadow(0 0 7px rgba(94,234,212,0.35)); }
+.gauge-track { fill: none; stroke: rgba(247,249,252,0.10); stroke-width: 7; }
+.gauge-arc { fill: none; stroke: url(#gaugeGrad); stroke-width: 9; stroke-linecap: round; filter: drop-shadow(0 0 14px rgba(45,212,191,0.5)); }
+.braid { fill: none; stroke: rgba(45,212,191,0.6); stroke-width: 3.5; stroke-linecap: round; }
+.pods-lane { fill: none; stroke: rgba(247,249,252,0.30); stroke-width: 4; stroke-linecap: round; }
+.pods-branch { fill: none; stroke: url(#threadGrad); stroke-width: 4; stroke-linecap: round; filter: drop-shadow(0 0 8px rgba(45,212,191,0.4)); }
+.gate {
+  position: absolute; width: 30px; height: 30px; transform: rotate(45deg);
+  border: 2.5px solid rgba(94,234,212,0.5); border-radius: 7px; background: var(--surface);
+}
+.gate-fill { position: absolute; inset: 4px; border-radius: 4px; background: var(--accent); box-shadow: 0 0 16px var(--accent); opacity: 0; }
+
+/* Viewport-level vignette — keeps edges cinematic in every exported frame */
+#hf-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 90;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%); }
+
+/* ── Ambient parallax layer (v2): deterministic particle field + nebulas.
+   Sits BEHIND #world, driven at a slower camera factor for depth. ── */
+#ambient {
+  position: absolute; top: 0; left: 0; width: 4200px; height: 2100px;
+  transform-origin: 0 0; will-change: transform; pointer-events: none;
+}
+#ambient .particle { position: absolute; border-radius: 50%; background: #5eead4; }
+#ambient .nebula { position: absolute; border-radius: 50%; filter: blur(46px); }
+
+/* ── Portrait shell adjustments (html sizing comes from the shell) ── */
+body[data-orientation="portrait"] .headline-safe { padding: 90px 60px; }
+
+
+/* ── VaultOS story stations ── */
+.vault-tile {
+  position: absolute; left: -110px; top: -110px; width: 220px; height: 220px; border-radius: 48px;
+  background: linear-gradient(135deg, #2dd4bf 0%, #0b3d38 100%);
+  box-shadow: 0 0 0 1px rgba(45,212,191,0.5), 0 24px 80px rgba(45,212,191,0.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.vault-tile svg { width: 128px; height: 128px; }
+.e2e-ring-svg { position: absolute; left: -190px; top: -190px; width: 380px; height: 380px; overflow: visible; }
+
+.catalog-table {
+  position: absolute; left: -150px; top: -110px; width: 300px; height: 220px; border-radius: 22px;
+  background: linear-gradient(160deg, rgba(232,237,244,0.06), rgba(232,237,244,0.015));
+  border: 1.5px solid rgba(45,212,191,0.35); padding: 24px 22px;
+  display: flex; flex-direction: column; gap: 16px;
+  box-shadow: 0 24px 70px rgba(45,212,191,0.16);
+}
+.catalog-table .row { height: 26px; border-radius: 8px; background: rgba(232,237,244,0.07); border: 1px solid rgba(148,180,220,0.14); position: relative; overflow: hidden; }
+.catalog-table .row .fill { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(45,212,191,0.35), rgba(94,234,212,0.15)); transform-origin: left; }
+.catalog-tag {
+  position: absolute; left: 110px; top: -150px; width: 84px; height: 56px; border-radius: 12px;
+  background: var(--surface); border: 2px solid rgba(94,234,212,0.55);
+  display: flex; align-items: center; justify-content: center;
+}
+.catalog-tag svg { width: 30px; height: 30px; stroke: var(--accent-2); }
+
+.index-stack { position: absolute; left: -140px; top: -100px; width: 280px; height: 240px; }
+.index-stack .plane {
+  position: absolute; left: 0; width: 260px; height: 54px; border-radius: 14px;
+  background: linear-gradient(160deg, rgba(232,237,244,0.07), rgba(232,237,244,0.02));
+  border: 1.5px solid rgba(45,212,191,0.3);
+}
+.index-lens {
+  position: absolute; left: 150px; top: -170px; width: 74px; height: 74px; border-radius: 50%;
+  border: 2.5px solid rgba(94,234,212,0.6); background: rgba(16,21,31,0.8);
+  display: flex; align-items: center; justify-content: center;
+}
+.index-lens svg { width: 34px; height: 34px; stroke: var(--accent-2); }
+
+.answer-card {
+  position: absolute; left: -170px; top: -130px; width: 340px; height: 260px; border-radius: 24px;
+  background: linear-gradient(160deg, rgba(232,237,244,0.07), rgba(232,237,244,0.02));
+  border: 1.5px solid rgba(45,212,191,0.4); padding: 28px 26px;
+  box-shadow: 0 28px 80px rgba(45,212,191,0.2);
+}
+.answer-card .aline { height: 18px; border-radius: 6px; background: rgba(232,237,244,0.12); margin-bottom: 14px; transform-origin: left; }
+.answer-card .aline.w60 { width: 60%; }
+.answer-card .aline.w85 { width: 85%; }
+.answer-card .aline.w72 { width: 72%; }
+.cite-pip {
+  position: absolute; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface); border: 2px solid rgba(45,212,191,0.6);
+}
+.gemini-spark {
+  position: absolute; left: -190px; top: -190px; width: 72px; height: 72px; border-radius: 18px;
+  background: var(--surface); border: 2px solid rgba(94,234,212,0.55);
+  display: flex; align-items: center; justify-content: center;
+}
+.gemini-spark svg { width: 38px; height: 38px; stroke: var(--accent-2); }
+
+.agent-dot {
+  position: absolute; width: 34px; height: 34px; border-radius: 50%;
+  background: var(--surface); border: 2px solid rgba(45,212,191,0.5);
+}
