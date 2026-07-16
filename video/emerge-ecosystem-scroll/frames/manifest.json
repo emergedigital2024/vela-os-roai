@@ -1,0 +1,20 @@
+{
+  "version": "v-16ac3e53",
+  "frameCount": 150,
+  "width": 1280,
+  "height": 720,
+  "aspect": 1.7778,
+  "format": "webp",
+  "pattern": "frame-%04d.webp",
+  "poster": "poster-2x.webp",
+  "previewStrip": {
+    "file": "preview-strip.webp",
+    "cols": 12,
+    "thumbWidth": 160,
+    "thumbHeight": 90
+  },
+  "timelineSeconds": 24,
+  "sourceFps": 30,
+  "beats": 8,
+  "chrome": "Chrome/150.0.7871.115"
+}
