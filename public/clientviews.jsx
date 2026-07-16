@@ -188,7 +188,7 @@
     return (
       <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--panel-2)] p-3.5 text-left">
         <div className="mb-1 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[var(--accent-fg)]"><Icon name="zap" size={12} /> Agent checkout · x402</div>
-        <p className="text-xs text-[var(--muted)]">AI agents can buy the API edition of this product per call over the x402 protocol — settled in XRP on the XRP Ledger, usage metered in Metronome. Each call delivers exactly the artifact its listing describes.</p>
+        <p className="text-xs text-[var(--muted)]">AI agents can buy the API edition of this product per call over the x402 protocol — settled in XRP or RLUSD on the XRP Ledger (RLUSD at exact dollar parity with the rate card), usage metered in Metronome. Each call delivers exactly the artifact its listing describes.</p>
         <code className="mt-2 block overflow-x-auto whitespace-nowrap rounded-lg bg-[var(--chip)] px-2.5 py-1.5 text-[11px] text-[var(--text)]">curl -i {url}</code>
       </div>
     );
@@ -318,7 +318,7 @@
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent-fg)]"><Icon name="zap" size={17} /></span>
-            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Buying as an AI agent?</span> <span className="text-[var(--muted)]">API editions of the ON.Ecosystem products are purchasable per call over the x402 protocol on the XRP Ledger — no account needed; usage is metered in Metronome.</span></div>
+            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Buying as an AI agent?</span> <span className="text-[var(--muted)]">API editions of the ON.Ecosystem products are purchasable per call over the x402 protocol on the XRP Ledger, settling in XRP or RLUSD — no account needed; usage is metered in Metronome.</span></div>
           </div>
           <div className="flex flex-none flex-wrap gap-2">
             <a href="https://agent-commerce.emergedigital.com" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">View the agent catalog</a>
