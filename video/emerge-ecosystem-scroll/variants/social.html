@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="../assets/gsap.min.js"></script>
+    <link rel="stylesheet" href="../assets/world.css" />
+    <style>
+      html, body { width: 1920px; height: 1080px; }
+      /* Lower-third captions (explainer's clip-wipe pattern) — burned for the
+         SOCIAL/MP4 cut only; the website overlays live DOM captions instead. */
+      #cap { position: absolute; left: 0; right: 0; bottom: 72px; z-index: 80; display: flex; justify-content: center; pointer-events: none; }
+      .cap-line {
+        position: absolute; visibility: hidden;
+        font-family: "Lexend", sans-serif; font-weight: 500; font-size: 30px; letter-spacing: 0.01em;
+        color: rgba(247,249,252,0.96); padding: 13px 28px; border-radius: 12px;
+        background: rgba(3,8,26,0.5); border: 1px solid rgba(255,255,255,0.10); backdrop-filter: blur(6px);
+        clip-path: inset(0 100% 0 0); white-space: nowrap;
+      }
+      .cap-line .teal { color: #3DDCE3; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24" data-width="1920" data-height="1080">
+      <!-- Social cut: landscape world + burned lower-third captions. Lives in variants/
+           so only index.html is the discovered root composition (render via npm run render:social). -->
+      <div id="film" class="clip" data-start="0" data-duration="24" data-track-index="1"></div>
+      <div id="cap">
+        <div class="cap-line" data-i="0">Emerge Digital — <span class="teal">Local Prime. Global Power. Enterprise Outcomes.</span></div>
+        <div class="cap-line" data-i="1">Agentforce that earns its keep — human-led, governed delivery.</div>
+        <div class="cap-line" data-i="2">Vela OS — <span class="teal">Return on AI Investment, measured.</span></div>
+        <div class="cap-line" data-i="3">VaultOS — knowledge your agents can run on.</div>
+        <div class="cap-line" data-i="4">Dev Pods — every PR reviewed, every merge earned.</div>
+        <div class="cap-line" data-i="5">One connected ecosystem behind every engagement.</div>
+        <div class="cap-line" data-i="6">The framework example: <span class="teal">≈4× — $4 of value per $1 of AI spend.</span></div>
+        <div class="cap-line" data-i="7"><span class="teal">emergedigital.com</span> — book a briefing.</div>
+      </div>
+      <div id="hf-vignette"></div>
+    </div>
+    <script>
+      window.__FILM_ORIENTATION = "landscape";
+      window.__timelines = window.__timelines || {}; // registration itself happens in world.js
+    </script>
+    <script src="../assets/world.js"></script>
+    <script>
+      // Caption choreography appended to the registered timeline (runs after world.js).
+      (function () {
+        const tl = window.__timelines && window.__timelines["main"];
+        if (!tl) return;
+        const STARTS = [0, 2.4, 5.28, 8.4, 11.28, 14.16, 17.28, 21.12];
+        const ENDS = [2.4, 5.28, 8.4, 11.28, 14.16, 17.28, 21.12, 24];
+        STARTS.forEach((s, i) => {
+          const sel = `.cap-line[data-i="${i}"]`;
+          const end = ENDS[i];
+          tl.set(sel, { visibility: "visible" }, s + 0.3);
+          tl.fromTo(sel, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power2.out" }, s + 0.3);
+          if (i < 7) {
+            tl.to(sel, { clipPath: "inset(0 0 0 100%)", duration: 0.3, ease: "power2.in" }, end - 0.4);
+            tl.set(sel, { visibility: "hidden" }, end - 0.1);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
