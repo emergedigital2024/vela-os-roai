@@ -56,7 +56,7 @@
         {!collapsed && (
           <div className="leading-tight">
             <div className="text-sm font-bold tracking-tight text-[var(--text)]">Vela <span className="text-[var(--accent-fg)]">OS</span></div>
-            <div className="text-[11px] text-[var(--muted)]">FPT CX Services</div>
+            <div className="text-[11px] text-[var(--muted)]">ROAI Analytics</div>
           </div>
         )}
       </div>
@@ -324,7 +324,7 @@
 
     // ---- per-view document.title (SEO + tab/history clarity) ----
     useEffect(() => {
-      const BRAND = "Vela OS · FPT CX Services";
+      const BRAND = "Vela OS — ROAI Analytics";
       let label;
       if (mode === "client") {
         label = (CLIENT_TITLES[clientSection] || "Customer portal") + " · Client portal";

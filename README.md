@@ -1,9 +1,10 @@
-# Vela OS · FPT CX Services — ROAI Analytics
+# Vela OS — ROAI Analytics
 
 A high-fidelity, **dual-mode (Agency ↔ Client)** B2B dashboard demo for an AI-native CX
-practice, themed around **FPT's Digital Commerce & Experience (DCX) offering** and the
+practice — modeled on **FPT's public Digital Commerce & Experience (DCX) portfolio** and the
 **ON.Ecosystem** agentic suite, centered on **Return on AI Investment (ROAI)**. Built as a
-single-page prototype and deployed to Cloudflare Workers static assets.
+single-page prototype and deployed to Cloudflare Workers static assets. Emerge Digital is
+not affiliated with FPT; FPT case results shown are attributed public proof points.
 
 **Live:** https://vela-os-roai.emerge-digital.workers.dev
 
