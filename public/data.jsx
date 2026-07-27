@@ -1,6 +1,7 @@
 /* =====================================================================
-   FPT CX Services — data layer
-   Portfolio figures are modelled; case-study results & credentials are real.
+   Vela OS — ROAI Analytics · data layer (CX-practice concept demo)
+   Portfolio figures are modelled; case-study results & credentials are real,
+   attributed FPT proof points (see canonical-facts.json).
    ROAI (multiple) = ValueDelivered / AICost
    ROAI %          = (ValueDelivered - AICost) / AICost * 100
    Net Value       = ValueDelivered - AICost
@@ -217,7 +218,7 @@
     };
   }
 
-  // ---- FPT CX services marketplace (client-facing catalog) ----
+  // ---- CX services marketplace (client-facing catalog, modeled on FPT's public CX portfolio) ----
   // Full offering across the 6 CX pillars. onEco = ON.Ecosystem agentic accelerator (+ funnel stage);
   // package = AI-first Sales Enablement ready-to-use package.
   const SERVICES = [

@@ -67,7 +67,7 @@
     if (!J) { window.print(); return; }
     const doc = new J({ unit: "pt", format: "a4" });
     let y = 56;
-    doc.setFontSize(18); doc.text("Vela OS · FPT CX Services", 40, y); y += 24;
+    doc.setFontSize(18); doc.text("Vela OS — ROAI Analytics", 40, y); y += 24;
     doc.setFontSize(10); doc.setTextColor(120);
     doc.text("Invoice " + inv.number, 40, y); y += 15;
     doc.text(client.name + "  ·  " + client.acct.type + (client.acct.poNumber ? "  ·  PO " + client.acct.poNumber : ""), 40, y); y += 15;
@@ -112,7 +112,7 @@
         </div>
         <div className="px-6 py-5">
           <div className="flex items-start justify-between">
-            <div><div className="text-sm font-bold text-[var(--text)]">Vela OS · FPT CX Services</div><div className="text-xs text-[var(--muted)]">billing@vela-os.fpt</div></div>
+            <div><div className="text-sm font-bold text-[var(--text)]">Vela OS — ROAI Analytics</div><div className="text-xs text-[var(--muted)]">billing@emergedigital.ae</div></div>
             <div className="text-right"><StatusBadge s={eff(inv)} /></div>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-[var(--border)] bg-[var(--panel-2)] p-4 text-sm">
