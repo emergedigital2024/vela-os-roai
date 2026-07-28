@@ -24,7 +24,7 @@ GUIDE = LIVE + "/guide"
 
 # ---------- shared content ----------
 TAGLINE = "The operating system for AI-first customer experience."
-SUB = "Vela OS turns FPT's full CX offering into one measurable surface - a dual-mode agency command center and customer portal, where every AI engagement is priced, delivered, and proven in ROAI."
+SUB = "Vela OS turns a full enterprise CX offering into one measurable surface - a dual-mode agency command center and customer portal, where every AI engagement is priced, delivered, and proven in ROAI."
 ROAI_F = "ROAI = (Value delivered - AI cost) / AI cost"
 ROAI_NOTE = "A 5.0x ROAI means every $1 of AI spend returned $5 of measured value - hours saved plus revenue uplift."
 STATS = [("2-3x", "higher revenue growth for CX leaders"),
@@ -134,7 +134,7 @@ def logo_mark(s, x, y, sz=0.42):
 
 
 def footer(s):
-    txt(s, 0.9, 7.02, 9, 0.3, [[("Vela OS  ", 9, MUTE, True), ("Emerge Digital x FPT CX Services", 9, FAINT, False)]])
+    txt(s, 0.9, 7.02, 9, 0.3, [[("Vela OS  ", 9, MUTE, True), ("ROAI Analytics  -  Emerge Digital", 9, FAINT, False)]])
     txt(s, 9.5, 7.02, 2.93, 0.3, [[(LIVE.replace("https://", ""), 9, FAINT, False)]], align=PP_ALIGN.RIGHT)
 
 
@@ -143,7 +143,7 @@ s = slide()
 box(s, 0, 0, 13.333, 7.5, fill=None)
 logo_mark(s, 0.9, 0.85, 0.6)
 txt(s, 1.65, 0.86, 8, 0.7, [[("Vela ", 22, WHITE, True), ("OS", 22, INDIGO_FG, True)]])
-txt(s, 1.65, 1.32, 8, 0.4, [[("FPT CX Services  -  ROAI Analytics", 12, MUTE, False)]])
+txt(s, 1.65, 1.32, 8, 0.4, [[("ROAI Analytics  -  Emerge Digital", 12, MUTE, False)]])
 txt(s, 0.9, 2.7, 11.5, 2.2, [[("The operating system for", 46, WHITE, True)], [("AI-first customer experience.", 46, WHITE, True)]], space=1.02)
 txt(s, 0.9, 4.95, 10.8, 1.2, [[(SUB, 16, MUTE, False)]], space=1.12)
 box(s, 0.9, 6.25, 6.4, 0.62, fill=PANEL, line=RGBColor(0x33, 0x33, 0x44))
@@ -205,7 +205,7 @@ txt(s, 1.25, 2.75, 4.7, 1.3, [[("5.4x", 70, EMER, True)]])
 txt(s, 1.25, 4.2, 4.7, 0.6, [[("$1 invested  ->  $5.40 of measured value returned", 13, MUTE, False)]], space=1.1)
 txt(s, 6.7, 2.2, 5.7, 0.9, [[(ROAI_F, 17, WHITE, True)]])
 txt(s, 6.7, 3.0, 5.7, 0.6, [[("Value = hours saved + revenue uplift, measured per engagement.", 13, MUTE, False)]], space=1.1)
-txt(s, 6.7, 3.9, 5.7, 1.8, [[("FPT and the client always see the same source of truth - so renewals and expansion become a data conversation, not a debate.", 14, MUTE, False)]], space=1.15)
+txt(s, 6.7, 3.9, 5.7, 1.8, [[("The practice and the client always see the same source of truth - so renewals and expansion become a data conversation, not a debate.", 14, MUTE, False)]], space=1.15)
 footer(s)
 
 # --- Slide 6: live billing ---
@@ -235,8 +235,8 @@ for i, (sol, head, who, metrics) in enumerate(CASES):
     txt(s, x + 0.32, y + 0.44, cw - 0.6, 0.4, [[(head, 16, WHITE, True)]])
     txt(s, x + 0.32, y + 0.82, cw - 0.6, 0.3, [[(who, 10.5, FAINT, False)]])
     txt(s, x + 0.32, y + 1.08, cw - 0.6, 0.35, [[(metrics, 10, MUTE, False)]])
-txt(s, 0.9, 5.45, 11.4, 0.3, [[("PARTNERS:  ", 11, INDIGO_FG, True), ("  ".join(PARTNERS), 11, MUTE, False)]], space=1.1)
-txt(s, 0.9, 5.95, 11.4, 0.4, [[("1,000+ certified engineers      1,500+ platform certifications", 14, WHITE, True)]])
+txt(s, 0.9, 5.45, 11.4, 0.3, [[("FPT PARTNERS:  ", 11, INDIGO_FG, True), ("  ".join(PARTNERS), 11, MUTE, False)]], space=1.1)
+txt(s, 0.9, 5.95, 11.4, 0.4, [[("1,000+ certified engineers      1,500+ platform certifications", 14, WHITE, True), ("      FPT Corporation's public figures", 10, FAINT, False)]])
 footer(s)
 
 # --- Slide 8: demo flow ---
@@ -262,7 +262,7 @@ box(s, 0.9, 5.1, 6.0, 0.7, fill=PANEL, line=RGBColor(0x33, 0x33, 0x44))
 txt(s, 1.15, 5.27, 5.6, 0.4, [[("Demo:  ", 13, FAINT, False), (LIVE.replace("https://", ""), 13, INDIGO_FG, True)]])
 box(s, 0.9, 5.95, 6.0, 0.7, fill=PANEL, line=RGBColor(0x33, 0x33, 0x44))
 txt(s, 1.15, 6.12, 5.6, 0.4, [[("Guide: ", 13, FAINT, False), (GUIDE.replace("https://", ""), 13, INDIGO_FG, True)]])
-txt(s, 0.9, 7.02, 11.5, 0.3, [[("Built by Emerge Digital for FPT CX Services", 10, FAINT, False)]])
+txt(s, 0.9, 7.02, 11.5, 0.3, [[("Built by Emerge Digital for an AI-native enterprise CX practice", 10, FAINT, False)]])
 
 pptx_path = os.path.join(OUT, "Vela-OS-Demo-Deck.pptx")
 prs.save(pptx_path)
@@ -291,13 +291,13 @@ class PDF(FPDF):
         self.set_xy(14, 6); self.set_text_color(255, 255, 255)
         self.set_font("Helvetica", "B", 15); self.cell(0, 5, "Vela OS", 0, 1)
         self.set_xy(14, 12); self.set_font("Helvetica", "", 9)
-        self.cell(0, 5, "FPT CX Services  -  ROAI Analytics", 0, 1)
+        self.cell(0, 5, "ROAI Analytics  -  Emerge Digital", 0, 1)
         self.set_xy(120, 8); self.set_font("Helvetica", "", 8.5)
         self.cell(76, 5, "Interactive demo + customer portal", 0, 1, "R")
 
     def footer(self):
         self.set_y(-13); self.set_text_color(*GREY); self.set_font("Helvetica", "", 8)
-        self.cell(0, 5, sanitize("Built by Emerge Digital for FPT CX Services  -  " + LIVE.replace("https://", "")), 0, 0, "L")
+        self.cell(0, 5, sanitize("Built by Emerge Digital for an AI-native enterprise CX practice  -  " + LIVE.replace("https://", "")), 0, 0, "L")
         self.cell(0, 5, "Page %s" % self.page_no(), 0, 0, "R")
 
 
@@ -350,14 +350,18 @@ body(pdf, "The Live panel reads a real Metronome account via a secure read-only 
 
 # page 2: proof + demo
 pdf.add_page()
+pdf.ln(8)  # drop below the 22mm header band - the first h2 would otherwise paint indigo-on-indigo inside it
 h2(pdf, "Proof - real FPT outcomes behind the demo")
 for sol, head, who, metrics in CASES:
     pdf.set_font("Helvetica", "B", 11); pdf.set_text_color(*INK); pdf.cell(0, 6, sanitize(head), 0, 1)
     pdf.set_font("Helvetica", "", 9); pdf.set_text_color(*IND); pdf.cell(0, 4.5, sanitize(sol + "   |   " + who), 0, 1)
     pdf.set_text_color(*GREY); pdf.set_font("Helvetica", "", 9); pdf.multi_cell(0, 4.5, sanitize(metrics), **MC); pdf.ln(1)
 pdf.set_font("Helvetica", "", 9.5); pdf.set_text_color(*INK)
-pdf.multi_cell(0, 5, sanitize("Partners: " + "  -  ".join(PARTNERS)), **MC)
-pdf.set_font("Helvetica", "B", 10); pdf.multi_cell(0, 5, "1,000+ certified engineers      1,500+ platform certifications", **MC)
+pdf.multi_cell(0, 5, sanitize("FPT partners: " + "  -  ".join(PARTNERS)), **MC)
+bench = "1,000+ certified engineers      1,500+ platform certifications"
+pdf.set_font("Helvetica", "B", 10); pdf.cell(pdf.get_string_width(bench) + 2, 5, bench, 0, 0)
+pdf.set_font("Helvetica", "", 8.5); pdf.set_text_color(*GREY); pdf.cell(0, 5, "FPT Corporation's public figures", 0, 1)
+pdf.set_text_color(*INK)
 
 h2(pdf, "Run the demo - 7 steps (~6-8 min)")
 for i, (head, d, u) in enumerate(DEMO):
