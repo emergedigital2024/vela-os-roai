@@ -492,8 +492,10 @@
     { name: "Shopify", tier: "Shopify Plus", engineers: "200+", certs: "40+", note: "Plus · custom storefronts · migration" },
   ];
   const PARTNER_TOTALS = { engineers: "1,000+", certs: "1,500+" };
-  // FPT Corporation parent-scale facts (canonical-facts.json → fpt_parent). The Agentforce ARR
-  // is a Salesforce-global ecosystem figure, NOT an FPT-specific result — label it as such wherever shown.
+  // FPT Corporation public figures — display ONLY with explicit FPT attribution (overview.jsx
+  // footnote does this). The Agentforce ARR is a Salesforce-global ecosystem figure, NOT an
+  // FPT-specific result — label it as such wherever shown. (canonical-facts.json no longer
+  // carries an fpt_parent block; unattributed reuse of these numbers is a killed claim.)
   const FPT = { revenue: "$2.47B", employees: "80,000+", agentforceArrNote: "$1.4B Salesforce-global Agentforce ARR (+330% YoY)" };
   const MARKET_STATS = [
     { stat: "2–3×", label: "higher revenue growth for CX leaders" },
