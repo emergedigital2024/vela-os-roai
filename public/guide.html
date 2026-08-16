@@ -138,7 +138,7 @@
   .step .say{color:var(--faint);font-style:italic}
   .step .go{white-space:nowrap}
   @media(max-width:760px){
-    .stats,.grid2,.pillars,.cases,.roai-box{grid-template-columns:1fr}
+    .stats,.grid2,.pillars,.cases,.roai-box,.vgrid{grid-template-columns:1fr}
     .step{grid-template-columns:38px 1fr;}
     .step .go{grid-column:1/-1}
   }
@@ -152,6 +152,15 @@
   .video-frame{position:relative;margin-top:28px;aspect-ratio:16/9;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:0 18px 50px rgba(0,0,0,.45)}
   .video-frame:focus-within{border-color:var(--accent-line)}
   .video-frame video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;background:#000}
+  .vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+  .vcard{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--panel);display:flex;flex-direction:column}
+  .vcard:focus-within{border-color:var(--accent-line)}
+  .vcard .vwrap{position:relative;aspect-ratio:16/9;background:#000}
+  .vcard video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;background:#000}
+  .vcard .vmeta{padding:14px 16px 16px}
+  .vcard .vmeta h3{font-size:15px;margin:0 0 4px}
+  .vcard .vmeta p{font-size:13px;color:var(--muted);margin:0}
+  .vcard .vlen{font-size:11.5px;font-weight:600;color:var(--accent-fg);background:var(--accent-soft);border:1px solid var(--accent-line);padding:3px 8px;border-radius:999px;display:inline-block;margin-bottom:8px}
   footer{padding:48px 0 70px}
   .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
   .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
@@ -171,6 +180,7 @@
     <nav class="navlinks">
       <a href="#watch">Watch</a>
       <a href="#what">Platform</a>
+      <a href="#shorts">Products</a>
       <a href="#roai">ROAI</a>
       <a href="#billing">Live billing</a>
       <a href="#proof">Proof</a>
@@ -204,7 +214,7 @@
 <section id="watch">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">Watch first</span><h2>The 66-second tour.</h2>
-    <p>A motion walkthrough of the whole platform — dual-mode command center and customer portal, the ON.Ecosystem, live usage-based billing, and the ROAI proof — before you open the live demo.</p></div>
+    <p>A motion walkthrough of the whole platform — dual-mode command center and customer portal, the Vela line, live usage-based billing, and the ROAI proof — before you open the live demo.</p></div>
     <div class="video-frame">
       <video controls preload="metadata" playsinline
              poster="/downloads/Vela-OS-Explainer-poster.jpg"
@@ -262,7 +272,7 @@
 <!-- PILLARS -->
 <section id="pillars">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">The offering</span><h2>Six CX pillars, powered by the ON.Ecosystem.</h2>
+    <div class="sec-head"><span class="eyebrow">The offering</span><h2>Six CX pillars, powered by the Vela line.</h2>
     <p>An end-to-end customer-experience capability — from strategy to run — with agentic AI products layered across the funnel.</p></div>
     <div class="pillars">
       <div class="pillar"><div class="k"><span class="dot" style="background:#3DDCE3"></span>Experience Strategy</div><p>Maturity assessment, marketecture and journey analysis.</p></div>
@@ -273,11 +283,74 @@
       <div class="pillar"><div class="k"><span class="dot" style="background:#ef4444"></span>Run &amp; Optimize</div><p>L1–L3 maintenance, 24×7 monitoring and ops support.</p></div>
     </div>
     <div class="agents">
-      <span class="agent">ON.Optima — Answer Engine Optimization</span>
-      <span class="agent">ON.X — Agentic Assistant</span>
-      <span class="agent">ON.E — Commerce Accelerator</span>
-      <span class="agent">ON.Match — AI Recommendations</span>
-      <span class="agent">ON.Browser — Agentic Browser</span>
+      <span class="agent">Vela AEO — Answer Engine Optimization</span>
+      <span class="agent">Vela Assist — Governed Assistant</span>
+      <span class="agent">Vela Commerce — Feed Validation</span>
+      <span class="agent">Vela Recs — Recommendation Ranking</span>
+      <span class="agent">Vela Scan — Agent-Readiness Crawl</span>
+    </div>
+  </div>
+</section>
+
+<!-- SEE EACH PRODUCT -->
+<section id="shorts">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">See it work</span><h2>Every product, on real output.</h2>
+    <p>One short per product. Nothing in them is illustrative — each figure on screen is read from a live API response, including a real store that turned out to be blocking Google's AI crawler.</p></div>
+    <div class="video-frame">
+      <video controls preload="none" playsinline
+             poster="/downloads/Vela-Line-Film-poster.jpg"
+             aria-label="The Vela line — all five products">
+        <source src="/downloads/Vela-Line-Film.mp4" type="video/mp4" />
+        Your browser can't play embedded video — <a href="/downloads/Vela-Line-Film.mp4">download the line film (.mp4)</a> instead.
+      </video>
+    </div>
+    <div class="vgrid">
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-AEO-Short-poster.jpg" aria-label="Vela AEO demo">
+            <source src="/downloads/Vela-AEO-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-AEO-Short.mp4">Download the Vela AEO demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:40</span><h3>Vela AEO</h3><p>A rewrite an answer engine can cite, an llms.txt block, and JSON-LD built only from the fields you send.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Assist-Short-poster.jpg" aria-label="Vela Assist demo">
+            <source src="/downloads/Vela-Assist-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Assist-Short.mp4">Download the Vela Assist demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:43</span><h3>Vela Assist</h3><p>A governed answer over your own context — and the list of everything it could not verify.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Recs-Short-poster.jpg" aria-label="Vela Recs demo">
+            <source src="/downloads/Vela-Recs-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Recs-Short.mp4">Download the Vela Recs demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:40</span><h3>Vela Recs</h3><p>Catalogue ranked by real cosine similarity on Workers AI embeddings, scores shown.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Commerce-Short-poster.jpg" aria-label="Vela Commerce demo">
+            <source src="/downloads/Vela-Commerce-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Commerce-Short.mp4">Download the Vela Commerce demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:46</span><h3>Vela Commerce</h3><p>A feed item validated to the GTIN check digit — and schema that omits what failed.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Scan-Short-poster.jpg" aria-label="Vela Scan demo">
+            <source src="/downloads/Vela-Scan-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Scan-Short.mp4">Download the Vela Scan demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:53</span><h3>Vela Scan</h3><p>A live agent-readiness crawl of a real store, run at call time.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -336,21 +409,21 @@
     <p>The case results surfaced in the dashboard are drawn from FPT's actual engagements across AEO, commerce and Data &amp; AI.</p></div>
     <div class="cases">
       <div class="case">
-        <div class="solution">ON.Optima · AEO</div>
+        <div class="solution">Answer Engine Optimization</div>
         <div class="head">+200% click-through rate</div>
         <div class="who">Global technology leader · Technology</div>
         <p style="font-size:13.5px">Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.</p>
         <div class="metrics"><span>Site ranking #6 (+18)</span><span>CTR 3.2% (+200%)</span><span>Featured snippets 30%</span></div>
       </div>
       <div class="case">
-        <div class="solution">ON.Optima · AEO</div>
+        <div class="solution">Answer Engine Optimization</div>
         <div class="head">Cited across 120+ markets</div>
         <div class="who">Global health F&amp;B leader · Food &amp; beverage</div>
         <p style="font-size:13.5px">Won AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.</p>
         <div class="metrics"><span>120+ markets</span><span>Consistent answer boxes</span><span>Acquisition cost ↓</span></div>
       </div>
       <div class="case">
-        <div class="solution">ON.E · Commerce</div>
+        <div class="solution">Commerce</div>
         <div class="head">MVP in 2 months, not 10</div>
         <div class="who">KSA megaproject (PIF) · Real estate</div>
         <p style="font-size:13.5px">Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.</p>
@@ -413,7 +486,7 @@
       </div>
       <div class="step">
         <div class="num"></div>
-        <div><h3>AI marketplace — launch an agent</h3><p>Walk the launch flow for a new ON.Ecosystem agent.</p><p class="say">"Expansion is self-serve — the customer can add an agent in a click."</p></div>
+        <div><h3>AI marketplace — launch an agent</h3><p>Walk the launch flow for a new Vela agent.</p><p class="say">"Expansion is self-serve — the customer can add an agent in a click."</p></div>
         <a class="btn go" href="https://roai.emergedigital.ae/?view=client&client=helios&section=marketplace" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
@@ -434,8 +507,14 @@
       <a class="card dl" href="/downloads/Vela-OS-Explainer.mp4" target="_blank" rel="noopener">
         <div class="tag accent">MP4 · 1:06</div>
         <h3>Vela OS — Explainer ↗</h3>
-        <p>A 66-second motion tour: dual-mode platform, the ON.Ecosystem, usage-based billing and real proof.</p>
+        <p>A 66-second motion tour: dual-mode platform, the Vela line, usage-based billing and real proof.</p>
         <span class="dlbtn">Watch the explainer (.mp4)</span>
+      </a>
+      <a class="card dl" href="/downloads/Vela-Line-Film.mp4" target="_blank" rel="noopener">
+        <div class="tag accent">MP4 · 0:53</div>
+        <h3>The Vela line — all five products ↗</h3>
+        <p>One film across Vela AEO, Assist, Recs, Commerce and Scan, with the per-call rate for each.</p>
+        <span class="dlbtn">Watch the line film (.mp4)</span>
       </a>
       <a class="card dl" href="/downloads/Vela-OS-Demo-Deck.pptx" download>
         <div class="tag accent">PPTX · 9 slides</div>
