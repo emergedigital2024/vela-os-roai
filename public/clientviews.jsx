@@ -133,7 +133,7 @@
         <div className="flex items-start justify-between gap-3">
           <PillarChip pillar={svc.pillar} size={40} />
           <div className="flex flex-wrap items-center justify-end gap-1.5">
-            {svc.onEco && <Badge tone="indigo">ON.Ecosystem</Badge>}
+            {svc.onEco && <Badge tone="indigo">Vela</Badge>}
             {svc.package && <Badge tone="emerald">Sales Enablement</Badge>}
             {svc.popular && !svc.onEco && !svc.package && <Badge tone="neutral">Popular</Badge>}
             {svc.isNew && <Badge tone="amber">New</Badge>}
@@ -170,7 +170,7 @@
   }
 
   // ---- Agent checkout (x402) — API editions on the XRP Ledger ----
-  // The five ON.Ecosystem products have per-call API editions sold over the
+  // The five Vela products have per-call API editions sold over the
   // x402 protocol by Emerge Digital's agent-commerce worker; each paid call
   // is metered into Metronome (visible in Agency → Billing → Live).
   const X402_BASE = "https://agent-commerce.emergedigital.com/api/xrpl/";
@@ -278,7 +278,7 @@
             <div>
               <Badge tone="emerald" icon="sparkles" className="mb-3">CX service catalog</Badge>
               <h2 className="text-xl font-bold text-[var(--text)]">Expand across the full CX lifecycle</h2>
-              <p className="mt-1 max-w-lg text-sm text-[var(--muted)]">Six service pillars — Strategy, Design, Platform, Commerce, Insights and Run — plus ON.Ecosystem AI accelerators and AI-first Sales Enablement. Delivered by your practice team with governed AI agents, trusted by Government and BFSI across the GCC; request one and it's usually live within weeks.</p>
+              <p className="mt-1 max-w-lg text-sm text-[var(--muted)]">Six service pillars — Strategy, Design, Platform, Commerce, Insights and Run — plus Vela AI accelerators and AI-first Sales Enablement. Delivered by your practice team with governed AI agents, trusted by Government and BFSI across the GCC; request one and it's usually live within weeks.</p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold tabular-nums text-[var(--text)]">{active.size}</div>
@@ -318,7 +318,7 @@
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent-fg)]"><Icon name="zap" size={17} /></span>
-            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Buying as an AI agent?</span> <span className="text-[var(--muted)]">API editions of the ON.Ecosystem products are purchasable per call over the x402 protocol on the XRP Ledger, settling in XRP or RLUSD — no account needed; usage is metered in Metronome.</span></div>
+            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Buying as an AI agent?</span> <span className="text-[var(--muted)]">API editions of the Vela products are purchasable per call over the x402 protocol on the XRP Ledger, settling in XRP or RLUSD — no account needed; usage is metered in Metronome.</span></div>
           </div>
           <div className="flex flex-none flex-wrap gap-2">
             <a href="https://agent-commerce.emergedigital.com" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">View the agent catalog</a>

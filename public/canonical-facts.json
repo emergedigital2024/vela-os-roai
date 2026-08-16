@@ -40,15 +40,15 @@
 
   "case_studies_attribution": "FPT-delivered outcomes (deck/public-sourced) — display ONLY under explicit FPT attribution (e.g. a 'real FPT outcomes behind the demo' heading), never as Emerge Digital results.",
   "case_studies": [
-    { "client": "Global technology leader", "sector": "Technology", "solution": "ON.Optima · AEO", "icon": "search",
+    { "client": "Global technology leader", "sector": "Technology", "solution": "Answer Engine Optimization", "icon": "search",
       "headline": "+200% click-through rate",
       "blurb": "Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.",
       "metrics": [["Site ranking", "#6 (+18)"], ["Click-through", "3.2% (+200%)"], ["Featured snippets", "30%"]] },
-    { "client": "Global health F&B leader", "sector": "Food & beverage", "solution": "ON.Optima · AEO", "icon": "sparkles",
+    { "client": "Global health F&B leader", "sector": "Food & beverage", "solution": "Answer Engine Optimization", "icon": "sparkles",
       "headline": "Cited across 120+ markets",
       "blurb": "Deployed AEO to win AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.",
       "metrics": [["Markets", "120+"], ["AI answer boxes", "Consistent"], ["Acquisition cost", "Reduced"]] },
-    { "client": "KSA megaproject (PIF)", "sector": "Real estate & construction", "solution": "ON.E · Commerce", "icon": "grid",
+    { "client": "KSA megaproject (PIF)", "sector": "Real estate & construction", "solution": "Commerce", "icon": "grid",
       "headline": "MVP in 2 months, not 10",
       "blurb": "Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.",
       "metrics": [["Time to MVP", "2 mo (vs 10)"], ["Build time", "−55%"], ["Requirements", "−40%"]] },
@@ -61,9 +61,9 @@
   "pricing_tiers": {
     "ladder": ["Starter", "Growth", "Scale", "Enterprise"],
     "descriptions": {
-      "Starter": "Entry tier — single-agent pilots and AEO visibility (ON.Optima).",
+      "Starter": "Entry tier — single-agent pilots and AEO visibility (Vela AEO).",
       "Growth": "Multi-agent CX with usage-based scaling across the funnel.",
-      "Scale": "Full ON.Ecosystem with committed volume and priority support.",
+      "Scale": "The full Vela line with committed volume and priority support.",
       "Enterprise": "Custom commercial terms, governance, and dedicated success."
     },
     "billing_models": ["Hybrid (seat-based)", "Enterprise commit"],

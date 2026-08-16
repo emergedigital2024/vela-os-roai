@@ -25,6 +25,10 @@ jobs:
         with:
           node-version: 22
 
+      - name: Claims lint
+        # Catch killed claims in review, not at deploy time when they are already merged.
+        run: node scripts/claims-lint.mjs
+
       - name: Upload preview version
         id: upload
         # Uploads a NEW Worker version (not promoted to production) and prints a
