@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "valid": false,
+  "issues": [
+    "price: not a non-negative number",
+    "currency: not a 3-letter ISO code",
+    "gtin: failed GS1 length/check-digit validation",
+    "availability: not a schema.org value (InStock|OutOfStock|PreOrder|BackOrder|Discontinued|LimitedAvailability|OnlineOnly|InStoreOnly|SoldOut)"
+  ],
+  "normalized": {
+    "name": "Aquora Pool Clarifier 1L",
+    "description": "Fast-acting clarifier for cloudy pool water.",
+    "sku": "AQ-CLR-1L",
+    "brand": "Aquora",
+    "url": "https://aquora.ae/p/clarifier"
+  },
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Aquora Pool Clarifier 1L",
+    "description": "Fast-acting clarifier for cloudy pool water.",
+    "sku": "AQ-CLR-1L",
+    "url": "https://aquora.ae/p/clarifier",
+    "brand": {
+      "@type": "Brand",
+      "name": "Aquora"
+    }
+  },
+  "notes": [
+    "JSON-LD emits only fields you supplied — missing fields are reported, never invented.",
+    "XRP price approximates the USD rate card at the on-ledger XRP/RLUSD rate (2026-07-10); the same 402 also offers RLUSD at exact USD parity."
+  ]
+}

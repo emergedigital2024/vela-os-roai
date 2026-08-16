@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "report": {
+    "url": "https://emergedigital.com/",
+    "origin": "https://emergedigital.com",
+    "robots_txt": {
+      "reachable": true,
+      "present": true,
+      "ai_crawler_rules": {
+        "*": [
+          "Allow: /",
+          "Disallow: /demand-generation"
+        ]
+      }
+    },
+    "llms_txt": {
+      "reachable": true,
+      "present": true,
+      "bytes": 17330
+    },
+    "wellknown_x402": {
+      "reachable": true,
+      "present": false,
+      "status": 404
+    },
+    "page": {
+      "reachable": true,
+      "status": 200,
+      "jsonld_blocks": 1,
+      "mcp_hints": false,
+      "nlweb_hints": false
+    },
+    "readiness": {
+      "signals_present": 2,
+      "signals_total": 4,
+      "basis": "observed facts from live fetches at call time only"
+    }
+  },
+  "notes": [
+    "Unreachable resources are reported as unreachable, not as failures of the target site.",
+    "XRP price approximates the USD rate card at the on-ledger XRP/RLUSD rate (2026-07-10); the same 402 also offers RLUSD at exact USD parity."
+  ]
+}

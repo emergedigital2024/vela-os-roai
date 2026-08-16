@@ -1,0 +1,68 @@
+{
+  "ok": true,
+  "report": {
+    "url": "https://aquora.ae/",
+    "origin": "https://aquora.ae",
+    "robots_txt": {
+      "reachable": true,
+      "present": true,
+      "ai_crawler_rules": {
+        "*": [
+          "Allow: /",
+          "Allow: /"
+        ],
+        "Applebot-Extended": [
+          "Disallow: /"
+        ],
+        "Bytespider": [
+          "Disallow: /",
+          "Disallow: /"
+        ],
+        "CCBot": [
+          "Disallow: /",
+          "Allow: /"
+        ],
+        "ClaudeBot": [
+          "Disallow: /",
+          "Allow: /"
+        ],
+        "Google-Extended": [
+          "Disallow: /"
+        ],
+        "GPTBot": [
+          "Disallow: /",
+          "Allow: /"
+        ],
+        "PerplexityBot": [
+          "Allow: /"
+        ]
+      }
+    },
+    "llms_txt": {
+      "reachable": true,
+      "present": true,
+      "bytes": 2877
+    },
+    "wellknown_x402": {
+      "reachable": true,
+      "present": false,
+      "status": 404
+    },
+    "page": {
+      "reachable": true,
+      "status": 200,
+      "jsonld_blocks": 1,
+      "mcp_hints": false,
+      "nlweb_hints": false
+    },
+    "readiness": {
+      "signals_present": 2,
+      "signals_total": 4,
+      "basis": "observed facts from live fetches at call time only"
+    }
+  },
+  "notes": [
+    "Unreachable resources are reported as unreachable, not as failures of the target site.",
+    "XRP price approximates the USD rate card at the on-ledger XRP/RLUSD rate (2026-07-10); the same 402 also offers RLUSD at exact USD parity."
+  ]
+}
