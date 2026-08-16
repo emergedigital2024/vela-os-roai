@@ -1,0 +1,21 @@
+{
+  "lead": 0.3,
+  "slots": [
+    7.0,
+    9.5,
+    8.0,
+    7.0,
+    7.5,
+    6.5,
+    8.0
+  ],
+  "segments": [
+    "Five products. One rate card. Every one of them pays per call.",
+    "Vela A E O rewrites your content so answer engines can cite it \u2014 and builds the l l m s dot t x t block to match.",
+    "Vela Assist answers from your context only, and hands back a list of everything it could not verify.",
+    "Vela Recs ranks your catalogue by real embedding similarity, and shows you the scores.",
+    "Vela Commerce validates a product feed item down to the G T I N check digit, then emits the schema.",
+    "And Vela Scan tells you what an A I agent actually sees when it visits you.",
+    "Usage-based, metered, priced to the unit. The Vela line, from Emerge Digital."
+  ]
+}

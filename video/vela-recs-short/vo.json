@@ -1,0 +1,19 @@
+{
+  "lead": 0.3,
+  "slots": [
+    6.0,
+    5.5,
+    7.0,
+    11.0,
+    6.0,
+    5.0
+  ],
+  "segments": [
+    "Most recommendation engines are a model guessing. This one is measured.",
+    "You post up to fifty catalogue items and the shopper's context.",
+    "A customer's pool went cloudy after heavy rain. Which three products go in front of them?",
+    "Clarifier, point six nine. Filter cartridge, point five six. Leaf net, point five four. Real cosine similarity, on real embeddings.",
+    "And it tells you what it is not: semantic similarity, not purchase-intent data.",
+    "One cent a recommendation. Vela Recs."
+  ]
+}

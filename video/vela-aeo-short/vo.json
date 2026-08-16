@@ -1,0 +1,19 @@
+{
+  "lead": 0.3,
+  "slots": [
+    5.5,
+    4.5,
+    10.0,
+    7.5,
+    8.0,
+    5.0
+  ],
+  "segments": [
+    "Answer engines are quoting your pages right now. Badly.",
+    "So post the content you already have.",
+    "Back comes a direct answer, then the key facts \u2014 using only what was in your page. Never a new claim, number or name.",
+    "It builds the l l m s dot t x t block for you, canonical U R L included.",
+    "And schema dot org JSON L D, from the fields you sent, and only those.",
+    "Two cents a call. Vela AEO."
+  ]
+}

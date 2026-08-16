@@ -1,0 +1,19 @@
+{
+  "lead": 0.3,
+  "slots": [
+    5.5,
+    6.5,
+    12.0,
+    9.5,
+    8.0,
+    5.0
+  ],
+  "segments": [
+    "Your product feed is telling A I agents things that aren't true.",
+    "One call. You post one feed item, exactly as it sits in your catalogue.",
+    "It caught four faults. Price wasn't a number. Currency wasn't an I S O code. The G T I N failed its check digit. Availability wasn't a schema dot org value.",
+    "Then look at the schema it emitted. Those four fields are simply absent. It reports what's missing \u2014 it never fills the gap with a guess.",
+    "Fix the item, call again, and the offer block appears. Price, currency, availability.",
+    "Three cents a call. Vela Commerce."
+  ]
+}
