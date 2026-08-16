@@ -24,6 +24,14 @@ jobs:
         with:
           node-version: 22
 
+      - name: Claims lint
+        # Killed FPT claims must never reach production. This gate exists because the
+        # 2026-07-27 de-brand missed public/guide.html and it sat live for three weeks —
+        # emerge-digital-website's compliance-lint scopes to its own dist/ and cannot
+        # see this repo. It also lints video/ scene decks + voiceover scripts, which are
+        # the only text-shaped artifacts before a claim becomes unreadable video.
+        run: node scripts/claims-lint.mjs
+
       - name: Deploy with Wrangler
         # account_id comes from wrangler.toml; only the API token is needed here.
         run: npx --yes wrangler@4 deploy
