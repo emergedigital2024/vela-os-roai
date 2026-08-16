@@ -1,0 +1,78 @@
+{
+  "captions": [
+    "Your product feed is telling agents things that aren't true.",
+    "One call. One feed item, exactly as it sits in your catalogue.",
+    "Four faults caught, field by field.",
+    "The four bad fields are simply absent \u2014 never invented.",
+    "Fix the item, and the offer block appears.",
+    "Vela Commerce \u2014 $0.03 a call."
+  ],
+  "scenes": [
+    {
+      "dur": 5.5,
+      "comment": "hook",
+      "html": "        <div class=\"eyebrow s1a\">Vela Commerce \u00b7 feed validation in one call</div>\n        <div class=\"headline s1b\" style=\"margin-top:26px;\">Your product feed is telling<br />agents things that <span class=\"teal\">aren't true.</span></div>\n        <div class=\"sub s1c\" style=\"margin-top:26px;\">A bad check digit or a stray currency string, and the listing quietly stops working.</div>",
+      "anim": [
+        "enter('.s1a', T + 0.25, {y:20})",
+        "tl.from('.s1b', {opacity:0, y:56, duration:0.85, ease:EXPO}, T + 0.5)",
+        "enter('.s1c', T + 1.0)"
+      ]
+    },
+    {
+      "dur": 6.5,
+      "comment": "the call",
+      "html": "        <div class=\"eyebrow s2a\">One call</div>\n        <div class=\"headline s2b\" style=\"font-size:56px;margin-top:20px;\">Post one item, exactly as<br />it sits in your <span class=\"teal\">catalogue.</span></div>\n        <div class=\"req s2c\">\n          <div><span class=\"m\">POST</span> <span class=\"u\">/api/xrpl/vela-commerce-call</span></div>\n          <div><span class=\"c\">{ \"product\": { \"name\": </span><span class=\"u\">\"Pool Clarifier 1L\"</span><span class=\"c\">, \u2026 } }</span></div>\n        </div>",
+      "anim": [
+        "enter('.s2a', T + 0.15, {y:18})",
+        "enter('.s2b', T + 0.4)",
+        "tl.from('.s2c', {opacity:0, scale:0.94, duration:0.7, ease:'back.out(1.4)'}, T + 1.1)"
+      ]
+    },
+    {
+      "dur": 12.0,
+      "comment": "four faults",
+      "html": "        <div class=\"eyebrow s3a\">Validation \u00b7 deterministic, no model involved</div>\n        <div class=\"report\">\n          <div class=\"rrow s3b\"><div class=\"mark bad\">\u2717</div><div class=\"nm\">price</div><div class=\"val\">not a non-negative number</div></div>\n          <div class=\"rrow s3c\"><div class=\"mark bad\">\u2717</div><div class=\"nm\">currency</div><div class=\"val\">not a 3-letter ISO code</div></div>\n          <div class=\"rrow s3d\"><div class=\"mark bad\">\u2717</div><div class=\"nm\">gtin</div><div class=\"val\">failed GS1 check-digit</div></div>\n          <div class=\"rrow s3e\"><div class=\"mark bad\">\u2717</div><div class=\"nm\">availability</div><div class=\"val\">not a schema.org value</div></div>\n        </div>",
+      "anim": [
+        "enter('.s3a', T + 0.15, {y:18})",
+        "tl.from('.s3b', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 1.4)",
+        "tl.from('.s3c', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 3.6)",
+        "tl.from('.s3d', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 5.9)",
+        "tl.from('.s3e', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 8.4)"
+      ]
+    },
+    {
+      "dur": 9.5,
+      "comment": "never invented",
+      "html": "        <div class=\"eyebrow s4a\">The schema it emitted</div>\n        <div class=\"headline s4b\" style=\"font-size:52px;margin-top:16px;\">The four bad fields are<br /><span class=\"teal\">simply not there.</span></div>\n        <div class=\"req s4c\" style=\"font-size:26px;margin-top:34px;\">\n          <div><span class=\"c\">\"@type\":</span> <span class=\"u\">\"Product\"</span><span class=\"c\">,</span></div>\n          <div><span class=\"c\">\"name\":</span> <span class=\"u\">\"Aquora Pool Clarifier 1L\"</span><span class=\"c\">,</span></div>\n          <div><span class=\"c\">\"sku\":</span> <span class=\"u\">\"AQ-CLR-1L\"</span><span class=\"c\">, \"brand\": { \u2026 }</span></div>\n          <div style=\"opacity:0.55;\"><span class=\"c\">// no price \u00b7 no currency \u00b7 no gtin \u00b7 no availability</span></div>\n        </div>\n        <div class=\"sub s4d\" style=\"font-size:26px;margin-top:26px;\">It reports what's missing. It never fills the gap with a guess.</div>",
+      "anim": [
+        "enter('.s4a', T + 0.15, {y:18})",
+        "enter('.s4b', T + 0.45)",
+        "tl.from('.s4c', {opacity:0, scale:0.96, duration:0.7, ease:'back.out(1.3)'}, T + 2.4)",
+        "enter('.s4d', T + 6.4, {y:20})"
+      ]
+    },
+    {
+      "dur": 8.0,
+      "comment": "fixed",
+      "html": "        <div class=\"eyebrow s5a\">Fix the item \u00b7 call again</div>\n        <div class=\"headline s5b\" style=\"font-size:54px;margin-top:18px;\">Now the <span class=\"teal\">offer block</span> appears.</div>\n        <div class=\"req s5c\" style=\"font-size:26px;margin-top:32px;\">\n          <div><span class=\"c\">\"offers\": {</span></div>\n          <div>&nbsp;&nbsp;<span class=\"c\">\"price\":</span> <span class=\"u\">\"49.90\"</span><span class=\"c\">, \"priceCurrency\":</span> <span class=\"u\">\"AED\"</span><span class=\"c\">,</span></div>\n          <div>&nbsp;&nbsp;<span class=\"c\">\"availability\":</span> <span class=\"u\">\"schema.org/InStock\"</span></div>\n          <div><span class=\"c\">}</span></div>\n        </div>",
+      "anim": [
+        "enter('.s5a', T + 0.15, {y:18})",
+        "enter('.s5b', T + 0.4)",
+        "tl.from('.s5c', {opacity:0, y:34, duration:0.7, ease:EXPO}, T + 1.5)"
+      ]
+    },
+    {
+      "dur": 5.0,
+      "comment": "close",
+      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">Commerce</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Deterministic feed validation. $0.03 a call.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>roai.emergedigital.ae</div>",
+      "anim": [
+        "tl.fromTo('.s6glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
+        "tl.from('.s6tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
+        "enter('.s6a', T + 0.5, {scale:0.96, y:0})",
+        "shimmer('.s6a .shimmer-sweep-target', T + 1.0)",
+        "enter('.s6b', T + 1.0, {y:20})",
+        "tl.from('.s6c', {opacity:0, y:16, duration:0.6, ease:EXPO}, T + 1.6)"
+      ]
+    }
+  ]
+}

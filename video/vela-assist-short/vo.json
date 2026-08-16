@@ -1,0 +1,19 @@
+{
+  "lead": 0.3,
+  "slots": [
+    5.5,
+    5.5,
+    7.5,
+    8.0,
+    11.0,
+    5.5
+  ],
+  "segments": [
+    "The problem with assistants isn't what they say. It's what they make up.",
+    "Vela Assist answers only from the context you supply.",
+    "A customer asks: my pool went cloudy two days after I shocked it. Do I need to drain it?",
+    "It answers. Draining isn't necessary \u2014 that's stirred-up dead algae \u2014 and it points to the clarifier.",
+    "Then it does what most assistants skip. It lists what it could not verify: p H, alkalinity, and how long the cloudiness lasts.",
+    "Twenty-five cents a session. Vela Assist."
+  ]
+}

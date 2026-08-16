@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* local brand fonts (captured .woff2 — offline-render safe) */
+      @font-face { font-family: "Lexend"; font-weight: 400; font-display: block; src: url("assets/fonts/lexend-400.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend"; font-weight: 600; font-display: block; src: url("assets/fonts/lexend-600.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend"; font-weight: 700; font-display: block; src: url("assets/fonts/lexend-700.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend Zetta"; font-weight: 700; font-display: block; src: url("assets/fonts/lexendzetta-700.woff2") format("woff2"); }
+      @font-face { font-family: "Prompt"; font-weight: 500; font-display: block; src: url("assets/fonts/prompt-500.woff2") format("woff2"); }
+      @font-face { font-family: "Prompt"; font-weight: 600; font-display: block; src: url("assets/fonts/prompt-600.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block; src: url("assets/fonts/jbmono-500.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block; src: url("assets/fonts/jbmono-700.woff2") format("woff2"); }
+
+      :root {
+        --bg: #06122A; --bg-deep: #03081A; --surface: #0A1F3D;
+        --ink: #F7F9FC; --muted: #9FAFC2; --hair: rgba(255,255,255,0.10);
+        --accent: #00C2C7; --accent-2: #3DDCE3; --glow: #00F5FF;
+        --ok: #34D399; --bad: #FB7185; --warn: #FBBF24;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg-deep); }
+      body { font-family: "Lexend", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background:
+          radial-gradient(ellipse 90% 70% at 80% 0%, rgba(0,194,199,0.18), transparent 60%),
+          radial-gradient(ellipse 70% 60% at 8% 95%, rgba(61,220,227,0.10), transparent 65%),
+          linear-gradient(160deg, #06122A 0%, #0A1F3D 55%, #06122A 100%);
+      }
+      .scene {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 110px 170px; will-change: transform, filter;
+      }
+      .eyebrow { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 600; font-size: 22px; color: var(--accent-2); }
+      .headline { font-weight: 700; font-size: 66px; line-height: 1.06; letter-spacing: -0.025em; max-width: 1400px; }
+      .sub { font-weight: 400; font-size: 30px; line-height: 1.45; color: var(--muted); max-width: 1120px; }
+      .teal { color: var(--accent); }
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+      .wordmark { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 118px; letter-spacing: -0.02em; line-height: 1; }
+      .tile { width: 118px; height: 106px; border-radius: 26px; margin-bottom: 36px; background: linear-gradient(150deg, #00C2C7 0%, #0A1F3D 99%); box-shadow: 0 24px 80px rgba(0,194,199,0.32); display: flex; align-items: center; justify-content: center; font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 52px; color: #fff; }
+
+      /* four-signal grid (S2) */
+      .signals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; width: 1560px; margin-top: 54px; }
+      .sig { background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border: 1px solid var(--hair); border-radius: 20px; padding: 30px 28px; text-align: left; }
+      .sig .k { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 15px; color: var(--accent-2); margin-bottom: 14px; }
+      .sig h3 { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 24px; font-weight: 700; line-height: 1.25; }
+      .sig p { font-size: 19px; color: var(--muted); margin-top: 12px; line-height: 1.4; }
+
+      /* request block (S3) */
+      .req { font-family: "JetBrains Mono", ui-monospace, monospace; text-align: left; background: rgba(3,8,26,0.62); border: 1px solid var(--hair); border-radius: 18px; padding: 34px 42px; font-size: 30px; line-height: 1.6; margin-top: 46px; box-shadow: 0 30px 90px -30px rgba(0,194,199,0.25); }
+      .req .m { color: var(--accent); font-weight: 700; }
+      .req .u { color: var(--ink); }
+      .req .c { color: var(--muted); }
+
+      /* report rows (S4) */
+      .report { width: 1500px; margin-top: 44px; }
+      .rrow { display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 26px; padding: 22px 26px; border-bottom: 1px solid var(--hair); }
+      .rrow .mark { font-size: 34px; font-weight: 700; text-align: center; }
+      .rrow .nm { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 30px; font-weight: 700; text-align: left; }
+      .rrow .val { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 24px; color: var(--muted); text-align: right; }
+      .ok { color: var(--ok); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+
+      /* findings (S5) */
+      .finds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px 40px; width: 1500px; margin-top: 44px; text-align: left; }
+      .find { border-left: 3px solid var(--warn); padding-left: 24px; }
+      .find .t { font-size: 27px; font-weight: 700; line-height: 1.25; }
+      .find .d { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 21px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+
+      .score { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 150px; line-height: 1; color: var(--accent); text-shadow: 0 0 80px rgba(0,194,199,0.45); }
+
+      .cta { display: inline-block; margin-top: 40px; background: linear-gradient(90deg, #00C2C7, #3DDCE3); color: #0A1F3D; font-weight: 700; font-size: 28px; padding: 22px 44px; border-radius: 9999px; box-shadow: 0 16px 50px rgba(0,194,199,0.35); }
+      .outro-glow { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(0,194,199,0.30), transparent 65%); filter: blur(20px); }
+      .url-pill { display: inline-flex; align-items: center; gap: 12px; margin-top: 28px; padding: 14px 28px; border-radius: 9999px; border: 1px solid rgba(0,194,199,0.4); background: rgba(0,194,199,0.10); font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 18px; color: var(--accent-2); }
+      .url-pill .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+
+      .shimmer-sweep-target { position: relative; display: inline-block; }
+      .shimmer-sweep-target .shimmer-mask {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        background: linear-gradient(120deg, transparent 0%,
+          transparent calc(var(--shimmer-pos, -20%) - 11%),
+          rgba(255,255,255,0.55) var(--shimmer-pos, -20%),
+          transparent calc(var(--shimmer-pos, -20%) + 11%), transparent 100%);
+        mix-blend-mode: overlay;
+      }
+
+      #cap { position: absolute; left: 0; right: 0; bottom: 72px; z-index: 80; display: flex; justify-content: center; pointer-events: none; }
+      .cap-line {
+        position: absolute; visibility: hidden;
+        font-family: "Prompt", "Lexend", sans-serif; font-weight: 500; font-size: 30px; letter-spacing: 0.01em;
+        color: rgba(247,249,252,0.96); padding: 12px 26px; border-radius: 12px;
+        background: rgba(3,8,26,0.45); border: 1px solid var(--hair); backdrop-filter: blur(6px);
+        clip-path: inset(0 100% 0 0); white-space: nowrap;
+      }
+
+      #hf-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 90;
+        background: radial-gradient(ellipse at center, transparent 52%, rgba(0,0,0,0.55) 100%); }
+      #flash { position: absolute; inset: 0; pointer-events: none; z-index: 95; background: #EAFBFF; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="53.5" data-width="1920" data-height="1080">
+
+      <!-- SCENE 1 — open (0.0–7.0) -->
+      <div class="scene clip" data-start="0.0" data-duration="7.0" data-track-index="1">
+        <div class="eyebrow s1a">The Vela line · API editions</div>
+        <div class="headline s1b" style="margin-top:26px;">Five products.<br />One rate card.<br /><span class="teal">Pay per call.</span></div>
+      </div>
+
+      <!-- SCENE 2 — AEO (7.0–16.5) -->
+      <div class="scene clip" data-start="7.0" data-duration="9.5" data-track-index="1">
+        <div class="eyebrow s2a">Attract</div>
+        <div class="headline s2b" style="font-size:64px;margin-top:16px;">Vela <span class="teal">AEO</span></div>
+        <div class="sub s2c" style="margin-top:22px;">A GenAI-visibility rewrite, an llms.txt block and Article/FAQ JSON-LD — built only from the fields you send.</div>
+        <div class="req s2d" style="font-size:28px;margin-top:32px;"><span class="c">$0.02</span> <span class="u">/ request</span></div>
+      </div>
+
+      <!-- SCENE 3 — Assist (16.5–24.5) -->
+      <div class="scene clip" data-start="16.5" data-duration="8.0" data-track-index="1">
+        <div class="eyebrow s3a">Engage</div>
+        <div class="headline s3b" style="font-size:64px;margin-top:16px;">Vela <span class="teal">Assist</span></div>
+        <div class="sub s3c" style="margin-top:22px;">A governed CX answer over your own context, with a claims-to-verify list so nothing unchecked reaches a customer.</div>
+        <div class="req s3d" style="font-size:28px;margin-top:32px;"><span class="c">$0.25</span> <span class="u">/ session</span></div>
+      </div>
+
+      <!-- SCENE 4 — Recs (24.5–31.5) -->
+      <div class="scene clip" data-start="24.5" data-duration="7.0" data-track-index="1">
+        <div class="eyebrow s4a">Optimize</div>
+        <div class="headline s4b" style="font-size:64px;margin-top:16px;">Vela <span class="teal">Recs</span></div>
+        <div class="sub s4c" style="margin-top:22px;">Top-N ranked by real cosine similarity on Workers AI embeddings — model id and scores included.</div>
+        <div class="req s4d" style="font-size:28px;margin-top:32px;"><span class="c">$0.01</span> <span class="u">/ rec</span></div>
+      </div>
+
+      <!-- SCENE 5 — Commerce (31.5–39.0) -->
+      <div class="scene clip" data-start="31.5" data-duration="7.5" data-track-index="1">
+        <div class="eyebrow s5a">Convert</div>
+        <div class="headline s5b" style="font-size:64px;margin-top:16px;">Vela <span class="teal">Commerce</span></div>
+        <div class="sub s5c" style="margin-top:22px;">Validates and normalizes a product-feed item — GTIN check digit, currency shape, availability enum — then emits Product/Offer JSON-LD.</div>
+        <div class="req s5d" style="font-size:28px;margin-top:32px;"><span class="c">$0.03</span> <span class="u">/ API call</span></div>
+      </div>
+
+      <!-- SCENE 6 — Scan (39.0–45.5) -->
+      <div class="scene clip" data-start="39.0" data-duration="6.5" data-track-index="1">
+        <div class="eyebrow s6a">Discover</div>
+        <div class="headline s6b" style="font-size:64px;margin-top:16px;">Vela <span class="teal">Scan</span></div>
+        <div class="sub s6c" style="margin-top:22px;">A live agent-readiness crawl: AI-crawler rules, llms.txt, agent payments and MCP hints — fetched at call time.</div>
+        <div class="req s6d" style="font-size:28px;margin-top:32px;"><span class="c">$0.05</span> <span class="u">/ scan</span></div>
+      </div>
+
+      <!-- SCENE 7 — close (45.5–53.5) -->
+      <div class="scene clip" data-start="45.5" data-duration="8.0" data-track-index="1">
+        <div class="outro-glow s7glow"></div>
+        <div class="tile s7tile">ED</div>
+        <div class="wordmark s7a" style="font-size:104px;"><span class="shimmer-sweep-target">The Vela <span class="teal">line</span></span></div>
+        <div class="sub s7b" style="margin-top:16px;">Usage-based, metered in Metronome, priced to the unit.</div>
+        <div class="url-pill s7c"><span class="dot"></span>roai.emergedigital.ae</div>
+      </div>
+
+      <div id="cap">
+        <div class="cap-line" data-i="0">Five products. One rate card. Pay per call.</div>
+        <div class="cap-line" data-i="1">Vela AEO — be quotable on purpose.</div>
+        <div class="cap-line" data-i="2">Vela Assist — an assistant that shows its seams.</div>
+        <div class="cap-line" data-i="3">Vela Recs — ranking you can audit.</div>
+        <div class="cap-line" data-i="4">Vela Commerce — deterministic feed validation.</div>
+        <div class="cap-line" data-i="5">Vela Scan — know what the agents see.</div>
+        <div class="cap-line" data-i="6">The Vela line — priced to the unit.</div>
+      </div>
+
+      <div id="hf-vignette"></div>
+      <div id="flash"></div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".shimmer-sweep-target").forEach((el) => {
+        if (!el.querySelector(".shimmer-mask")) { const m = document.createElement("div"); m.className = "shimmer-mask"; el.appendChild(m); }
+      });
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const EXPO = "expo.out";
+      const enter = (sel, at, opts = {}) => tl.from(sel, Object.assign({ opacity: 0, y: 44, duration: 0.7, ease: EXPO }, opts), at);
+      const shimmer = (sel, at) => tl.fromTo(sel, { "--shimmer-pos": "-20%" }, { "--shimmer-pos": "120%", duration: 1.2, ease: "power2.inOut" }, at);
+      const flash = (at) => tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.55, duration: 0.12, ease: "power2.out" }, at).to("#flash", { opacity: 0, duration: 0.5, ease: "power2.in" }, at + 0.12);
+
+      const STARTS = [0.0, 7.0, 16.5, 24.5, 31.5, 39.0, 45.5];
+      const DURS = [7.0, 9.5, 8.0, 7.0, 7.5, 6.5, 8.0];
+      STARTS.forEach((s, i) => {
+        const sel = `.cap-line[data-i="${i}"]`;
+        const end = s + DURS[i];
+        tl.set(sel, { visibility: "visible" }, s + 0.35);
+        tl.fromTo(sel, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power2.out" }, s + 0.35);
+        tl.to(sel, { clipPath: "inset(0 0 0 100%)", duration: 0.3, ease: "power2.in" }, end - 0.45);
+        tl.set(sel, { visibility: "hidden" }, end - 0.12);
+      });
+
+      // S1 — open
+      { const T = 0.0;
+        enter('.s1a', T + 0.25, {y:20});
+        tl.from('.s1b', {opacity:0, y:56, duration:0.85, ease:EXPO}, T + 0.5);
+      }
+      // S2 — AEO
+      { const T = 7.0;
+        flash(T);
+        enter('.s2a', T + 0.15, {y:18});
+        enter('.s2b', T + 0.4);
+        enter('.s2c', T + 1.1, {y:26});
+        tl.from('.s2d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4);
+      }
+      // S3 — Assist
+      { const T = 16.5;
+        flash(T);
+        enter('.s3a', T + 0.15, {y:18});
+        enter('.s3b', T + 0.4);
+        enter('.s3c', T + 1.1, {y:26});
+        tl.from('.s3d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4);
+      }
+      // S4 — Recs
+      { const T = 24.5;
+        flash(T);
+        enter('.s4a', T + 0.15, {y:18});
+        enter('.s4b', T + 0.4);
+        enter('.s4c', T + 1.1, {y:26});
+        tl.from('.s4d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4);
+      }
+      // S5 — Commerce
+      { const T = 31.5;
+        flash(T);
+        enter('.s5a', T + 0.15, {y:18});
+        enter('.s5b', T + 0.4);
+        enter('.s5c', T + 1.1, {y:26});
+        tl.from('.s5d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4);
+      }
+      // S6 — Scan
+      { const T = 39.0;
+        flash(T);
+        enter('.s6a', T + 0.15, {y:18});
+        enter('.s6b', T + 0.4);
+        enter('.s6c', T + 1.1, {y:26});
+        tl.from('.s6d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4);
+      }
+      // S7 — close
+      { const T = 45.5;
+        flash(T);
+        tl.fromTo('.s7glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1);
+        tl.from('.s7tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2);
+        enter('.s7a', T + 0.6, {scale:0.96, y:0});
+        shimmer('.s7a .shimmer-sweep-target', T + 1.2);
+        enter('.s7b', T + 1.2, {y:20});
+        tl.from('.s7c', {opacity:0, y:16, duration:0.6, ease:EXPO}, T + 1.9);
+      }
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
