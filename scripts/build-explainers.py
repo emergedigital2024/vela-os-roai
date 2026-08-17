@@ -50,6 +50,24 @@ CASES = [
     ("Data & AI CoE", "Campaign cycles: weeks to minutes", "FPT x Salesforce ASEAN CoE",
      "First in ASEAN - weeks to minutes - ~100 Agentforce certs by 2026"),
 ]
+# Per-call API editions. Prices are the RLUSD figures in agent-commerce-worker
+# src/catalog/products.ts — the ONLY source of truth for what a caller is charged.
+# Do NOT copy these from the demo rate card in public/data.jsx: that is the retainer
+# pricing for the managed product and is a different number (it is how the Vela Recs
+# price shipped 10x wrong in two films, 2026-08-17).
+API_EDITIONS = [
+    ("Vela AEO", "$0.02 / request", "GenAI-visibility rewrite + llms.txt block + Article/FAQ JSON-LD"),
+    ("Vela Assist", "$0.25 / session", "Governed CX answer with a claims-to-verify list"),
+    ("Vela Recs", "$0.10 / recommendation", "Top-N by real cosine similarity, model id and scores shown"),
+    ("Vela Commerce", "$0.03 / API call", "Feed item validated to the GTIN check digit, then JSON-LD"),
+    ("Vela Scan", "$0.05 / scan", "Agent-readiness crawl: crawler rules, llms.txt, x402, MCP"),
+]
+X402 = ("Settles in XRP or RLUSD over the x402 protocol on the XRP Ledger - usage metered in "
+        "Metronome - no account, no contract, no sales call. Catalogue at "
+        "agent-commerce.emergedigital.com/.well-known/x402")
+FILMS = ("Six films on the guide: a 53-second tour of the whole line, plus one short per product "
+         "(0:40-0:53). Every figure on screen is read from a live API response - nothing is illustrative.")
+
 PARTNERS = ["Adobe (Specialized)", "Sitecore (Platinum APAC)", "Salesforce (First ASEAN Data & AI CoE)",
             "Liferay (Global Platinum)", "Shopify (Plus)"]
 DEMO = [
@@ -195,6 +213,20 @@ txt(s, 0.9, 5.05, 11.4, 0.3, [[("AGENTIC PRODUCTS", 11, INDIGO_FG, True)]])
 txt(s, 0.9, 5.4, 11.5, 1.2, [[(a + ("        " if (i + 1) % 2 else "\n"), 13, MUTE, False) for i, a in enumerate(AGENTS)]], space=1.3)
 footer(s)
 
+# --- Slide 4b: per-call API editions ---
+s = slide()
+eyebrow(s, "Buy it by the call")
+heading(s, "Every product, callable per request.")
+rw, rh, ry = 11.5, 0.62, 1.95
+for i, (name, price, desc) in enumerate(API_EDITIONS):
+    y = ry + i * (rh + 0.12)
+    box(s, 0.9, y, rw, rh, fill=PANEL if i % 2 == 0 else PANEL2, line=RGBColor(0x2A, 0x2A, 0x36))
+    txt(s, 1.15, y + 0.13, 2.6, 0.36, [[(name, 13.5, WHITE, True)]])
+    txt(s, 3.75, y + 0.15, 5.6, 0.36, [[(desc, 10.5, MUTE, False)]])
+    txt(s, 9.4, y + 0.13, 2.8, 0.36, [[(price, 13, EMER, True)]], align=PP_ALIGN.RIGHT)
+txt(s, 0.9, 5.78, 11.5, 0.8, [[(X402, 10.5, FAINT, False)]], space=1.25)
+footer(s)
+
 # --- Slide 5: ROAI ---
 s = slide()
 eyebrow(s, "The differentiator")
@@ -243,6 +275,7 @@ footer(s)
 s = slide()
 eyebrow(s, "Run the demo")
 heading(s, "A 7-step walkthrough (~6-8 min).")
+txt(s, 0.9, 5.95, 11.5, 0.45, [[(FILMS, 10.5, FAINT, False)]], space=1.2)
 for i, (h, d, _u) in enumerate(DEMO):
     r, c = divmod(i, 2)
     x = 0.9 + c * 6.1; y = 1.95 + r * 1.02
@@ -345,6 +378,15 @@ pdf.set_font("Helvetica", "I", 9); pdf.set_text_color(*IND)
 pdf.multi_cell(0, 5, sanitize("Agents: " + "  -  ".join(AGENTS)), **MC)
 pdf.set_text_color(*INK)
 
+h2(pdf, "Buy it by the call - per-call API editions")
+for name, price, desc in API_EDITIONS:
+    pdf.set_font("Helvetica", "B", 9.5); pdf.set_text_color(*INK); pdf.cell(30, 5, sanitize(name), 0, 0)
+    pdf.set_font("Helvetica", "B", 9.5); pdf.set_text_color(*EM); pdf.cell(44, 5, sanitize(price), 0, 0)
+    pdf.set_font("Helvetica", "", 9.5); pdf.set_text_color(*GREY); pdf.cell(0, 5, sanitize(desc), 0, 1)
+pdf.set_font("Helvetica", "I", 8.5); pdf.set_text_color(*GREY)
+pdf.multi_cell(0, 4.4, sanitize(X402), **MC)
+pdf.set_text_color(*INK)
+
 h2(pdf, "Live usage-based billing (Metronome)")
 body(pdf, "The Live panel reads a real Metronome account via a secure read-only proxy (the key never reaches the browser): 7 customers on prepaid-commit or hybrid models, finalized + draft invoices with 6 months of revenue history, commit/credit drawdown, and a full catalog of metrics, products, rate cards and packages.")
 
@@ -368,6 +410,9 @@ for i, (head, d, u) in enumerate(DEMO):
     pdf.set_font("Helvetica", "B", 9.5); pdf.set_text_color(*IND); pdf.cell(7, 5, str(i + 1) + ".", 0, 0)
     pdf.set_text_color(*INK); pdf.cell(50, 5, sanitize(head), 0, 0)
     pdf.set_font("Helvetica", "", 9); pdf.set_text_color(*GREY); pdf.multi_cell(0, 5, sanitize(d), **MC)
+pdf.ln(1)
+pdf.set_font("Helvetica", "I", 8.5); pdf.set_text_color(*GREY)
+pdf.multi_cell(0, 4.4, sanitize(FILMS), **MC)
 pdf.ln(2)
 y = pdf.get_y(); pdf.set_fill_color(*LITE); pdf.rect(14, y, 182, 18, "F")
 pdf.set_xy(18, y + 3.5); pdf.set_text_color(*INK); pdf.set_font("Helvetica", "B", 10)
