@@ -43,7 +43,7 @@
     {
       "dur": 7.0,
       "comment": "Recs",
-      "html": "        <div class=\"eyebrow s4a\">Optimize</div>\n        <div class=\"headline s4b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">Recs</span></div>\n        <div class=\"sub s4c\" style=\"margin-top:22px;\">Top-N ranked by real cosine similarity on Workers AI embeddings \u2014 model id and scores included.</div>\n        <div class=\"req s4d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.01</span> <span class=\"u\">/ rec</span></div>",
+      "html": "        <div class=\"eyebrow s4a\">Optimize</div>\n        <div class=\"headline s4b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">Recs</span></div>\n        <div class=\"sub s4c\" style=\"margin-top:22px;\">Top-N ranked by real cosine similarity on Workers AI embeddings \u2014 model id and scores included.</div>\n        <div class=\"req s4d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.10</span> <span class=\"u\">/ recommendation</span></div>",
       "anim": [
         "enter('.s4a', T + 0.15, {y:18})",
         "enter('.s4b', T + 0.4)",
