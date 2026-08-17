@@ -5,7 +5,7 @@
     "Cloudy pool after heavy rain. What should we show?",
     "Ranked by real cosine similarity, scores included.",
     "It tells you what it is not: similarity, not intent.",
-    "Vela Recs \u2014 $0.01 a recommendation."
+    "Vela Recs \u2014 $0.10 a recommendation."
   ],
   "scenes": [
     {
@@ -63,7 +63,7 @@
     {
       "dur": 5.0,
       "comment": "close",
-      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">Recs</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Ranking you can audit. $0.01 a recommendation.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>roai.emergedigital.ae</div>",
+      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">Recs</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Ranking you can audit. $0.10 a recommendation.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>roai.emergedigital.ae</div>",
       "anim": [
         "tl.fromTo('.s6glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
         "tl.from('.s6tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
