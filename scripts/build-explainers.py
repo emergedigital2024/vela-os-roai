@@ -38,14 +38,14 @@ PILLARS = [
     ("Experience Insights", "CDP & Customer 360, analytics portals, AI agents"),
     ("Run & Optimize", "L1-L3 maintenance, 24x7 monitoring, ops support"),
 ]
-AGENTS = ["ON.Optima - Answer Engine Optimization", "ON.X - Agentic Assistant",
-          "ON.E - Commerce Accelerator", "ON.Match - AI Recommendations", "ON.Browser - Agentic Browser"]
+AGENTS = ["Vela AEO - Answer Engine Optimization", "Vela Assist - Governed Assistant",
+          "Vela Commerce - Feed Validation", "Vela Recs - Recommendation Ranking", "Vela Scan - Agent-Readiness Crawl"]
 CASES = [
-    ("ON.Optima - AEO", "+200% click-through rate", "Global technology leader",
+    ("Answer Engine Optimization", "+200% click-through rate", "Global technology leader",
      "Site ranking #6 (+18) - CTR 3.2% - featured snippets 30%"),
-    ("ON.Optima - AEO", "Cited across 120+ markets", "Global health F&B leader",
+    ("Answer Engine Optimization", "Cited across 120+ markets", "Global health F&B leader",
      "120+ markets - consistent AI answer boxes - acquisition cost down"),
-    ("ON.E - Commerce", "MVP in 2 months, not 10", "KSA megaproject (PIF)",
+    ("Commerce", "MVP in 2 months, not 10", "KSA megaproject (PIF)",
      "Time to MVP 2 mo (vs 10) - build time -55% - requirements -40%"),
     ("Data & AI CoE", "Campaign cycles: weeks to minutes", "FPT x Salesforce ASEAN CoE",
      "First in ASEAN - weeks to minutes - ~100 Agentforce certs by 2026"),
@@ -58,7 +58,7 @@ DEMO = [
     ("Client deep dive", "Drill into one account + its real case result.", LIVE + "/?view=agency&client=helios"),
     ("Billing -> Live", "Real Metronome invoices and commit drawdown.", LIVE + "/?view=agency&section=billing&tab=live"),
     ("Customer portal", "The same engagement, the client's own view.", LIVE + "/?view=client&client=helios&section=roai"),
-    ("AI marketplace", "Launch a new ON.Ecosystem agent in a click.", LIVE + "/?view=client&client=helios&section=marketplace"),
+    ("AI marketplace", "Launch a new Vela agent in a click.", LIVE + "/?view=client&client=helios&section=marketplace"),
     ("Customer billing & usage", "Credits, usage drawdown and top-up.", LIVE + "/?view=client&client=helios&section=billing&tab=usage"),
 ]
 
@@ -183,7 +183,7 @@ footer(s)
 # --- Slide 4: pillars ---
 s = slide()
 eyebrow(s, "The offering")
-heading(s, "Six CX pillars, powered by the ON.Ecosystem.")
+heading(s, "Six CX pillars, powered by the Vela line.")
 cw, ch, gx, gy = 3.7, 1.25, 0.35, 0.3
 for i, (name, desc) in enumerate(PILLARS):
     r, c = divmod(i, 3)
@@ -337,7 +337,7 @@ body(pdf, "Portfolio ROAI, revenue & margin - client directory & health tiers - 
 pdf.set_font("Helvetica", "B", 10); pdf.set_text_color(*INK); pdf.cell(0, 5, "Customer portal", 0, 1)
 body(pdf, "A personal ROAI Center - active projects across six pillars - AI marketplace to launch agents - self-serve billing, usage & top-ups.")
 
-h2(pdf, "Six CX pillars, powered by the ON.Ecosystem")
+h2(pdf, "Six CX pillars, powered by the Vela line")
 for name, desc in PILLARS:
     pdf.set_font("Helvetica", "B", 9.5); pdf.set_text_color(*INK); pdf.cell(48, 5, sanitize(name), 0, 0)
     pdf.set_font("Helvetica", "", 9.5); pdf.set_text_color(*GREY); pdf.cell(0, 5, sanitize(desc), 0, 1)
