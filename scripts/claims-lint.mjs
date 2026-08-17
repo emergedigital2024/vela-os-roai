@@ -48,6 +48,15 @@ const ROOT = new URL("..", import.meta.url).pathname;
 const SCAN = [
   { dir: "public", exts: new Set([".html", ".txt", ".xml", ".json", ".jsx", ".js", ".md"]) },
   { dir: "video", exts: new Set([".html", ".md"]) },
+  // scripts/ generates the downloadable collateral. The PDF and PPTX are binaries this
+  // lint cannot read, so the generator is the only text-shaped place their copy exists —
+  // exactly the same reason video/ is scanned. It is not hypothetical: the 2026-07-27
+  // de-brand updated build-explainers.py for the one-pager (#52) but hand-edited the deck
+  // BINARY for the deck (#53, "0 insertions, 0 deletions"), so source and artifact drifted
+  // and 10 killed ON.* marks survived in BOTH downloads for three weeks.
+  // The .txt transcripts build-explainers.py now emits are picked up by the public/ rule
+  // above, so the shipped copy is linted too, not just its source.
+  { dir: "scripts", exts: new Set([".py", ".mjs", ".js"]) },
 ];
 
 // Never scan build output, deps, or render scratch.
