@@ -141,7 +141,7 @@
       <div class="scene clip" data-start="25.0" data-duration="11.0" data-track-index="1">
         <div class="eyebrow s4a">Live scan · aquora.ae</div>
         <div class="report">
-          <div class="rrow s4b"><div class="mark ok">✓</div><div class="nm">robots.txt</div><div class="val">reachable · 8 AI-crawler groups</div></div>
+          <div class="rrow s4b"><div class="mark ok">✓</div><div class="nm">robots.txt</div><div class="val">reachable · AI crawlers allowed</div></div>
           <div class="rrow s4c"><div class="mark ok">✓</div><div class="nm">llms.txt</div><div class="val">present · 2,877 bytes</div></div>
           <div class="rrow s4d"><div class="mark bad">✗</div><div class="nm">.well-known/x402</div><div class="val">404 · agents cannot pay you</div></div>
           <div class="rrow s4e"><div class="mark bad">✗</div><div class="nm">MCP / NLWeb hints</div><div class="val">none found · 1 JSON-LD block</div></div>
@@ -150,12 +150,13 @@
 
       <!-- SCENE 5 — what it caught (36.0–46.5) -->
       <div class="scene clip" data-start="36.0" data-duration="10.5" data-track-index="1">
-        <div class="eyebrow s5a">And it caught what a checklist would miss</div>
-        <div class="headline s5b" style="font-size:52px;margin-top:18px;">Your crawler rules<br />are <span class="teal">contradicting themselves.</span></div>
+        <div class="eyebrow s5a">And the part a checklist misses</div>
+        <div class="headline s5b" style="font-size:50px;margin-top:16px;">It wrote a guide for AI assistants.<br />They still <span class="teal">can't buy anything.</span></div>
         <div class="finds">
-          <div class="find s5c"><div class="t">Three crawlers told both things</div><div class="d">ClaudeBot · GPTBot · CCBot<br />Disallow: / &nbsp;and&nbsp; Allow: /</div></div>
-          <div class="find s5d"><div class="t">Two blocked outright</div><div class="d">Google-Extended · Applebot-Extended<br />Disallow: /</div></div>
+          <div class="find s5c"><div class="t">Published for agents</div><div class="d">/llms.txt · 2,877 bytes<br />a machine-readable product index</div></div>
+          <div class="find s5d"><div class="t">But no way to act on it</div><div class="d">/.well-known/x402 → 404<br />no MCP or NLWeb hints</div></div>
         </div>
+        <div class="sub s5e" style="font-size:25px;margin-top:34px;">An agent can read the whole catalogue and still not transact.</div>
       </div>
 
       <!-- SCENE 6 — close (46.5–53.0) -->
@@ -173,7 +174,7 @@
         <div class="cap-line" data-i="1">Four signals decide whether agents can use you.</div>
         <div class="cap-line" data-i="2">One call. You post a URL. Everything is fetched live.</div>
         <div class="cap-line" data-i="3">A real store: 2 of 4 signals present.</div>
-        <div class="cap-line" data-i="4">Contradictory crawler rules — a checklist would miss it.</div>
+        <div class="cap-line" data-i="4">It published a guide for agents — they still can't buy.</div>
         <div class="cap-line" data-i="5">Vela Scan — $0.05 a call.</div>
       </div>
 
@@ -235,7 +236,8 @@
       flash(36.0);
       tl.from(".s5a", { opacity: 0, scale: 1.05, filter: "blur(8px)", duration: 0.55, ease: EXPO }, 36.1);
       enter(".s5b", 36.4);
-      tl.from([".s5c", ".s5d"], { opacity: 0, y: 36, duration: 0.6, ease: EXPO, stagger: 0.9 }, 38.1);
+      tl.from([".s5c", ".s5d"], { opacity: 0, y: 36, duration: 0.6, ease: EXPO, stagger: 1.1 }, 38.1);
+      enter(".s5e", 42.6, { y: 20 });
 
       // S6 — close
       flash(46.5);

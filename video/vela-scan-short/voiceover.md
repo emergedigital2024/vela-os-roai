@@ -17,12 +17,21 @@ The two hard-won constraints there apply verbatim to this project:
 2. Four signals, checked live: robots rules for A I crawlers, l l m s dot t x t, a payments manifest, and M C P hints.
 3. One call. You post a U R L, and everything is fetched live — no cache, no crawl queue.
 4. Here's a real store. Robots reachable. L L M S dot t x t present. But agent payments: missing. And no M C P hints at all.
-5. Then it caught what a checklist would miss. Three crawlers are told both allow and disallow. Two more are blocked outright, including Google's.
+5. Then the part a checklist misses. This store publishes a guide written for A I assistants. They can read it — and still can't buy anything.
 6. Two of four signals. Five cents a call. Vela Scan.
 
 > Claim discipline: every number spoken here is read from a live `vela-agent-scan` response against
-> `https://aquora.ae`, captured to `video/_capture/vela-scan-aquora.json`. Nothing is illustrative.
-> If the store's robots.txt is fixed, this footage becomes stale — re-scan before re-cutting.
+> `https://aquora.ae`. Nothing is illustrative.
+>
+> ⚠️ **This already bit once.** The original scene 5 showed contradictory crawler rules
+> (ClaudeBot/GPTBot/CCBot each told both `Allow: /` and `Disallow: /`). That was real on 2026-08-16
+> — and fixed hours later, which made the footage a true record of a moment but a false statement
+> about the store. Re-cut 2026-08-16 against `_capture/vela-scan-aquora-final.json`.
+> Scene 4's "8 AI-crawler groups" went stale in the same change (now 2) and was reworded to
+> "AI crawlers allowed", which does not rot when the policy moves.
+>
+> **Before reusing this film, re-scan aquora.ae.** Scene 5 now rests on `/llms.txt` existing
+> (2,877 bytes) while `.well-known/x402` 404s. Ship x402 on that store and this scene is stale again.
 
 ## ⚠️ Segment 2 is the tight one
 Spelled-out letters ("A I", "l l m s dot t x t", "M C P") dominate duration — Chirp3-HD reads them

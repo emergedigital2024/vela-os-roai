@@ -96,19 +96,29 @@ for i, (text, slot) in enumerate(zip(segments, slots), 1):
     raw = os.path.join("assets", "seg", f"s{i}.wav")
     # Re-use a take that already fits. Re-timing a scene is common and each synth is a
     # fresh roll of a non-deterministic dice — re-rolling a good take can only lose.
-    # FORCE=1 to re-synth anyway (e.g. after editing the line).
-    if not force and os.path.exists(raw):
+    #
+    # ⚠️ Reuse is gated on the TEXT, not just the duration. Duration alone is not enough:
+    # an edited line usually still fits its slot, so a duration-only check would silently
+    # keep the OLD audio under the NEW visuals — a wrong-voiceover bug that every
+    # downstream check (length, volumedetect, lint) passes cleanly. The sidecar .txt is
+    # what makes an edit detectable. FORCE=1 re-synths everything regardless.
+    sidecar = os.path.join("assets", "seg", f"s{i}.txt")
+    prev = open(sidecar).read() if os.path.exists(sidecar) else None
+    if not force and os.path.exists(raw) and prev == text:
         d = duration(raw)
         head = slot - lead - d
         if head >= MIN_HEADROOM:
             print(f"  s{i}  {d:6.3f}s  slot {slot:5.1f}  headroom {head:+6.3f}  reused")
             continue
+    if prev is not None and prev != text:
+        print(f"  s{i}  line changed — re-synthing (old take would still have fit)")
     for take in range(1, MAX_TAKES + 1):
         synth(text, raw)
         d = duration(raw)
         head = slot - lead - d
         if head >= MIN_HEADROOM:
             print(f"  s{i}  {d:6.3f}s  slot {slot:5.1f}  headroom {head:+6.3f}  OK (take {take})")
+            open(sidecar, "w").write(text)   # record WHAT was said, so an edit invalidates reuse
             break
         print(f"  s{i}  {d:6.3f}s  slot {slot:5.1f}  headroom {head:+6.3f}  over — retrying")
     else:
