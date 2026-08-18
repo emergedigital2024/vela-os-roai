@@ -25,7 +25,7 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const ORIGIN = 'https://roai.emergedigital.ae';
+const ORIGIN = 'https://vela.emergedigital.com';
 
 const args = process.argv.slice(2);
 

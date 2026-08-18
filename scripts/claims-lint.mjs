@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * claims-lint.mjs — claims-hygiene gate for roai.emergedigital.ae.
+ * claims-lint.mjs — claims-hygiene gate for vela.emergedigital.com.
  *
  * Fails if the repo ships language the claims register killed:
  *   1. FPT identity claims ("Powered by FPT", "part of FPT CX Services", …) — the MoU

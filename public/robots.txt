@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://roai.emergedigital.ae/sitemap.xml
+Sitemap: https://vela.emergedigital.com/sitemap.xml
