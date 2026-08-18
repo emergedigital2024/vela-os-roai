@@ -60,7 +60,7 @@
     {
       "dur": 5.0,
       "comment": "close",
-      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">AEO</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Be quotable on purpose. $0.02 a call.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>roai.emergedigital.ae</div>",
+      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">AEO</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Be quotable on purpose. $0.02 a call.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>vela.emergedigital.com</div>",
       "anim": [
         "tl.fromTo('.s6glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
         "tl.from('.s6tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
