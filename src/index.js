@@ -90,6 +90,15 @@ async function handleApi(request, env, url) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // Host canonicalization: legacy host → canonical, path + query preserved.
+    // Requires run_worker_first = true in wrangler.toml — with the old
+    // ["/api/*"] form this block never ran on asset paths ("/", "/guide",
+    // "/downloads/*"), which is exactly where the burned-in links point.
+    // The *.workers.dev host is deliberately NOT redirected (previews).
+    if (LEGACY_HOSTS.has(url.host)) {
+      url.host = CANONICAL_HOST;
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname.startsWith("/api/metronome")) return handleApi(request, env, url);
     return env.ASSETS.fetch(request);
   },

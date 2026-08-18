@@ -150,9 +150,9 @@
           </a>
           <div className="mt-1 px-2 text-center text-[11px] text-[var(--faint)]">
             Part of the Emerge Digital{" "}
-            <a href="https://emergedigital.com?utm_source=roai&utm_medium=footer&utm_campaign=parent" target="_blank" rel="noopener" className="transition-colors hover:text-[var(--accent-fg)]">ecosystem</a>
+            <a href="https://emergedigital.com?utm_source=vela&utm_medium=footer&utm_campaign=parent" target="_blank" rel="noopener" className="transition-colors hover:text-[var(--accent-fg)]">ecosystem</a>
             {" · "}
-            <a href="https://vault.emergedigital.com?utm_source=roai&utm_medium=footer&utm_campaign=vaultos" target="_blank" rel="noopener" className="transition-colors hover:text-[var(--accent-fg)]">VaultOS</a>
+            <a href="https://vault.emergedigital.com?utm_source=vela&utm_medium=footer&utm_campaign=vaultos" target="_blank" rel="noopener" className="transition-colors hover:text-[var(--accent-fg)]">VaultOS</a>
           </div>
         </div>
       </aside>
