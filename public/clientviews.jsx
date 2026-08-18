@@ -322,7 +322,7 @@
           </div>
           <div className="flex flex-none flex-wrap gap-2">
             <a href="https://agent-commerce.emergedigital.com" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">View the agent catalog</a>
-            <a href="https://emergedigital.com/insights/agent-commerce-xrpl-live/?utm_source=roai&utm_medium=marketplace" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--accent-line)] bg-[var(--accent-soft)] px-3.5 py-2 text-sm font-medium text-[var(--accent-fg)] transition-colors hover:opacity-90">Read the launch note</a>
+            <a href="https://emergedigital.com/insights/agent-commerce-xrpl-live/?utm_source=vela&utm_medium=marketplace" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--accent-line)] bg-[var(--accent-soft)] px-3.5 py-2 text-sm font-medium text-[var(--accent-fg)] transition-colors hover:opacity-90">Read the launch note</a>
           </div>
         </div>
       </div>
