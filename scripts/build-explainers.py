@@ -19,7 +19,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "public", "downloads")
 os.makedirs(OUT, exist_ok=True)
 
-LIVE = "https://roai.emergedigital.ae"
+LIVE = "https://vela.emergedigital.com"
 GUIDE = LIVE + "/guide"
 
 # ---------- shared content ----------
