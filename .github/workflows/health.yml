@@ -1,0 +1,40 @@
+name: Health check
+
+# Post-cutover watch for the vela/roai pair. This host has a silent-failure
+# history (2026-07-27: a missing MP4 surfaced as a "browser bug" for weeks
+# because poster + player render from other repos) and nothing else monitors
+# it. A red run here emails the repo owner — that email IS the alert channel.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Canonical host serves
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 https://vela.emergedigital.com/)
+          echo "vela / -> $code"
+          test "$code" = "200"
+
+      - name: Legacy host 301s to canonical
+        run: |
+          out=$(curl -s -o /dev/null -w "%{http_code} %{redirect_url}" --max-time 20 https://roai.emergedigital.ae/)
+          echo "roai / -> $out"
+          test "$out" = "301 https://vela.emergedigital.com/"
+
+      - name: Metronome proxy configured
+        run: |
+          body=$(curl -s --max-time 20 -H "Origin: https://vela.emergedigital.com" https://vela.emergedigital.com/api/metronome/ping)
+          echo "ping -> $body"
+          echo "$body" | grep -q '"configured":true'
+
+      - name: Explainer MP4 published
+        run: |
+          out=$(curl -s -o /dev/null -w "%{http_code} %{content_type}" --max-time 30 -I https://vela.emergedigital.com/downloads/Vela-OS-Explainer.mp4)
+          echo "mp4 -> $out"
+          test "$out" = "200 video/mp4"
