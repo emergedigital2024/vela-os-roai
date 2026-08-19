@@ -2,6 +2,8 @@
 .wrangler/
 .dev.vars
 .dev.vars.*
+# template (names only, no values) — safe to commit
+!.dev.vars.example
 
 # Local tooling
 .claude/

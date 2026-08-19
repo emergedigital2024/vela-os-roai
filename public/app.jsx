@@ -10,7 +10,7 @@
   // ---- URL routing (query params on /) ----
   const AGENCY_SECTIONS = ["home", "clients", "analytics", "billing"];
   const CLIENT_SECTIONS = ["roai", "projects", "marketplace", "billing", "insights"];
-  const AGENCY_BILLING_TABS = ["overview", "invoices", "contracts", "clients", "live"];
+  const AGENCY_BILLING_TABS = ["overview", "invoices", "contracts", "clients", "live", "liveroai"];
   const CLIENT_BILLING_TABS = ["overview", "invoices", "payment", "usage"];
   function parseURL() {
     const p = new URLSearchParams(window.location.search);
