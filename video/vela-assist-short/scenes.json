@@ -1,0 +1,74 @@
+{
+  "captions": [
+    "The problem with assistants isn't what they say.",
+    "It answers only from the context you supply.",
+    "\"My pool went cloudy after I shocked it. Do I drain it?\"",
+    "A straight answer, grounded in your own material.",
+    "Then it lists what it could not verify.",
+    "Vela Assist \u2014 $0.25 a session."
+  ],
+  "scenes": [
+    {
+      "dur": 5.5,
+      "comment": "hook",
+      "html": "        <div class=\"eyebrow s1a\">Vela Assist \u00b7 governed assistant session</div>\n        <div class=\"headline s1b\" style=\"margin-top:26px;\">The problem with assistants<br />isn't what they say.<br />It's what they <span class=\"teal\">make up.</span></div>",
+      "anim": [
+        "enter('.s1a', T + 0.25, {y:20})",
+        "tl.from('.s1b', {opacity:0, y:56, duration:0.85, ease:EXPO}, T + 0.5)"
+      ]
+    },
+    {
+      "dur": 5.5,
+      "comment": "the call",
+      "html": "        <div class=\"eyebrow s2a\">One exchange</div>\n        <div class=\"headline s2b\" style=\"font-size:54px;margin-top:20px;\">Answers only from<br />the context <span class=\"teal\">you supply.</span></div>\n        <div class=\"req s2c\">\n          <div><span class=\"m\">POST</span> <span class=\"u\">/api/xrpl/vela-assist-session</span></div>\n          <div><span class=\"c\">{ \"message\": \u2026, \"context\": </span><span class=\"u\">\"your product + policy notes\"</span><span class=\"c\"> }</span></div>\n        </div>",
+      "anim": [
+        "enter('.s2a', T + 0.15, {y:18})",
+        "enter('.s2b', T + 0.4)",
+        "tl.from('.s2c', {opacity:0, scale:0.94, duration:0.7, ease:'back.out(1.4)'}, T + 1.1)"
+      ]
+    },
+    {
+      "dur": 7.5,
+      "comment": "the question",
+      "html": "        <div class=\"eyebrow s3a\">A real customer question</div>\n        <div class=\"headline s3b\" style=\"font-size:50px;margin-top:20px;line-height:1.25;\">\"My pool went cloudy two days<br />after I shocked it.<br />Do I need to <span class=\"teal\">drain it?</span>\"</div>",
+      "anim": [
+        "enter('.s3a', T + 0.15, {y:18})",
+        "enter('.s3b', T + 0.5)"
+      ]
+    },
+    {
+      "dur": 8.0,
+      "comment": "the answer",
+      "html": "        <div class=\"eyebrow s4a\">The reply</div>\n        <div class=\"req s4b\" style=\"font-size:27px;line-height:1.55;max-width:1500px;margin-top:30px;\">\n          <div><span class=\"u\">\"Draining the pool is not typically necessary.</span></div>\n          <div><span class=\"u\">Cloudiness after shocking is stirred-up dead algae.</span></div>\n          <div><span class=\"u\">Check pH and alkalinity with 5-way test strips</span></div>\n          <div><span class=\"u\">before adding a clarifier.\"</span></div>\n        </div>\n        <div class=\"sub s4c\" style=\"font-size:25px;margin-top:28px;\">Grounded in the context supplied \u2014 no invented account facts.</div>",
+      "anim": [
+        "enter('.s4a', T + 0.15, {y:18})",
+        "tl.from('.s4b', {opacity:0, y:34, duration:0.7, ease:EXPO}, T + 0.6)",
+        "enter('.s4c', T + 5.6, {y:20})"
+      ]
+    },
+    {
+      "dur": 11.0,
+      "comment": "claims to verify",
+      "html": "        <div class=\"eyebrow s5a\">And then the part most assistants skip</div>\n        <div class=\"headline s5b\" style=\"font-size:50px;margin-top:16px;\">It lists what it<br /><span class=\"teal\">could not verify.</span></div>\n        <div class=\"finds\" style=\"grid-template-columns:repeat(3,1fr);\">\n          <div class=\"find s5c\"><div class=\"t\">claims_to_verify</div><div class=\"d\">pH levels after shocking</div></div>\n          <div class=\"find s5d\"><div class=\"t\">&nbsp;</div><div class=\"d\">alkalinity after shocking</div></div>\n          <div class=\"find s5e\"><div class=\"t\">&nbsp;</div><div class=\"d\">cloudiness duration</div></div>\n        </div>\n        <div class=\"sub s5f\" style=\"font-size:25px;margin-top:32px;\">A human or a downstream check confirms these before anything reaches a customer.</div>",
+      "anim": [
+        "tl.from('.s5a', {opacity:0, scale:1.05, filter:'blur(8px)', duration:0.55, ease:EXPO}, T + 0.1)",
+        "enter('.s5b', T + 0.45)",
+        "tl.from(['.s5c','.s5d','.s5e'], {opacity:0, y:36, duration:0.6, ease:EXPO, stagger:0.7}, T + 3.0)",
+        "enter('.s5f', T + 7.4, {y:20})"
+      ]
+    },
+    {
+      "dur": 5.5,
+      "comment": "close",
+      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">Assist</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">An assistant that shows its seams. $0.25 a session.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>vela.emergedigital.com</div>",
+      "anim": [
+        "tl.fromTo('.s6glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
+        "tl.from('.s6tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
+        "enter('.s6a', T + 0.5, {scale:0.96, y:0})",
+        "shimmer('.s6a .shimmer-sweep-target', T + 1.0)",
+        "enter('.s6b', T + 1.0, {y:20})",
+        "tl.from('.s6c', {opacity:0, y:16, duration:0.6, ease:EXPO}, T + 1.6)"
+      ]
+    }
+  ]
+}

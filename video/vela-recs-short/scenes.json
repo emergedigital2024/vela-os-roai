@@ -1,0 +1,77 @@
+{
+  "captions": [
+    "Most recommendation engines are a model guessing.",
+    "Post your catalogue and the shopper's context.",
+    "Cloudy pool after heavy rain. What should we show?",
+    "Ranked by real cosine similarity, scores included.",
+    "It tells you what it is not: similarity, not intent.",
+    "Vela Recs \u2014 $0.10 a recommendation."
+  ],
+  "scenes": [
+    {
+      "dur": 6.0,
+      "comment": "hook",
+      "html": "        <div class=\"eyebrow s1a\">Vela Recs \u00b7 recommendation ranking</div>\n        <div class=\"headline s1b\" style=\"margin-top:26px;\">Most recommendation engines<br />are a model <span class=\"teal\">guessing.</span></div>\n        <div class=\"sub s1c\" style=\"margin-top:26px;\">This one is measured \u2014 and it shows you the number.</div>",
+      "anim": [
+        "enter('.s1a', T + 0.25, {y:20})",
+        "tl.from('.s1b', {opacity:0, y:56, duration:0.85, ease:EXPO}, T + 0.5)",
+        "enter('.s1c', T + 1.0)"
+      ]
+    },
+    {
+      "dur": 5.5,
+      "comment": "the call",
+      "html": "        <div class=\"eyebrow s2a\">One call</div>\n        <div class=\"headline s2b\" style=\"font-size:56px;margin-top:20px;\">Up to fifty items,<br />plus the <span class=\"teal\">shopper's context.</span></div>\n        <div class=\"req s2c\">\n          <div><span class=\"m\">POST</span> <span class=\"u\">/api/xrpl/vela-recs-ranking</span></div>\n          <div><span class=\"c\">{ \"items\": [ \u2026 ], \"context\": </span><span class=\"u\">\"cloudy after heavy rain\"</span><span class=\"c\"> }</span></div>\n        </div>",
+      "anim": [
+        "enter('.s2a', T + 0.15, {y:18})",
+        "enter('.s2b', T + 0.4)",
+        "tl.from('.s2c', {opacity:0, scale:0.94, duration:0.7, ease:'back.out(1.4)'}, T + 1.1)"
+      ]
+    },
+    {
+      "dur": 7.0,
+      "comment": "the context",
+      "html": "        <div class=\"eyebrow s3a\">The shopper</div>\n        <div class=\"headline s3b\" style=\"font-size:50px;margin-top:18px;line-height:1.2;\">\"Pool water turned cloudy after heavy rain.<br />I want it clear <span class=\"teal\">before the weekend.</span>\"</div>\n        <div class=\"sub s3c\" style=\"font-size:26px;margin-top:28px;\">Six products in the catalogue. Which three go in front of them?</div>",
+      "anim": [
+        "enter('.s3a', T + 0.15, {y:18})",
+        "enter('.s3b', T + 0.4)",
+        "enter('.s3c', T + 2.6, {y:20})"
+      ]
+    },
+    {
+      "dur": 11.0,
+      "comment": "ranked result",
+      "html": "        <div class=\"eyebrow s4a\">Ranked \u00b7 @cf/baai/bge-base-en-v1.5</div>\n        <div class=\"report\">\n          <div class=\"rrow s4b\"><div class=\"mark ok\">1</div><div class=\"nm\">Pool Clarifier 1L</div><div class=\"val\">0.6998</div></div>\n          <div class=\"rrow s4c\"><div class=\"mark ok\">2</div><div class=\"nm\">Cartridge filter element</div><div class=\"val\">0.5564</div></div>\n          <div class=\"rrow s4d\"><div class=\"mark ok\">3</div><div class=\"nm\">Telescopic leaf net</div><div class=\"val\">0.5352</div></div>\n        </div>\n        <div class=\"sub s4e\" style=\"font-size:26px;margin-top:34px;\">Real cosine similarity on real embeddings \u2014 not a model's opinion.</div>",
+      "anim": [
+        "enter('.s4a', T + 0.15, {y:18})",
+        "tl.from('.s4b', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 1.4)",
+        "tl.from('.s4c', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 3.1)",
+        "tl.from('.s4d', {opacity:0, x:-50, duration:0.55, ease:EXPO}, T + 4.8)",
+        "enter('.s4e', T + 6.6, {y:20})"
+      ]
+    },
+    {
+      "dur": 6.0,
+      "comment": "honest scope",
+      "html": "        <div class=\"eyebrow s5a\">And it tells you what it is not</div>\n        <div class=\"headline s5b\" style=\"font-size:48px;margin-top:18px;line-height:1.25;\">Semantic similarity \u2014<br /><span class=\"teal\">not purchase-intent data.</span></div>\n        <div class=\"sub s5c\" style=\"font-size:26px;margin-top:30px;\">The methodology ships in the response, so nobody has to guess how the order was reached.</div>",
+      "anim": [
+        "tl.from('.s5a', {opacity:0, scale:1.05, filter:'blur(8px)', duration:0.55, ease:EXPO}, T + 0.1)",
+        "enter('.s5b', T + 0.45)",
+        "enter('.s5c', T + 3.0, {y:20})"
+      ]
+    },
+    {
+      "dur": 5.0,
+      "comment": "close",
+      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">Recs</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Ranking you can audit. $0.10 a recommendation.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>vela.emergedigital.com</div>",
+      "anim": [
+        "tl.fromTo('.s6glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
+        "tl.from('.s6tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
+        "enter('.s6a', T + 0.5, {scale:0.96, y:0})",
+        "shimmer('.s6a .shimmer-sweep-target', T + 1.0)",
+        "enter('.s6b', T + 1.0, {y:20})",
+        "tl.from('.s6c', {opacity:0, y:16, duration:0.6, ease:EXPO}, T + 1.6)"
+      ]
+    }
+  ]
+}

@@ -5,9 +5,13 @@
 const MT_BASE = "https://api.metronome.com/v1";
 
 // The Metronome proxy backs the Vela dashboard only. Accept callers whose
-// Origin/Referer is the production host (or the Worker's own host, so
+// Origin/Referer is a production host (or the Worker's own host, so
 // same-origin fetches on preview deploys keep working) and reject the rest.
-const ALLOWED_HOST = "roai.emergedigital.ae";
+// roai is the legacy host — kept in the allow-list so stale open tabs (their
+// Referer still names the old page) survive the transition; drop in a quarter.
+const CANONICAL_HOST = "vela.emergedigital.com";
+const LEGACY_HOSTS = new Set(["roai.emergedigital.ae"]);
+const ALLOWED_HOSTS = [CANONICAL_HOST, ...LEGACY_HOSTS];
 
 function hostOf(value) {
   if (!value) return null;
@@ -15,7 +19,7 @@ function hostOf(value) {
 }
 
 function isAllowedCaller(request, url) {
-  const allowed = new Set([ALLOWED_HOST, url.host]);
+  const allowed = new Set([...ALLOWED_HOSTS, url.host]);
   const origin = hostOf(request.headers.get("origin"));
   const referer = hostOf(request.headers.get("referer"));
   // Require at least one of Origin/Referer to be present and match — a request
@@ -163,6 +167,15 @@ async function handleRoai(request, env, url) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // Host canonicalization: legacy host → canonical, path + query preserved.
+    // Requires run_worker_first = true in wrangler.toml — with the old
+    // ["/api/*"] form this block never ran on asset paths ("/", "/guide",
+    // "/downloads/*"), which is exactly where the burned-in links point.
+    // The *.workers.dev host is deliberately NOT redirected (previews).
+    if (LEGACY_HOSTS.has(url.host)) {
+      url.host = CANONICAL_HOST;
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname.startsWith("/api/metronome")) return handleApi(request, env, url);
     if (url.pathname.startsWith("/api/roai")) return handleRoai(request, env, url);
     return env.ASSETS.fetch(request);

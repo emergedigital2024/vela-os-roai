@@ -1,6 +1,7 @@
 /* =====================================================================
-   FPT CX Services — data layer
-   Portfolio figures are modelled; case-study results & credentials are real.
+   Vela OS — ROAI Analytics · data layer (CX-practice concept demo)
+   Portfolio figures are modelled; case-study results & credentials are real,
+   attributed FPT proof points (see canonical-facts.json).
    ROAI (multiple) = ValueDelivered / AICost
    ROAI %          = (ValueDelivered - AICost) / AICost * 100
    Net Value       = ValueDelivered - AICost
@@ -48,7 +49,7 @@
       splitsSeed: 7, volatility: 0.10,
       splits: { cost: [0.08, 0.14, 0.22, 0.34, 0.14, 0.08], value: [0.06, 0.14, 0.22, 0.38, 0.14, 0.06] },
       recs: [
-        { kind: "grow", title: "Scale ON.E storefront components", body: "ON.E composable commerce is your highest-ROAI line at 6.4x. Roll the checkout module to the 4,200 unindexed SKUs.", impact: "+$38k value / qtr" },
+        { kind: "grow", title: "Scale Vela Commerce storefront components", body: "Vela Commerce composable commerce is your highest-ROAI line at 6.4x. Roll the checkout module to the 4,200 unindexed SKUs.", impact: "+$38k value / qtr" },
         { kind: "upsell", title: "Pre-empt a credit top-up", body: "Tracking to 96% of included credits by month 2. Offer a 500k credit pack at the current rate.", impact: "+$4.5k MRR" },
       ],
     },
@@ -62,7 +63,7 @@
       splits: { cost: [0.10, 0.12, 0.40, 0.14, 0.18, 0.06], value: [0.08, 0.12, 0.44, 0.12, 0.18, 0.06] },
       recs: [
         { kind: "warn", title: "Credits near cap", body: "98.7% of included credits consumed with 6 days left in cycle. Auto top-up is OFF.", impact: "Risk: throttled agents" },
-        { kind: "grow", title: "ON.Optima drives the value", body: "AEO content regeneration lifted AI-answer visibility +30% across 120 markets. Extend to the nutrition knowledge hub.", impact: "+$52k value / qtr" },
+        { kind: "grow", title: "Vela AEO drives the value", body: "AEO content regeneration lifted AI-answer visibility +30% across 120 markets. Extend to the nutrition knowledge hub.", impact: "+$52k value / qtr" },
       ],
     },
     {
@@ -74,7 +75,7 @@
       splitsSeed: 21, volatility: 0.12,
       splits: { cost: [0.08, 0.26, 0.14, 0.36, 0.10, 0.06], value: [0.06, 0.26, 0.14, 0.40, 0.08, 0.06] },
       recs: [
-        { kind: "grow", title: "StyleMaestro under-deployed", body: "ON.Match's outfit recommender runs on only 41% of eligible journeys. Strong ROAI headroom on the new-arrivals feed.", impact: "+$29k value / qtr" },
+        { kind: "grow", title: "StyleMaestro under-deployed", body: "Vela Recs's outfit recommender runs on only 41% of eligible journeys. Strong ROAI headroom on the new-arrivals feed.", impact: "+$29k value / qtr" },
         { kind: "upsell", title: "Renewal in 27 days", body: "Health 90, ROAI 6.1x. Move from Scale to Enterprise for SSO + priority models.", impact: "+$14.5k MRR" },
       ],
     },
@@ -88,7 +89,7 @@
       splits: { cost: [0.10, 0.10, 0.24, 0.40, 0.10, 0.06], value: [0.08, 0.10, 0.24, 0.44, 0.08, 0.06] },
       recs: [
         { kind: "warn", title: "Opus-heavy mix inflating cost", body: "48% of spend is on Opus 4. Route catalog-enrichment tasks to Sonnet 4 — quality holds.", impact: "-$11k cost / qtr" },
-        { kind: "grow", title: "ON.E marketplace outperforming", body: "The composable B2B marketplace cut build time 55%. Package supplier onboarding as a standalone module.", impact: "+$22k value / qtr" },
+        { kind: "grow", title: "Vela Commerce marketplace outperforming", body: "The composable B2B marketplace cut build time 55%. Package supplier onboarding as a standalone module.", impact: "+$22k value / qtr" },
       ],
     },
     {
@@ -101,7 +102,7 @@
       splits: { cost: [0.10, 0.14, 0.36, 0.08, 0.24, 0.08], value: [0.08, 0.14, 0.40, 0.06, 0.24, 0.08] },
       recs: [
         { kind: "grow", title: "Shift volume to Haiku", body: "Editorial tagging runs on Sonnet but tolerates Haiku. Cuts unit cost ~62%.", impact: "+0.9x ROAI" },
-        { kind: "upsell", title: "Add ON.Browser agent-readiness", body: "No agentic-browser integration live yet. NLWeb + MCP exposure is the obvious next deploy.", impact: "+$18k value / qtr" },
+        { kind: "upsell", title: "Add Vela Scan agent-readiness", body: "No agentic-browser integration live yet. NLWeb + MCP exposure is the obvious next deploy.", impact: "+$18k value / qtr" },
       ],
     },
     {
@@ -114,7 +115,7 @@
       splits: { cost: [0.08, 0.24, 0.14, 0.30, 0.16, 0.08], value: [0.06, 0.24, 0.14, 0.34, 0.16, 0.06] },
       recs: [
         { kind: "warn", title: "Adoption stalling", body: "Active agent-hours down 12% MoM. Only 2 of 5 deployed agents used last week.", impact: "Risk: churn signal" },
-        { kind: "grow", title: "ON.Match bundle recommender", body: "Cross-sell bundles are the strongest performer — expand to the skincare & fragrance lines.", impact: "+$16k value / qtr" },
+        { kind: "grow", title: "Vela Recs bundle recommender", body: "Cross-sell bundles are the strongest performer — expand to the skincare & fragrance lines.", impact: "+$16k value / qtr" },
       ],
     },
     {
@@ -128,7 +129,7 @@
       recs: [
         { kind: "warn", title: "ROAI below 2.0x threshold", body: "Lowest in portfolio at 1.68x. Cost is up 19% QoQ while value is flat. Schedule a QBR.", impact: "Churn risk: HIGH" },
         { kind: "warn", title: "Model mix is the culprit", body: "52% Opus 4 on tasks Sonnet handles well. Re-routing alone lifts ROAI to ~2.3x.", impact: "-$14k cost / qtr" },
-        { kind: "grow", title: "ON.X assistant barely deployed", body: "The agentic trip-planning assistant is 8% of value vs 28% portfolio avg — the biggest untapped lever.", impact: "+$34k value / qtr" },
+        { kind: "grow", title: "Vela Assist assistant barely deployed", body: "The agentic trip-planning assistant is 8% of value vs 28% portfolio avg — the biggest untapped lever.", impact: "+$34k value / qtr" },
       ],
     },
   ];
@@ -217,8 +218,8 @@
     };
   }
 
-  // ---- FPT CX services marketplace (client-facing catalog) ----
-  // Full offering across the 6 CX pillars. onEco = ON.Ecosystem agentic accelerator (+ funnel stage);
+  // ---- CX services marketplace (client-facing catalog, modeled on FPT's public CX portfolio) ----
+  // Full offering across the 6 CX pillars. onEco = Vela agentic accelerator (+ funnel stage);
   // package = AI-first Sales Enablement ready-to-use package.
   const SERVICES = [
     // Experience Strategy
@@ -233,14 +234,14 @@
     { id: "dxp-build", name: "DXP Build & Re-platform", pillar: "Experience Platform", icon: "layers", tagline: "AEM · Sitecore · Liferay", blurb: "CMS build, upgrade and headless/hybrid re-platforming on cloud-native, API-first architectures.", priceLabel: "project", typicalRoai: 4.1, popular: true },
     { id: "martech", name: "MarTech Implementation", pillar: "Experience Platform", icon: "settings", tagline: "Orchestrate the stack", blurb: "Marketing automation, journey orchestration and activation across your experience platforms.", priceLabel: "from $6k/mo", typicalRoai: 4.0 },
     { id: "dx-engineering", name: "DX Engineering (Web, Mobile, Apps)", pillar: "Experience Platform", icon: "cpu", tagline: "Build any surface", blurb: "Web and mobile apps (native, cross-platform, low-code), smart apps and AR/VR/MR experiences.", priceLabel: "project", typicalRoai: 3.7 },
-    { id: "on-optima", name: "ON.Optima", pillar: "Experience Platform", onEco: true, stage: "Attract", icon: "search", tagline: "Answers Engine Optimization", blurb: "Get your brand cited by AI answer engines — regenerate, enrich and structure content for GenAI visibility.", priceLabel: "from $6k/mo", typicalRoai: 5.4, popular: true },
-    { id: "on-x", name: "ON.X", pillar: "Experience Platform", onEco: true, stage: "Engage", icon: "sparkles", tagline: "Agentic Assistant", blurb: "An autonomous assistant that unifies fragmented journeys and acts on your customers' behalf in real time.", priceLabel: "from $7k/mo", typicalRoai: 4.7, popular: true },
+    { id: "on-optima", name: "Vela AEO", pillar: "Experience Platform", onEco: true, stage: "Attract", icon: "search", tagline: "Answers Engine Optimization", blurb: "Get your brand cited by AI answer engines — regenerate, enrich and structure content for GenAI visibility.", priceLabel: "from $6k/mo", typicalRoai: 5.4, popular: true },
+    { id: "on-x", name: "Vela Assist", pillar: "Experience Platform", onEco: true, stage: "Engage", icon: "sparkles", tagline: "Agentic Assistant", blurb: "A governed assistant that unifies fragmented journeys and acts on your customers' behalf in real time.", priceLabel: "from $7k/mo", typicalRoai: 4.7, popular: true },
     // Commerce Platform
     { id: "commerce-build", name: "Commerce Build & Re-platform", pillar: "Commerce Platform", icon: "grid", tagline: "Adobe Commerce · Shopify · OrderCloud", blurb: "Composable, cloud-ready commerce build, re-platforming and migration with performance and security built in.", priceLabel: "project", typicalRoai: 4.3, popular: true },
     { id: "b2b-b2c", name: "B2B / B2C Implementation", pillar: "Commerce Platform", icon: "building", tagline: "Catalog, pricing, orders", blurb: "Product, pricing, promotion and inventory integrations across CRM, CDP and analytics.", priceLabel: "project", typicalRoai: 4.0 },
-    { id: "on-e", name: "ON.E", pillar: "Commerce Platform", onEco: true, stage: "Convert", icon: "grid", tagline: "Supercharged Commerce", blurb: "Composable, template-driven commerce accelerator — launch storefronts up to 55% cheaper and 30% faster.", priceLabel: "from $9k/mo", typicalRoai: 6.1, popular: true },
-    { id: "on-match", name: "ON.Match", pillar: "Commerce Platform", onEco: true, stage: "Optimize", icon: "target", tagline: "AI-Driven Recommendation", blurb: "Multi-agent hyper-personalization — trend, profiler and recommendation agents lift conversion 15–20%.", priceLabel: "usage-based", typicalRoai: 5.2 },
-    { id: "on-browser", name: "ON.Browser", pillar: "Commerce Platform", onEco: true, stage: "Discover", icon: "layers", tagline: "Agentic Browser Integration", blurb: "Make your site agent-ready for AI browsers via NLWeb, MCP and SDK — up to +45% AI search visibility.", priceLabel: "from $5k/mo", typicalRoai: 3.8, isNew: true },
+    { id: "on-e", name: "Vela Commerce", pillar: "Commerce Platform", onEco: true, stage: "Convert", icon: "grid", tagline: "Supercharged Commerce", blurb: "Composable, template-driven commerce accelerator — launch storefronts up to 55% cheaper and 30% faster.", priceLabel: "from $9k/mo", typicalRoai: 6.1, popular: true },
+    { id: "on-match", name: "Vela Recs", pillar: "Commerce Platform", onEco: true, stage: "Optimize", icon: "target", tagline: "AI-Driven Recommendation", blurb: "Multi-agent hyper-personalization — trend, profiler and recommendation agents lift conversion 15–20%.", priceLabel: "usage-based", typicalRoai: 5.2 },
+    { id: "on-browser", name: "Vela Scan", pillar: "Commerce Platform", onEco: true, stage: "Discover", icon: "layers", tagline: "Agentic Browser Integration", blurb: "Make your site agent-ready for AI browsers via NLWeb, MCP and SDK — up to +45% AI search visibility.", priceLabel: "from $5k/mo", typicalRoai: 3.8, isNew: true },
     // Experience Insights (incl. AI-first Sales Enablement packages)
     { id: "cdp-360", name: "CDP & Customer 360", pillar: "Experience Insights", icon: "users", tagline: "One unified profile", blurb: "CDP-enabled unification and activation of customer data into a single, real-time Customer 360.", priceLabel: "project", typicalRoai: 4.2 },
     { id: "data-analytics", name: "Data Engineering & Analytics", pillar: "Experience Insights", icon: "chart", tagline: "Foundations for AI", blurb: "Data integration and scalable foundations for analytics, activation and AI-driven insight.", priceLabel: "from $6k/mo", typicalRoai: 3.9 },
@@ -269,8 +270,8 @@
   const PROJECT_NAMES = {
     "Experience Strategy": ["CX maturity assessment", "Marketecture roadmap", "Journey analysis & prioritization", "Personalization strategy"],
     "Experience Design": ["UX research & journey mapping", "Design system build", "Adaptive UI redesign", "Usability testing program"],
-    "Experience Platform": ["DXP re-platform", "AEO content rollout (ON.Optima)", "Agentic assistant rollout (ON.X)", "MarTech integration"],
-    "Commerce Platform": ["Composable storefront MVP", "B2B marketplace build (ON.E)", "Recommendation engine (ON.Match)", "Agent-ready browser (ON.Browser)"],
+    "Experience Platform": ["DXP re-platform", "AEO content rollout (Vela AEO)", "Agentic assistant rollout (Vela Assist)", "MarTech integration"],
+    "Commerce Platform": ["Composable storefront MVP", "B2B marketplace build (Vela Commerce)", "Recommendation engine (Vela Recs)", "Agent-ready browser (Vela Scan)"],
     "Experience Insights": ["CDP & Customer 360 build", "Data Analytics Portal", "AI Agent for Sales & Service", "Sales & Service Portal rollout"],
     "Run & Optimize": ["AMS L1–L3 transition", "24×7 monitoring setup", "Production ops support", "Platform upgrade"],
   };
@@ -329,13 +330,13 @@
     northwind: { solution: "Data & AI · Salesforce", icon: "chart", headline: "Campaign cycles: weeks → minutes",
       blurb: "Reusable Data & AI accelerators across Sales, Service, Marketing, Data Cloud and Agentforce collapsed campaign launch from weeks to minutes.",
       metrics: [["Launch cycles", "Weeks → min"], ["Personalization", "At scale"], ["CoE", "First in ASEAN"]] },
-    helios: { solution: "ON.Optima · AEO", icon: "search", headline: "Cited across 120+ markets",
+    helios: { solution: "Answer Engine Optimization", icon: "search", headline: "Cited across 120+ markets",
       blurb: "AEO won AI answer-box citations across 120+ markets and cut acquisition cost — with no cannibalization of Google traffic.",
       metrics: [["Markets", "120+"], ["AI answer boxes", "Consistent"], ["Acquisition cost", "Reduced"]] },
-    vantage: { solution: "ON.E · Commerce", icon: "grid", headline: "MVP in 2 months, not 10",
+    vantage: { solution: "Commerce", icon: "grid", headline: "MVP in 2 months, not 10",
       blurb: "Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.",
       metrics: [["Time to MVP", "2 mo (vs 10)"], ["Build time", "−55%"], ["Requirements", "−40%"]] },
-    brightside: { solution: "ON.Optima · AEO", icon: "search", headline: "+200% click-through rate",
+    brightside: { solution: "Answer Engine Optimization", icon: "search", headline: "+200% click-through rate",
       blurb: "Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.",
       metrics: [["Site ranking", "#6 (+18)"], ["Click-through", "3.2% (+200%)"], ["Featured snippets", "30%"]] },
   };
@@ -470,13 +471,13 @@
 
   // ---- Credible proof points (real FPT results & credentials, from the CX decks) ----
   const CASE_STUDIES = [
-    { client: "Global technology leader", sector: "Technology", solution: "ON.Optima · AEO", icon: "search",
+    { client: "Global technology leader", sector: "Technology", solution: "Answer Engine Optimization", icon: "search",
       headline: "+200% click-through rate", blurb: "Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.",
       metrics: [["Site ranking", "#6 (+18)"], ["Click-through", "3.2% (+200%)"], ["Featured snippets", "30%"]] },
-    { client: "Global health F&B leader", sector: "Food & beverage", solution: "ON.Optima · AEO", icon: "sparkles",
+    { client: "Global health F&B leader", sector: "Food & beverage", solution: "Answer Engine Optimization", icon: "sparkles",
       headline: "Cited across 120+ markets", blurb: "Deployed AEO to win AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.",
       metrics: [["Markets", "120+"], ["AI answer boxes", "Consistent"], ["Acquisition cost", "Reduced"]] },
-    { client: "KSA megaproject (PIF)", sector: "Real estate & construction", solution: "ON.E · Commerce", icon: "grid",
+    { client: "KSA megaproject (PIF)", sector: "Real estate & construction", solution: "Commerce", icon: "grid",
       headline: "MVP in 2 months, not 10", blurb: "Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.",
       metrics: [["Time to MVP", "2 mo (vs 10)"], ["Build time", "−55%"], ["Requirements", "−40%"]] },
     { client: "FPT × Salesforce ASEAN CoE", sector: "Banking & cross-industry", solution: "Data & AI CoE", icon: "chart",
@@ -491,8 +492,10 @@
     { name: "Shopify", tier: "Shopify Plus", engineers: "200+", certs: "40+", note: "Plus · custom storefronts · migration" },
   ];
   const PARTNER_TOTALS = { engineers: "1,000+", certs: "1,500+" };
-  // FPT Corporation parent-scale facts (canonical-facts.json → fpt_parent). The Agentforce ARR
-  // is a Salesforce-global ecosystem figure, NOT an FPT-specific result — label it as such wherever shown.
+  // FPT Corporation public figures — display ONLY with explicit FPT attribution (overview.jsx
+  // footnote does this). The Agentforce ARR is a Salesforce-global ecosystem figure, NOT an
+  // FPT-specific result — label it as such wherever shown. (canonical-facts.json no longer
+  // carries an fpt_parent block; unattributed reuse of these numbers is a killed claim.)
   const FPT = { revenue: "$2.47B", employees: "80,000+", agentforceArrNote: "$1.4B Salesforce-global Agentforce ARR (+330% YoY)" };
   const MARKET_STATS = [
     { stat: "2–3×", label: "higher revenue growth for CX leaders" },

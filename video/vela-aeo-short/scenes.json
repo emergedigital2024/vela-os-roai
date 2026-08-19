@@ -1,0 +1,74 @@
+{
+  "captions": [
+    "Answer engines are quoting your pages. Badly.",
+    "Post the content you already have.",
+    "Back comes a direct answer, then the key facts.",
+    "The llms.txt block, built for you.",
+    "And schema.org JSON-LD \u2014 only from fields you sent.",
+    "Vela AEO \u2014 $0.02 a call."
+  ],
+  "scenes": [
+    {
+      "dur": 5.5,
+      "comment": "hook",
+      "html": "        <div class=\"eyebrow s1a\">Vela AEO \u00b7 answer engine optimization</div>\n        <div class=\"headline s1b\" style=\"margin-top:26px;\">Answer engines are quoting<br />your pages right now. <span class=\"teal\">Badly.</span></div>\n        <div class=\"sub s1c\" style=\"margin-top:26px;\">They cite what they can parse \u2014 not what you meant.</div>",
+      "anim": [
+        "enter('.s1a', T + 0.25, {y:20})",
+        "tl.from('.s1b', {opacity:0, y:56, duration:0.85, ease:EXPO}, T + 0.5)",
+        "enter('.s1c', T + 1.0)"
+      ]
+    },
+    {
+      "dur": 4.5,
+      "comment": "the call",
+      "html": "        <div class=\"eyebrow s2a\">One call</div>\n        <div class=\"headline s2b\" style=\"font-size:56px;margin-top:20px;\">Post the content<br />you <span class=\"teal\">already have.</span></div>\n        <div class=\"req s2c\">\n          <div><span class=\"m\">POST</span> <span class=\"u\">/api/xrpl/vela-aeo-pass</span></div>\n          <div><span class=\"c\">{ \"title\": \u2026, \"url\": \u2026, \"content\": </span><span class=\"u\">\"your page\"</span><span class=\"c\"> }</span></div>\n        </div>",
+      "anim": [
+        "enter('.s2a', T + 0.15, {y:18})",
+        "enter('.s2b', T + 0.4)",
+        "tl.from('.s2c', {opacity:0, scale:0.94, duration:0.7, ease:'back.out(1.4)'}, T + 1.1)"
+      ]
+    },
+    {
+      "dur": 10.0,
+      "comment": "the rewrite",
+      "html": "        <div class=\"eyebrow s3a\">Restructured to be citable</div>\n        <div class=\"req s3b\" style=\"font-size:26px;line-height:1.55;max-width:1520px;margin-top:28px;\">\n          <div><span class=\"c\">Direct answer:</span> <span class=\"u\">Pool water goes cloudy after shock treatment</span></div>\n          <div><span class=\"u\">due to suspended dead algae and organic matter.</span></div>\n          <div style=\"margin-top:18px;\"><span class=\"c\">Key facts:</span></div>\n          <div><span class=\"u\">1. Not a chemical failure.</span></div>\n          <div><span class=\"u\">2. Filtration and a clarifier resolve it in 24\u201348 hours.</span></div>\n        </div>\n        <div class=\"sub s3c\" style=\"font-size:25px;margin-top:26px;\">Only facts present in what you sent \u2014 never a new claim, number or name.</div>",
+      "anim": [
+        "enter('.s3a', T + 0.15, {y:18})",
+        "tl.from('.s3b', {opacity:0, y:34, duration:0.7, ease:EXPO}, T + 0.6)",
+        "enter('.s3c', T + 6.0, {y:20})"
+      ]
+    },
+    {
+      "dur": 7.5,
+      "comment": "llms.txt block",
+      "html": "        <div class=\"eyebrow s4a\">And the llms.txt block, built for you</div>\n        <div class=\"req s4b\" style=\"font-size:27px;line-height:1.6;margin-top:30px;\">\n          <div><span class=\"c\"># </span><span class=\"u\">Why does pool water go cloudy after shocking?</span></div>\n          <div><span class=\"c\">&gt; Canonical: </span><span class=\"u\">https://aquora.ae/guides/cloudy-after-shocking</span></div>\n          <div style=\"opacity:0.6;\"><span class=\"c\">\u2026direct answer + key facts\u2026</span></div>\n        </div>",
+      "anim": [
+        "enter('.s4a', T + 0.15, {y:18})",
+        "tl.from('.s4b', {opacity:0, scale:0.96, duration:0.7, ease:'back.out(1.3)'}, T + 0.7)"
+      ]
+    },
+    {
+      "dur": 8.0,
+      "comment": "json-ld",
+      "html": "        <div class=\"eyebrow s5a\">Plus schema.org JSON-LD</div>\n        <div class=\"headline s5b\" style=\"font-size:50px;margin-top:16px;\">Built from the fields you sent \u2014<br /><span class=\"teal\">and only those.</span></div>\n        <div class=\"req s5c\" style=\"font-size:25px;margin-top:30px;\">\n          <div><span class=\"c\">\"@type\":</span> <span class=\"u\">\"Article\"</span><span class=\"c\">, \"headline\": \u2026, \"url\": \u2026, \"about\": \u2026</span></div>\n        </div>",
+      "anim": [
+        "tl.from('.s5a', {opacity:0, scale:1.05, filter:'blur(8px)', duration:0.55, ease:EXPO}, T + 0.1)",
+        "enter('.s5b', T + 0.45)",
+        "tl.from('.s5c', {opacity:0, y:30, duration:0.65, ease:EXPO}, T + 3.2)"
+      ]
+    },
+    {
+      "dur": 5.0,
+      "comment": "close",
+      "html": "        <div class=\"outro-glow s6glow\"></div>\n        <div class=\"tile s6tile\">ED</div>\n        <div class=\"wordmark s6a\"><span class=\"shimmer-sweep-target\">Vela <span class=\"teal\">AEO</span></span></div>\n        <div class=\"sub s6b\" style=\"margin-top:16px;\">Be quotable on purpose. $0.02 a call.</div>\n        <div class=\"url-pill s6c\"><span class=\"dot\"></span>vela.emergedigital.com</div>",
+      "anim": [
+        "tl.fromTo('.s6glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
+        "tl.from('.s6tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
+        "enter('.s6a', T + 0.5, {scale:0.96, y:0})",
+        "shimmer('.s6a .shimmer-sweep-target', T + 1.0)",
+        "enter('.s6b', T + 1.0, {y:20})",
+        "tl.from('.s6c', {opacity:0, y:16, duration:0.6, ease:EXPO}, T + 1.6)"
+      ]
+    }
+  ]
+}

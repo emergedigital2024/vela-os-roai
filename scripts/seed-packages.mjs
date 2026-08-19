@@ -27,9 +27,9 @@ async function api(method, path, body) {
 // exact ids of the two junk "Starter" packages created during discovery (safe, targeted cleanup)
 const JUNK_IDS = ["1d7d7c76-72e9-4b03-b9d7-50d1df7a176c", "fe7bfe41-6247-4857-b0e9-734293c47036"];
 const TIERS = [
-  { name: "Starter",    description: "Entry tier — single-agent pilots and AEO visibility (ON.Optima)." },
+  { name: "Starter",    description: "Entry tier — single-agent pilots and AEO visibility (Vela AEO)." },
   { name: "Growth",     description: "Multi-agent CX with usage-based scaling across the funnel." },
-  { name: "Scale",      description: "Full ON.Ecosystem with committed volume and priority support." },
+  { name: "Scale",      description: "Full Vela line with committed volume and priority support." },
   { name: "Enterprise", description: "Custom commercial terms, governance, and dedicated success." },
 ];
 

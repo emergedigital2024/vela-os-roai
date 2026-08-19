@@ -1,12 +1,12 @@
 {
-  "$schema_note": "Canonical single source of truth for Vela OS / FPT CX Services proof + brand facts. Shared by Vela (public/) and future (data/). Resolved per issue #5; signed off by Rami 2026-06-16.",
+  "$schema_note": "Canonical single source of truth for Vela OS proof + brand facts (Emerge Digital). Shared by Vela (public/) and future (data/). Resolved per issue #5; signed off by Rami 2026-06-16 (v1.0.0).",
   "$issue": "https://github.com/emergedigital2024/vela-os-roai/issues/5",
-  "version": "1.0.0",
-  "as_of": "2026-06-16",
-  "signed_off_by": "Rami Alcheikh",
+  "version": "1.1.0",
+  "as_of": "2026-08-02",
+  "signed_off_by": "Rami Alcheikh (v1.0.0); v1.1.0 de-brand per settled FPT position 2026-07-27 — practice_name wording pending Rami ratification",
 
   "brand": {
-    "practice_name": "FPT CX Services",
+    "practice_name": "Emerge Digital",
     "product_name": "Vela OS",
     "tagline": "Return on AI Investment, measured.",
     "built_by": "Emerge Digital"
@@ -25,6 +25,7 @@
   },
 
   "credentials": {
+    "$attribution": "Every figure in this block is FPT Corporation's public bench data — display ONLY with explicit FPT attribution (as in overview.jsx's footnote), never as Emerge Digital's or Vela's own.",
     "headline": { "engineers": "1,000+", "certs": "1,500+", "scope": "across all CX-practice platform partners" },
     "salesforce_callout": { "experts": "340+", "certs": "760+", "scope": "Salesforce certified experts" },
     "agentforce_certs": "~100 by 2026",
@@ -37,27 +38,17 @@
     ]
   },
 
-  "fpt_parent": {
-    "parent_revenue": { "value": "$2.47B", "label": "FPT Corporation revenue" },
-    "employees": { "value": "80,000+", "label": "FPT Corporation employees" },
-    "agentforce_arr": {
-      "value": "$1.4B",
-      "yoy": "330%",
-      "label": "Salesforce global Agentforce ARR (YoY growth)",
-      "scope": "ecosystem context — Salesforce-wide, NOT an FPT-specific result; must be labeled as such wherever shown"
-    }
-  },
-
+  "case_studies_attribution": "FPT-delivered outcomes (deck/public-sourced) — display ONLY under explicit FPT attribution (e.g. a 'real FPT outcomes behind the demo' heading), never as Emerge Digital results.",
   "case_studies": [
-    { "client": "Global technology leader", "sector": "Technology", "solution": "ON.Optima · AEO", "icon": "search",
+    { "client": "Global technology leader", "sector": "Technology", "solution": "Answer Engine Optimization", "icon": "search",
       "headline": "+200% click-through rate",
       "blurb": "Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.",
       "metrics": [["Site ranking", "#6 (+18)"], ["Click-through", "3.2% (+200%)"], ["Featured snippets", "30%"]] },
-    { "client": "Global health F&B leader", "sector": "Food & beverage", "solution": "ON.Optima · AEO", "icon": "sparkles",
+    { "client": "Global health F&B leader", "sector": "Food & beverage", "solution": "Answer Engine Optimization", "icon": "sparkles",
       "headline": "Cited across 120+ markets",
       "blurb": "Deployed AEO to win AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.",
       "metrics": [["Markets", "120+"], ["AI answer boxes", "Consistent"], ["Acquisition cost", "Reduced"]] },
-    { "client": "KSA megaproject (PIF)", "sector": "Real estate & construction", "solution": "ON.E · Commerce", "icon": "grid",
+    { "client": "KSA megaproject (PIF)", "sector": "Real estate & construction", "solution": "Commerce", "icon": "grid",
       "headline": "MVP in 2 months, not 10",
       "blurb": "Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.",
       "metrics": [["Time to MVP", "2 mo (vs 10)"], ["Build time", "−55%"], ["Requirements", "−40%"]] },
@@ -70,9 +61,9 @@
   "pricing_tiers": {
     "ladder": ["Starter", "Growth", "Scale", "Enterprise"],
     "descriptions": {
-      "Starter": "Entry tier — single-agent pilots and AEO visibility (ON.Optima).",
+      "Starter": "Entry tier — single-agent pilots and AEO visibility (Vela AEO).",
       "Growth": "Multi-agent CX with usage-based scaling across the funnel.",
-      "Scale": "Full ON.Ecosystem with committed volume and priority support.",
+      "Scale": "The full Vela line with committed volume and priority support.",
       "Enterprise": "Custom commercial terms, governance, and dedicated success."
     },
     "billing_models": ["Hybrid (seat-based)", "Enterprise commit"],

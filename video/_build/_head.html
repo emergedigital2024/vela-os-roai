@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* local brand fonts (captured .woff2 — offline-render safe) */
+      @font-face { font-family: "Lexend"; font-weight: 400; font-display: block; src: url("assets/fonts/lexend-400.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend"; font-weight: 600; font-display: block; src: url("assets/fonts/lexend-600.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend"; font-weight: 700; font-display: block; src: url("assets/fonts/lexend-700.woff2") format("woff2"); }
+      @font-face { font-family: "Lexend Zetta"; font-weight: 700; font-display: block; src: url("assets/fonts/lexendzetta-700.woff2") format("woff2"); }
+      @font-face { font-family: "Prompt"; font-weight: 500; font-display: block; src: url("assets/fonts/prompt-500.woff2") format("woff2"); }
+      @font-face { font-family: "Prompt"; font-weight: 600; font-display: block; src: url("assets/fonts/prompt-600.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block; src: url("assets/fonts/jbmono-500.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block; src: url("assets/fonts/jbmono-700.woff2") format("woff2"); }
+
+      :root {
+        --bg: #06122A; --bg-deep: #03081A; --surface: #0A1F3D;
+        --ink: #F7F9FC; --muted: #9FAFC2; --hair: rgba(255,255,255,0.10);
+        --accent: #00C2C7; --accent-2: #3DDCE3; --glow: #00F5FF;
+        --ok: #34D399; --bad: #FB7185; --warn: #FBBF24;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg-deep); }
+      body { font-family: "Lexend", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background:
+          radial-gradient(ellipse 90% 70% at 80% 0%, rgba(0,194,199,0.18), transparent 60%),
+          radial-gradient(ellipse 70% 60% at 8% 95%, rgba(61,220,227,0.10), transparent 65%),
+          linear-gradient(160deg, #06122A 0%, #0A1F3D 55%, #06122A 100%);
+      }
+      .scene {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 110px 170px; will-change: transform, filter;
+      }
+      .eyebrow { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 600; font-size: 22px; color: var(--accent-2); }
+      .headline { font-weight: 700; font-size: 66px; line-height: 1.06; letter-spacing: -0.025em; max-width: 1400px; }
+      .sub { font-weight: 400; font-size: 30px; line-height: 1.45; color: var(--muted); max-width: 1120px; }
+      .teal { color: var(--accent); }
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+      .wordmark { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 118px; letter-spacing: -0.02em; line-height: 1; }
+      .tile { width: 118px; height: 106px; border-radius: 26px; margin-bottom: 36px; background: linear-gradient(150deg, #00C2C7 0%, #0A1F3D 99%); box-shadow: 0 24px 80px rgba(0,194,199,0.32); display: flex; align-items: center; justify-content: center; font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 52px; color: #fff; }
+
+      /* four-signal grid (S2) */
+      .signals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; width: 1560px; margin-top: 54px; }
+      .sig { background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border: 1px solid var(--hair); border-radius: 20px; padding: 30px 28px; text-align: left; }
+      .sig .k { font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 15px; color: var(--accent-2); margin-bottom: 14px; }
+      .sig h3 { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 24px; font-weight: 700; line-height: 1.25; }
+      .sig p { font-size: 19px; color: var(--muted); margin-top: 12px; line-height: 1.4; }
+
+      /* request block (S3) */
+      .req { font-family: "JetBrains Mono", ui-monospace, monospace; text-align: left; background: rgba(3,8,26,0.62); border: 1px solid var(--hair); border-radius: 18px; padding: 34px 42px; font-size: 30px; line-height: 1.6; margin-top: 46px; box-shadow: 0 30px 90px -30px rgba(0,194,199,0.25); }
+      .req .m { color: var(--accent); font-weight: 700; }
+      .req .u { color: var(--ink); }
+      .req .c { color: var(--muted); }
+
+      /* report rows (S4) */
+      .report { width: 1500px; margin-top: 44px; }
+      .rrow { display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 26px; padding: 22px 26px; border-bottom: 1px solid var(--hair); }
+      .rrow .mark { font-size: 34px; font-weight: 700; text-align: center; }
+      .rrow .nm { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 30px; font-weight: 700; text-align: left; }
+      .rrow .val { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 24px; color: var(--muted); text-align: right; }
+      .ok { color: var(--ok); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+
+      /* findings (S5) */
+      .finds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px 40px; width: 1500px; margin-top: 44px; text-align: left; }
+      .find { border-left: 3px solid var(--warn); padding-left: 24px; }
+      .find .t { font-size: 27px; font-weight: 700; line-height: 1.25; }
+      .find .d { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 21px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+
+      .score { font-family: "Lexend Zetta", "Lexend", sans-serif; font-weight: 700; font-size: 150px; line-height: 1; color: var(--accent); text-shadow: 0 0 80px rgba(0,194,199,0.45); }
+
+      .cta { display: inline-block; margin-top: 40px; background: linear-gradient(90deg, #00C2C7, #3DDCE3); color: #0A1F3D; font-weight: 700; font-size: 28px; padding: 22px 44px; border-radius: 9999px; box-shadow: 0 16px 50px rgba(0,194,199,0.35); }
+      .outro-glow { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(0,194,199,0.30), transparent 65%); filter: blur(20px); }
+      .url-pill { display: inline-flex; align-items: center; gap: 12px; margin-top: 28px; padding: 14px 28px; border-radius: 9999px; border: 1px solid rgba(0,194,199,0.4); background: rgba(0,194,199,0.10); font-family: "Prompt", "Lexend", sans-serif; text-transform: uppercase; letter-spacing: 0.14em; font-size: 18px; color: var(--accent-2); }
+      .url-pill .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+
+      .shimmer-sweep-target { position: relative; display: inline-block; }
+      .shimmer-sweep-target .shimmer-mask {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        background: linear-gradient(120deg, transparent 0%,
+          transparent calc(var(--shimmer-pos, -20%) - 11%),
+          rgba(255,255,255,0.55) var(--shimmer-pos, -20%),
+          transparent calc(var(--shimmer-pos, -20%) + 11%), transparent 100%);
+        mix-blend-mode: overlay;
+      }
+
+      #cap { position: absolute; left: 0; right: 0; bottom: 72px; z-index: 80; display: flex; justify-content: center; pointer-events: none; }
+      .cap-line {
+        position: absolute; visibility: hidden;
+        font-family: "Prompt", "Lexend", sans-serif; font-weight: 500; font-size: 30px; letter-spacing: 0.01em;
+        color: rgba(247,249,252,0.96); padding: 12px 26px; border-radius: 12px;
+        background: rgba(3,8,26,0.45); border: 1px solid var(--hair); backdrop-filter: blur(6px);
+        clip-path: inset(0 100% 0 0); white-space: nowrap;
+      }
+
+      #hf-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 90;
+        background: radial-gradient(ellipse at center, transparent 52%, rgba(0,0,0,0.55) 100%); }
+      #flash { position: absolute; inset: 0; pointer-events: none; z-index: 95; background: #EAFBFF; opacity: 0; }
+    </style>

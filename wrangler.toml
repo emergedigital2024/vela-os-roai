@@ -2,10 +2,28 @@ name = "vela-os-roai"
 account_id = "4a75e91d6fca8bc58467fb80ce1b9c2e"
 compatibility_date = "2025-06-15"
 main = "src/index.js"
-workers_dev = true  # keep the *.workers.dev URL enabled alongside the custom domain
+workers_dev = true  # keep the *.workers.dev URL enabled alongside the custom domains
+
+# Workers Custom Domains — this list is RECONCILED on every deploy. Every
+# attached domain MUST stay listed: removing a line DETACHES that domain on the
+# next deploy (same pattern/warning as emerge-digital-website/wrangler.jsonc).
+routes = [
+  # Canonical host (2026-08 cutover). wrangler provisions the proxied DNS
+  # record + edge cert on the emergedigital.com zone (same CF account).
+  { pattern = "vela.emergedigital.com", custom_domain = true },
+  # Legacy host — attached via dashboard pre-cutover; kept FOREVER (the URL is
+  # burned into published MP4 pixels, PDFs, and shared links). The Worker 301s
+  # it to the canonical host. DO NOT REMOVE.
+  { pattern = "roai.emergedigital.ae", custom_domain = true },
+]
 
 [assets]
 directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
-run_worker_first = ["/api/*"]
+# true (was ["/api/*"]): the host-canon 301 in src/index.js must see EVERY
+# request. With the array form, asset paths ("/", "/guide", "/downloads/*")
+# are served by the ASSETS binding before the Worker runs, and the redirect
+# would silently never fire on exactly those paths (emerge-digital-website's
+# wrangler.jsonc documents this same trap for its www→apex redirect).
+run_worker_first = true

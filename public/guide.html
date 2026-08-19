@@ -2,28 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<!-- Google tag (gtag.js) — GA4 stream VeloOS · roai.emergedigital.ae -->
+<!-- Google tag (gtag.js) — GA4 stream VeloOS · vela.emergedigital.com -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-T9T5VGCETP"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T9T5VGCETP');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#08080b" />
 <link rel="manifest" href="/site.webmanifest" />
-<title>Vela OS · FPT CX Services — Demo Guide</title>
-<meta name="description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first customer experience offering. Dual-mode agency + client portal with live usage-based billing." />
-<link rel="canonical" href="https://roai.emergedigital.ae/guide" />
+<title>Vela OS — ROAI Analytics · Demo Guide</title>
+<meta name="description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for an AI-first customer experience offering. Dual-mode agency + client portal with live usage-based billing." />
+<link rel="canonical" href="https://vela.emergedigital.com/guide" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="Vela OS · FPT CX Services" />
-<meta property="og:title" content="Vela OS · FPT CX Services — Demo Guide" />
-<meta property="og:description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first CX offering. Dual-mode agency + client portal with live usage-based billing." />
-<meta property="og:url" content="https://roai.emergedigital.ae/guide" />
-<meta property="og:image" content="https://roai.emergedigital.ae/og.png" />
+<meta property="og:site_name" content="Vela OS — ROAI Analytics" />
+<meta property="og:title" content="Vela OS — ROAI Analytics · Demo Guide" />
+<meta property="og:description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for an AI-first CX offering. Dual-mode agency + client portal with live usage-based billing." />
+<meta property="og:url" content="https://vela.emergedigital.com/guide" />
+<meta property="og:image" content="https://vela.emergedigital.com/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Vela OS · FPT CX Services — Demo Guide" />
-<meta name="twitter:description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for FPT's AI-first CX offering. Dual-mode agency + client portal with live usage-based billing." />
-<meta name="twitter:image" content="https://roai.emergedigital.ae/og.png" />
+<meta name="twitter:title" content="Vela OS — ROAI Analytics · Demo Guide" />
+<meta name="twitter:description" content="A guided walkthrough of Vela OS — the ROAI analytics platform for an AI-first CX offering. Dual-mode agency + client portal with live usage-based billing." />
+<meta name="twitter:image" content="https://vela.emergedigital.com/og.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Lexend+Zetta:wght@400;700&family=Prompt:wght@400;500&display=swap" rel="stylesheet" />
@@ -138,7 +138,7 @@
   .step .say{color:var(--faint);font-style:italic}
   .step .go{white-space:nowrap}
   @media(max-width:760px){
-    .stats,.grid2,.pillars,.cases,.roai-box{grid-template-columns:1fr}
+    .stats,.grid2,.pillars,.cases,.roai-box,.vgrid{grid-template-columns:1fr}
     .step{grid-template-columns:38px 1fr;}
     .step .go{grid-column:1/-1}
   }
@@ -152,6 +152,15 @@
   .video-frame{position:relative;margin-top:28px;aspect-ratio:16/9;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:0 18px 50px rgba(0,0,0,.45)}
   .video-frame:focus-within{border-color:var(--accent-line)}
   .video-frame video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;background:#000}
+  .vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+  .vcard{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--panel);display:flex;flex-direction:column}
+  .vcard:focus-within{border-color:var(--accent-line)}
+  .vcard .vwrap{position:relative;aspect-ratio:16/9;background:#000}
+  .vcard video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;background:#000}
+  .vcard .vmeta{padding:14px 16px 16px}
+  .vcard .vmeta h3{font-size:15px;margin:0 0 4px}
+  .vcard .vmeta p{font-size:13px;color:var(--muted);margin:0}
+  .vcard .vlen{font-size:11.5px;font-weight:600;color:var(--accent-fg);background:var(--accent-soft);border:1px solid var(--accent-line);padding:3px 8px;border-radius:999px;display:inline-block;margin-bottom:8px}
   footer{padding:48px 0 70px}
   .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
   .note{font-size:12.5px;color:var(--faint);max-width:60ch;margin-top:10px}
@@ -166,18 +175,19 @@
   <div class="wrap bar">
     <a class="brand" href="#top">
       <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 19 M12 3 L4 19 M7.5 13 H16.5"/></svg></span>
-      <span>Vela <span class="accent">OS</span><small>FPT CX Services · ROAI Analytics</small></span>
+      <span>Vela <span class="accent">OS</span><small>ROAI Analytics · AI-native CX</small></span>
     </a>
     <nav class="navlinks">
       <a href="#watch">Watch</a>
       <a href="#what">Platform</a>
+      <a href="#shorts">Products</a>
       <a href="#roai">ROAI</a>
       <a href="#billing">Live billing</a>
       <a href="#proof">Proof</a>
       <a href="#demo">Demo script</a>
       <a href="#downloads">Downloads</a>
     </nav>
-    <a class="btn btn-primary" href="https://roai.emergedigital.ae/?view=agency&section=home" target="_blank" rel="noopener">Open live demo →</a>
+    <a class="btn btn-primary" href="https://vela.emergedigital.com/?view=agency&section=home" target="_blank" rel="noopener">Open live demo →</a>
   </div>
 </header>
 
@@ -187,10 +197,10 @@
   <div class="wrap">
     <span class="chip">● &nbsp;Live, interactive demo — agency + client portal</span>
     <h1>The operating system for AI-first customer experience.</h1>
-    <p class="sub">Vela OS turns FPT's full CX offering into one measurable surface — a dual-mode agency command center and customer portal, where every AI engagement is priced, delivered, and proven in <span class="accent">ROAI</span> (Return on AI Investment).</p>
+    <p class="sub">Vela OS turns a full enterprise CX offering into one measurable surface — a dual-mode agency command center and customer portal, where every AI engagement is priced, delivered, and proven in <span class="accent">ROAI</span> (Return on AI Investment).</p>
     <div class="cta">
       <a class="btn btn-primary" href="https://cal.com/rami-alcheikh/strategy-call?utm_source=vela&utm_medium=cta" target="_blank" rel="noopener">Book a discovery call →</a>
-      <a class="btn" href="https://roai.emergedigital.ae/?view=agency&section=home" target="_blank" rel="noopener">Open the live demo</a>
+      <a class="btn" href="https://vela.emergedigital.com/?view=agency&section=home" target="_blank" rel="noopener">Open the live demo</a>
       <a class="btn" href="#demo">Follow the 7-step demo script</a>
     </div>
     <div class="formula">
@@ -204,7 +214,7 @@
 <section id="watch">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">Watch first</span><h2>The 66-second tour.</h2>
-    <p>A motion walkthrough of the whole platform — dual-mode command center and customer portal, the ON.Ecosystem, live usage-based billing, and the ROAI proof — before you open the live demo.</p></div>
+    <p>A motion walkthrough of the whole platform — dual-mode command center and customer portal, the Vela line, live usage-based billing, and the ROAI proof — before you open the live demo.</p></div>
     <div class="video-frame">
       <video controls preload="metadata" playsinline
              poster="/downloads/Vela-OS-Explainer-poster.jpg"
@@ -233,7 +243,7 @@
 <section id="what">
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">What it is</span><h2>One platform, two modes.</h2>
-    <p>The same engagement, seen from both sides of the table — so FPT runs the portfolio and the customer sees their own outcomes, in real time.</p></div>
+    <p>The same engagement, seen from both sides of the table — so the practice runs the portfolio and the customer sees their own outcomes, in real time.</p></div>
     <div class="grid2">
       <div class="card mode">
         <div class="tag accent">Agency command center</div>
@@ -262,8 +272,8 @@
 <!-- PILLARS -->
 <section id="pillars">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">The offering</span><h2>Six CX pillars, powered by the ON.Ecosystem.</h2>
-    <p>FPT's end-to-end customer-experience capability — from strategy to run — with agentic AI products layered across the funnel.</p></div>
+    <div class="sec-head"><span class="eyebrow">The offering</span><h2>Six CX pillars, powered by the Vela line.</h2>
+    <p>An end-to-end customer-experience capability — from strategy to run — with agentic AI products layered across the funnel.</p></div>
     <div class="pillars">
       <div class="pillar"><div class="k"><span class="dot" style="background:#3DDCE3"></span>Experience Strategy</div><p>Maturity assessment, marketecture and journey analysis.</p></div>
       <div class="pillar"><div class="k"><span class="dot" style="background:#8b5cf6"></span>Experience Design</div><p>Research, adaptive UI, design systems and usability testing.</p></div>
@@ -273,11 +283,74 @@
       <div class="pillar"><div class="k"><span class="dot" style="background:#ef4444"></span>Run &amp; Optimize</div><p>L1–L3 maintenance, 24×7 monitoring and ops support.</p></div>
     </div>
     <div class="agents">
-      <span class="agent">ON.Optima — Answer Engine Optimization</span>
-      <span class="agent">ON.X — Agentic Assistant</span>
-      <span class="agent">ON.E — Commerce Accelerator</span>
-      <span class="agent">ON.Match — AI Recommendations</span>
-      <span class="agent">ON.Browser — Agentic Browser</span>
+      <span class="agent">Vela AEO — Answer Engine Optimization</span>
+      <span class="agent">Vela Assist — Governed Assistant</span>
+      <span class="agent">Vela Commerce — Feed Validation</span>
+      <span class="agent">Vela Recs — Recommendation Ranking</span>
+      <span class="agent">Vela Scan — Agent-Readiness Crawl</span>
+    </div>
+  </div>
+</section>
+
+<!-- SEE EACH PRODUCT -->
+<section id="shorts">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">See it work</span><h2>Every product, on real output.</h2>
+    <p>One short per product. Nothing in them is illustrative — each figure on screen is read from a live API response, including a real store that turned out to be blocking Google's AI crawler.</p></div>
+    <div class="video-frame">
+      <video controls preload="none" playsinline
+             poster="/downloads/Vela-Line-Film-poster.jpg"
+             aria-label="The Vela line — all five products">
+        <source src="/downloads/Vela-Line-Film.mp4" type="video/mp4" />
+        Your browser can't play embedded video — <a href="/downloads/Vela-Line-Film.mp4">download the line film (.mp4)</a> instead.
+      </video>
+    </div>
+    <div class="vgrid">
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-AEO-Short-poster.jpg" aria-label="Vela AEO demo">
+            <source src="/downloads/Vela-AEO-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-AEO-Short.mp4">Download the Vela AEO demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:40</span><h3>Vela AEO</h3><p>A rewrite an answer engine can cite, an llms.txt block, and JSON-LD built only from the fields you send.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Assist-Short-poster.jpg" aria-label="Vela Assist demo">
+            <source src="/downloads/Vela-Assist-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Assist-Short.mp4">Download the Vela Assist demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:43</span><h3>Vela Assist</h3><p>A governed answer over your own context — and the list of everything it could not verify.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Recs-Short-poster.jpg" aria-label="Vela Recs demo">
+            <source src="/downloads/Vela-Recs-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Recs-Short.mp4">Download the Vela Recs demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:40</span><h3>Vela Recs</h3><p>Catalogue ranked by real cosine similarity on Workers AI embeddings, scores shown.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Commerce-Short-poster.jpg" aria-label="Vela Commerce demo">
+            <source src="/downloads/Vela-Commerce-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Commerce-Short.mp4">Download the Vela Commerce demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:46</span><h3>Vela Commerce</h3><p>A feed item validated to the GTIN check digit — and schema that omits what failed.</p></div>
+      </div>
+      <div class="vcard">
+        <div class="vwrap">
+          <video controls preload="none" playsinline poster="/downloads/Vela-Scan-Short-poster.jpg" aria-label="Vela Scan demo">
+            <source src="/downloads/Vela-Scan-Short.mp4" type="video/mp4" />
+            <a href="/downloads/Vela-Scan-Short.mp4">Download the Vela Scan demo (.mp4)</a>
+          </video>
+        </div>
+        <div class="vmeta"><span class="vlen">MP4 · 0:53</span><h3>Vela Scan</h3><p>A live agent-readiness crawl of a real store, run at call time.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -299,7 +372,7 @@
           <code>ROAI = (Value − AI cost) ÷ AI cost</code>
           <span>Value = hours saved + revenue uplift, measured per engagement.</span>
         </div>
-        <p style="margin-top:16px">Because the number is consistent across the portfolio and the customer view, FPT and the client are always looking at the <b style="color:var(--text)">same source of truth</b> — which makes renewals and expansion a data conversation, not a debate.</p>
+        <p style="margin-top:16px">Because the number is consistent across the portfolio and the customer view, the practice and the client are always looking at the <b style="color:var(--text)">same source of truth</b> — which makes renewals and expansion a data conversation, not a debate.</p>
       </div>
     </div>
   </div>
@@ -323,7 +396,7 @@
       <div class="card">
         <div class="tag" style="color:var(--emerald)">Why it matters</div>
         <p>It proves the commercial model is real, not painted on: usage-based pricing, committed-spend drawdown, government Net-60/PO flows and self-serve top-ups all run on production billing infrastructure. The same proxy pattern drops into a real deployment unchanged.</p>
-        <a class="btn" style="margin-top:14px" href="https://roai.emergedigital.ae/?view=agency&section=billing&tab=live" target="_blank" rel="noopener">See the live billing panel →</a>
+        <a class="btn" style="margin-top:14px" href="https://vela.emergedigital.com/?view=agency&section=billing&tab=live" target="_blank" rel="noopener">See the live billing panel →</a>
       </div>
     </div>
   </div>
@@ -336,21 +409,21 @@
     <p>The case results surfaced in the dashboard are drawn from FPT's actual engagements across AEO, commerce and Data &amp; AI.</p></div>
     <div class="cases">
       <div class="case">
-        <div class="solution">ON.Optima · AEO</div>
+        <div class="solution">Answer Engine Optimization</div>
         <div class="head">+200% click-through rate</div>
         <div class="who">Global technology leader · Technology</div>
         <p style="font-size:13.5px">Regenerated and restructured the corporate site for AI-driven visibility — measured 7 weeks after deployment.</p>
         <div class="metrics"><span>Site ranking #6 (+18)</span><span>CTR 3.2% (+200%)</span><span>Featured snippets 30%</span></div>
       </div>
       <div class="case">
-        <div class="solution">ON.Optima · AEO</div>
+        <div class="solution">Answer Engine Optimization</div>
         <div class="head">Cited across 120+ markets</div>
         <div class="who">Global health F&amp;B leader · Food &amp; beverage</div>
         <p style="font-size:13.5px">Won AI answer-box citations and cut acquisition cost — with no cannibalization of Google traffic.</p>
         <div class="metrics"><span>120+ markets</span><span>Consistent answer boxes</span><span>Acquisition cost ↓</span></div>
       </div>
       <div class="case">
-        <div class="solution">ON.E · Commerce</div>
+        <div class="solution">Commerce</div>
         <div class="head">MVP in 2 months, not 10</div>
         <div class="who">KSA megaproject (PIF) · Real estate</div>
         <p style="font-size:13.5px">Composable B2B marketplace for a Vision-2030 megaproject, delivered end-to-end against a critical timeline.</p>
@@ -388,38 +461,38 @@
     <div class="steps">
       <div class="step">
         <div class="num"></div>
-        <div><h3>Agency overview — the portfolio at a glance</h3><p>Open on blended ROAI, revenue and margin across all clients.</p><p class="say">"This is how FPT sees the whole book of business — and the headline is ROAI, not just revenue."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=agency&section=home" target="_blank" rel="noopener">Open ↗</a>
+        <div><h3>Agency overview — the portfolio at a glance</h3><p>Open on blended ROAI, revenue and margin across all clients.</p><p class="say">"This is how the practice sees the whole book of business — and the headline is ROAI, not just revenue."</p></div>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=agency&section=home" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
         <div class="num"></div>
         <div><h3>ROAI analytics — how value is measured</h3><p>Show the formula, the trend, and the per-pillar breakdown.</p><p class="say">"Every dollar of AI spend is tied to measured value — hours saved plus revenue uplift."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=agency&section=analytics" target="_blank" rel="noopener">Open ↗</a>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=agency&section=analytics" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
         <div class="num"></div>
         <div><h3>Client deep dive — drill into one account</h3><p>Open Verdano Foods: ROAI, active services, and the real AEO case result.</p><p class="say">"Here's a single client — projects, spend, return, and the proof behind it."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=agency&client=helios" target="_blank" rel="noopener">Open ↗</a>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=agency&client=helios" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
         <div class="num"></div>
         <div><h3>Billing → Live — real Metronome data</h3><p>Pick a customer; show finalized invoices and commit drawdown.</p><p class="say">"This isn't mocked — it's a live billing account read through a secure proxy."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=agency&section=billing&tab=live" target="_blank" rel="noopener">Open ↗</a>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=agency&section=billing&tab=live" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
         <div class="num"></div>
         <div><h3>Switch to the customer portal</h3><p>Same engagement, the customer's view — their ROAI Center.</p><p class="say">"Now flip the table — this is exactly what the client logs in and sees."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=client&client=helios&section=roai" target="_blank" rel="noopener">Open ↗</a>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=client&client=helios&section=roai" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
         <div class="num"></div>
-        <div><h3>AI marketplace — launch an agent</h3><p>Walk the launch flow for a new ON.Ecosystem agent.</p><p class="say">"Expansion is self-serve — the customer can add an agent in a click."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=client&client=helios&section=marketplace" target="_blank" rel="noopener">Open ↗</a>
+        <div><h3>AI marketplace — launch an agent</h3><p>Walk the launch flow for a new Vela agent.</p><p class="say">"Expansion is self-serve — the customer can add an agent in a click."</p></div>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=client&client=helios&section=marketplace" target="_blank" rel="noopener">Open ↗</a>
       </div>
       <div class="step">
         <div class="num"></div>
         <div><h3>Customer billing &amp; usage — the loop closes</h3><p>Show credits, usage drawdown and a top-up.</p><p class="say">"Usage, credits and invoices — the same numbers the agency side bills on."</p></div>
-        <a class="btn go" href="https://roai.emergedigital.ae/?view=client&client=helios&section=billing&tab=usage" target="_blank" rel="noopener">Open ↗</a>
+        <a class="btn go" href="https://vela.emergedigital.com/?view=client&client=helios&section=billing&tab=usage" target="_blank" rel="noopener">Open ↗</a>
       </div>
     </div>
   </div>
@@ -434,8 +507,14 @@
       <a class="card dl" href="/downloads/Vela-OS-Explainer.mp4" target="_blank" rel="noopener">
         <div class="tag accent">MP4 · 1:06</div>
         <h3>Vela OS — Explainer ↗</h3>
-        <p>A 66-second motion tour: dual-mode platform, the ON.Ecosystem, usage-based billing and real proof.</p>
+        <p>A 66-second motion tour: dual-mode platform, the Vela line, usage-based billing and real proof.</p>
         <span class="dlbtn">Watch the explainer (.mp4)</span>
+      </a>
+      <a class="card dl" href="/downloads/Vela-Line-Film.mp4" target="_blank" rel="noopener">
+        <div class="tag accent">MP4 · 0:53</div>
+        <h3>The Vela line — all five products ↗</h3>
+        <p>One film across Vela AEO, Assist, Recs, Commerce and Scan, with the per-call rate for each.</p>
+        <span class="dlbtn">Watch the line film (.mp4)</span>
       </a>
       <a class="card dl" href="/downloads/Vela-OS-Demo-Deck.pptx" download>
         <div class="tag accent">PPTX · 9 slides</div>
@@ -458,12 +537,13 @@
   <div class="wrap foot">
     <div>
       <div class="brand" style="font-size:15px"><span class="logo" style="width:30px;height:30px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 19 M12 3 L4 19 M7.5 13 H16.5"/></svg></span>Vela <span class="accent">OS</span></div>
-      <div class="note"><span style="display:inline-flex;width:15px;height:15px;border-radius:4px;overflow:hidden;vertical-align:-3px;margin-right:5px"><svg viewBox="0 0 556.86 502.33" role="img" aria-label="Emerge Digital" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="edmark-guide" x1="424.88" y1="-88.26" x2="130.94" y2="593.03" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00C2C7"/><stop offset="0.99" stop-color="#0A1F3D"/></linearGradient></defs><rect width="556.86" height="502.33" fill="url(#edmark-guide)"/><path fill="#fff" d="M203.6,385.73V327.36c46.58-5.85,92.81-11.64,139-17.49,25.79-3.26,36.86-15.39,37.15-41,.19-16.77.15-33.53,0-50.3-.26-25.92-11.14-38.2-36.62-41.41-45.84-5.79-91.7-11.5-138.93-17.42v-58.5c52.5,11.85,105,22,156.53,35.95,32.18,8.74,52.81,41.34,53.67,75.66q.78,30.33,0,60.7c-.85,35.89-22.73,68.41-56.46,77.2C307.34,364,255.86,374.07,203.6,385.73Zm91.19-199.67v49h49.77V193.41Zm-91-8.93v57.93H289V185.81ZM294,252.07v48.18l51.43-8.65V252.07Zm-89.93,0V310.8l85.07-10.55V252.07Zm-46.14-76.54,37.9-15V101.15l-37.9,20.11Zm0,12.63v48.65h37.9V175.53Zm0,113.68,37.9,13.57V250.85h-37.9Zm0,63.62,37.9,23.39V328.51l-37.9-15Z"/></svg></span>Interactive demo built by <a href="https://vision.emergedigital.ae?utm_source=vela&utm_medium=corp" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Emerge Digital</a> for FPT CX Services. ROAI = Return on AI Investment. Live billing data is a Metronome sandbox; client names and portfolio figures are illustrative.</div>
+      <div class="note"><span style="display:inline-flex;width:15px;height:15px;border-radius:4px;overflow:hidden;vertical-align:-3px;margin-right:5px"><svg viewBox="0 0 556.86 502.33" role="img" aria-label="Emerge Digital" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs><linearGradient id="edmark-guide" x1="424.88" y1="-88.26" x2="130.94" y2="593.03" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00C2C7"/><stop offset="0.99" stop-color="#0A1F3D"/></linearGradient></defs><rect width="556.86" height="502.33" fill="url(#edmark-guide)"/><path fill="#fff" d="M203.6,385.73V327.36c46.58-5.85,92.81-11.64,139-17.49,25.79-3.26,36.86-15.39,37.15-41,.19-16.77.15-33.53,0-50.3-.26-25.92-11.14-38.2-36.62-41.41-45.84-5.79-91.7-11.5-138.93-17.42v-58.5c52.5,11.85,105,22,156.53,35.95,32.18,8.74,52.81,41.34,53.67,75.66q.78,30.33,0,60.7c-.85,35.89-22.73,68.41-56.46,77.2C307.34,364,255.86,374.07,203.6,385.73Zm91.19-199.67v49h49.77V193.41Zm-91-8.93v57.93H289V185.81ZM294,252.07v48.18l51.43-8.65V252.07Zm-89.93,0V310.8l85.07-10.55V252.07Zm-46.14-76.54,37.9-15V101.15l-37.9,20.11Zm0,12.63v48.65h37.9V175.53Zm0,113.68,37.9,13.57V250.85h-37.9Zm0,63.62,37.9,23.39V328.51l-37.9-15Z"/></svg></span>Interactive demo concept built by <a href="https://vision.emergedigital.ae?utm_source=vela&utm_medium=corp" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px">Emerge Digital</a> for an AI-native enterprise CX practice. ROAI = Return on AI Investment. Live billing data is a Metronome sandbox; client names and portfolio figures are illustrative.</div>
       <div class="note" style="margin-top:8px">Part of the Emerge Digital <a href="https://future.emergedigital.com?utm_source=vela&utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent-fg);text-decoration:none;border-bottom:1px solid var(--accent-line)">Agentforce practice →</a></div>
+      <div class="note" style="margin-top:8px">Part of the Emerge Digital <a href="https://emergedigital.com?utm_source=vela&utm_medium=footer&utm_campaign=parent" target="_blank" rel="noopener" style="color:var(--accent-fg);text-decoration:none;border-bottom:1px solid var(--accent-line)">ecosystem</a> · <a href="https://vault.emergedigital.com?utm_source=vela&utm_medium=footer&utm_campaign=vaultos" target="_blank" rel="noopener" style="color:var(--accent-fg);text-decoration:none;border-bottom:1px solid var(--accent-line)">VaultOS</a></div>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <a class="btn btn-primary" href="https://cal.com/rami-alcheikh/strategy-call?utm_source=vela&utm_medium=cta" target="_blank" rel="noopener">Book a discovery call →</a>
-      <a class="btn" href="https://roai.emergedigital.ae/?view=agency&section=home" target="_blank" rel="noopener">Open the live demo</a>
+      <a class="btn" href="https://vela.emergedigital.com/?view=agency&section=home" target="_blank" rel="noopener">Open the live demo</a>
     </div>
   </div>
 </footer>

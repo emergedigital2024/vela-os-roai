@@ -1,0 +1,90 @@
+{
+  "captions": [
+    "Five products. One rate card. Pay per call.",
+    "Vela AEO \u2014 be quotable on purpose.",
+    "Vela Assist \u2014 an assistant that shows its seams.",
+    "Vela Recs \u2014 ranking you can audit.",
+    "Vela Commerce \u2014 deterministic feed validation.",
+    "Vela Scan \u2014 know what the agents see.",
+    "The Vela line \u2014 priced to the unit."
+  ],
+  "scenes": [
+    {
+      "dur": 7.0,
+      "comment": "open",
+      "html": "        <div class=\"eyebrow s1a\">The Vela line \u00b7 API editions</div>\n        <div class=\"headline s1b\" style=\"margin-top:26px;\">Five products.<br />One rate card.<br /><span class=\"teal\">Pay per call.</span></div>",
+      "anim": [
+        "enter('.s1a', T + 0.25, {y:20})",
+        "tl.from('.s1b', {opacity:0, y:56, duration:0.85, ease:EXPO}, T + 0.5)"
+      ]
+    },
+    {
+      "dur": 9.5,
+      "comment": "AEO",
+      "html": "        <div class=\"eyebrow s2a\">Attract</div>\n        <div class=\"headline s2b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">AEO</span></div>\n        <div class=\"sub s2c\" style=\"margin-top:22px;\">A GenAI-visibility rewrite, an llms.txt block and Article/FAQ JSON-LD \u2014 built only from the fields you send.</div>\n        <div class=\"req s2d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.02</span> <span class=\"u\">/ request</span></div>",
+      "anim": [
+        "enter('.s2a', T + 0.15, {y:18})",
+        "enter('.s2b', T + 0.4)",
+        "enter('.s2c', T + 1.1, {y:26})",
+        "tl.from('.s2d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4)"
+      ]
+    },
+    {
+      "dur": 8.0,
+      "comment": "Assist",
+      "html": "        <div class=\"eyebrow s3a\">Engage</div>\n        <div class=\"headline s3b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">Assist</span></div>\n        <div class=\"sub s3c\" style=\"margin-top:22px;\">A governed CX answer over your own context, with a claims-to-verify list so nothing unchecked reaches a customer.</div>\n        <div class=\"req s3d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.25</span> <span class=\"u\">/ session</span></div>",
+      "anim": [
+        "enter('.s3a', T + 0.15, {y:18})",
+        "enter('.s3b', T + 0.4)",
+        "enter('.s3c', T + 1.1, {y:26})",
+        "tl.from('.s3d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4)"
+      ]
+    },
+    {
+      "dur": 7.0,
+      "comment": "Recs",
+      "html": "        <div class=\"eyebrow s4a\">Optimize</div>\n        <div class=\"headline s4b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">Recs</span></div>\n        <div class=\"sub s4c\" style=\"margin-top:22px;\">Top-N ranked by real cosine similarity on Workers AI embeddings \u2014 model id and scores included.</div>\n        <div class=\"req s4d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.10</span> <span class=\"u\">/ recommendation</span></div>",
+      "anim": [
+        "enter('.s4a', T + 0.15, {y:18})",
+        "enter('.s4b', T + 0.4)",
+        "enter('.s4c', T + 1.1, {y:26})",
+        "tl.from('.s4d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4)"
+      ]
+    },
+    {
+      "dur": 7.5,
+      "comment": "Commerce",
+      "html": "        <div class=\"eyebrow s5a\">Convert</div>\n        <div class=\"headline s5b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">Commerce</span></div>\n        <div class=\"sub s5c\" style=\"margin-top:22px;\">Validates and normalizes a product-feed item \u2014 GTIN check digit, currency shape, availability enum \u2014 then emits Product/Offer JSON-LD.</div>\n        <div class=\"req s5d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.03</span> <span class=\"u\">/ API call</span></div>",
+      "anim": [
+        "enter('.s5a', T + 0.15, {y:18})",
+        "enter('.s5b', T + 0.4)",
+        "enter('.s5c', T + 1.1, {y:26})",
+        "tl.from('.s5d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4)"
+      ]
+    },
+    {
+      "dur": 6.5,
+      "comment": "Scan",
+      "html": "        <div class=\"eyebrow s6a\">Discover</div>\n        <div class=\"headline s6b\" style=\"font-size:64px;margin-top:16px;\">Vela <span class=\"teal\">Scan</span></div>\n        <div class=\"sub s6c\" style=\"margin-top:22px;\">A live agent-readiness crawl: AI-crawler rules, llms.txt, agent payments and MCP hints \u2014 fetched at call time.</div>\n        <div class=\"req s6d\" style=\"font-size:28px;margin-top:32px;\"><span class=\"c\">$0.05</span> <span class=\"u\">/ scan</span></div>",
+      "anim": [
+        "enter('.s6a', T + 0.15, {y:18})",
+        "enter('.s6b', T + 0.4)",
+        "enter('.s6c', T + 1.1, {y:26})",
+        "tl.from('.s6d', {opacity:0, scale:0.9, duration:0.6, ease:'back.out(1.5)'}, T + 2.4)"
+      ]
+    },
+    {
+      "dur": 8.0,
+      "comment": "close",
+      "html": "        <div class=\"outro-glow s7glow\"></div>\n        <div class=\"tile s7tile\">ED</div>\n        <div class=\"wordmark s7a\" style=\"font-size:104px;\"><span class=\"shimmer-sweep-target\">The Vela <span class=\"teal\">line</span></span></div>\n        <div class=\"sub s7b\" style=\"margin-top:16px;\">Usage-based, metered in Metronome, priced to the unit.</div>\n        <div class=\"url-pill s7c\"><span class=\"dot\"></span>vela.emergedigital.com</div>",
+      "anim": [
+        "tl.fromTo('.s7glow', {opacity:0, scale:0.6}, {opacity:1, scale:1, duration:1.0, ease:'power2.out'}, T + 0.1)",
+        "tl.from('.s7tile', {opacity:0, scale:0.7, rotate:-8, duration:0.6, ease:'back.out(1.7)'}, T + 0.2)",
+        "enter('.s7a', T + 0.6, {scale:0.96, y:0})",
+        "shimmer('.s7a .shimmer-sweep-target', T + 1.2)",
+        "enter('.s7b', T + 1.2, {y:20})",
+        "tl.from('.s7c', {opacity:0, y:16, duration:0.6, ease:EXPO}, T + 1.9)"
+      ]
+    }
+  ]
+}

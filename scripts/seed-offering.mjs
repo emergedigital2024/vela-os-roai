@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Enrich the Metronome sandbox OFFERING catalog so Offering → Billable metrics / Products /
- * Rate cards mirror the Vela / ON.Ecosystem product line (instead of a single demo metric).
+ * Rate cards mirror the Vela / Vela line product line (instead of a single demo metric).
  * Adds per-agent billable metrics + USAGE products + rates on the existing "Vela demo rate card",
  * plus a couple of FIXED service products. Catalog-only (not wired to customer contracts).
  *
@@ -41,13 +41,13 @@ async function api(method, path, body) {
 }
 const idOf = (r) => r.data?.id || r.id;
 
-// On-brand usage lines (mirror data.jsx ON.Ecosystem agents). price = USD cents per unit.
+// On-brand usage lines (mirror data.jsx Vela line agents). price = USD cents per unit.
 const LINES = [
-  { key: "optima",  metric: "ON.Optima — AEO answer requests",   event: "aeo_request",       agg: "COUNT",                      product: "ON.Optima — Answer Engine Optimization", price: 2 },
-  { key: "onx",     metric: "ON.X — assistant sessions",          event: "assistant_session", agg: "COUNT",                      product: "ON.X — Agentic Assistant",               price: 25 },
-  { key: "match",   metric: "ON.Match — recommendations served",  event: "recommendation",    agg: "SUM", aggKey: "count",       product: "ON.Match — AI Recommendations",          price: 1 },
-  { key: "one",     metric: "ON.E — storefront API calls",        event: "storefront_call",   agg: "SUM", aggKey: "amount",      product: "ON.E — Commerce Accelerator",            price: 3 },
-  { key: "browser", metric: "ON.Browser — agentic crawls",        event: "agent_crawl",       agg: "COUNT",                      product: "ON.Browser — Agentic Browser",           price: 5 },
+  { key: "optima",  metric: "Vela AEO — AEO answer requests",   event: "aeo_request",       agg: "COUNT",                      product: "Vela AEO — Answer Engine Optimization", price: 2 },
+  { key: "onx",     metric: "Vela Assist — assistant sessions",          event: "assistant_session", agg: "COUNT",                      product: "Vela Assist — Agentic Assistant",               price: 25 },
+  { key: "match",   metric: "Vela Recs — recommendations served",  event: "recommendation",    agg: "SUM", aggKey: "count",       product: "Vela Recs — AI Recommendations",          price: 1 },
+  { key: "one",     metric: "Vela Commerce — storefront API calls",        event: "storefront_call",   agg: "SUM", aggKey: "amount",      product: "Vela Commerce — Commerce Accelerator",            price: 3 },
+  { key: "browser", metric: "Vela Scan — agentic crawls",        event: "agent_crawl",       agg: "COUNT",                      product: "Vela Scan — Agentic Browser",           price: 5 },
 ];
 const FIXED = [
   { key: "impl",    name: "Implementation & onboarding" },

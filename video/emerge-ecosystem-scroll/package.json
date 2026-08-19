@@ -1,0 +1,19 @@
+{
+  "name": "emerge-ecosystem-scroll",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.6.110 preview",
+    "check": "npx --yes hyperframes@0.6.110 lint && npx --yes hyperframes@0.6.110 validate && npx --yes hyperframes@0.6.110 inspect",
+    "render": "PATH=\"$PWD/bin:$PATH\" npx --yes hyperframes@0.6.110 render",
+    "export": "node export-frames.mjs all",
+    "render:portrait": "cp index.html .index.render.bak && sed 's|\\.\\./assets/|assets/|g' variants/portrait.html > index.html; PATH=\"$PWD/bin:$PATH\" npx --yes hyperframes@0.6.110 render; s=$?; mv .index.render.bak index.html; exit $s",
+    "render:social": "cp index.html .index.render.bak && sed 's|\\.\\./assets/|assets/|g' variants/social.html > index.html; PATH=\"$PWD/bin:$PATH\" npx --yes hyperframes@0.6.110 render; s=$?; mv .index.render.bak index.html; exit $s"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
+    "puppeteer-core": "^24.9.0",
+    "sharp": "^0.34.2"
+  }
+}

@@ -133,7 +133,7 @@
         <div className="flex items-start justify-between gap-3">
           <PillarChip pillar={svc.pillar} size={40} />
           <div className="flex flex-wrap items-center justify-end gap-1.5">
-            {svc.onEco && <Badge tone="indigo">ON.Ecosystem</Badge>}
+            {svc.onEco && <Badge tone="indigo">Vela</Badge>}
             {svc.package && <Badge tone="emerald">Sales Enablement</Badge>}
             {svc.popular && !svc.onEco && !svc.package && <Badge tone="neutral">Popular</Badge>}
             {svc.isNew && <Badge tone="amber">New</Badge>}
@@ -166,6 +166,31 @@
           )}
         </div>
       </Card>
+    );
+  }
+
+  // ---- Agent checkout (x402) — API editions on the XRP Ledger ----
+  // The five Vela products have per-call API editions sold over the
+  // x402 protocol by Emerge Digital's agent-commerce worker; each paid call
+  // is metered into Metronome (visible in Agency → Billing → Live).
+  const X402_BASE = "https://agent-commerce.emergedigital.com/api/xrpl/";
+  const X402_SKUS = {
+    "on-optima": "on-optima-aeo",
+    "on-x": "on-x-session",
+    "on-match": "on-match-recs",
+    "on-e": "on-e-commerce",
+    "on-browser": "on-browser-scan",
+  };
+  function AgentCheckout({ svc }) {
+    const slug = X402_SKUS[svc.id];
+    if (!slug) return null;
+    const url = X402_BASE + slug;
+    return (
+      <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--panel-2)] p-3.5 text-left">
+        <div className="mb-1 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-[var(--accent-fg)]"><Icon name="zap" size={12} /> Agent checkout · x402</div>
+        <p className="text-xs text-[var(--muted)]">AI agents can buy the API edition of this product per call over the x402 protocol — settled in XRP or RLUSD on the XRP Ledger (RLUSD at exact dollar parity with the rate card), usage metered in Metronome. Each call delivers exactly the artifact its listing describes.</p>
+        <code className="mt-2 block overflow-x-auto whitespace-nowrap rounded-lg bg-[var(--chip)] px-2.5 py-1.5 text-[11px] text-[var(--text)]">curl -i {url}</code>
+      </div>
     );
   }
 
@@ -224,6 +249,7 @@
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400"><Icon name="checkCircle" size={26} /></div>
               <div className="mt-3 text-lg font-bold text-[var(--text)]">{svc.name} is live</div>
               <p className="mx-auto mt-1 max-w-xs text-sm text-[var(--muted)]">{isAgent ? "Your agent is provisioned and running. Track it in Active projects." : "Your engagement is set up — your strategist will be in touch."}</p>
+              {svc.onEco && <AgentCheckout svc={svc} />}
             </div>
           )}
         </div>
@@ -250,9 +276,9 @@
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full" style={{ background: "radial-gradient(circle, rgba(16,185,129,.20), transparent 70%)" }} />
           <div className="relative flex flex-wrap items-center justify-between gap-4">
             <div>
-              <Badge tone="emerald" icon="sparkles" className="mb-3">FPT CX offering</Badge>
+              <Badge tone="emerald" icon="sparkles" className="mb-3">CX service catalog</Badge>
               <h2 className="text-xl font-bold text-[var(--text)]">Expand across the full CX lifecycle</h2>
-              <p className="mt-1 max-w-lg text-sm text-[var(--muted)]">Six service pillars — Strategy, Design, Platform, Commerce, Insights and Run — plus the ON.Ecosystem AI accelerators and AI-first Sales Enablement packages. Delivered by your FPT team; request one and it's usually live within weeks.</p>
+              <p className="mt-1 max-w-lg text-sm text-[var(--muted)]">Six service pillars — Strategy, Design, Platform, Commerce, Insights and Run — plus Vela AI accelerators and AI-first Sales Enablement. Delivered by your practice team with governed AI agents, trusted by Government and BFSI across the GCC; request one and it's usually live within weeks.</p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold tabular-nums text-[var(--text)]">{active.size}</div>
@@ -284,9 +310,20 @@
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent-fg)]"><Icon name="bulb" size={17} /></span>
-            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Not sure what to add?</span> <span className="text-[var(--muted)]">Your strategist can recommend the highest-return next agent for your goals.</span></div>
+            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Not sure what to add?</span> <span className="text-[var(--muted)]">Human-governed AI: your practice strategist recommends the highest-return next agent for your goals.</span></div>
           </div>
           <button className="flex-none rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">Talk to your strategist</button>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-2)] p-5">
+          <div className="flex items-center gap-3">
+            <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent-fg)]"><Icon name="zap" size={17} /></span>
+            <div className="text-sm"><span className="font-semibold text-[var(--text)]">Buying as an AI agent?</span> <span className="text-[var(--muted)]">API editions of the Vela products are purchasable per call over the x402 protocol on the XRP Ledger, settling in XRP or RLUSD — no account needed; usage is metered in Metronome.</span></div>
+          </div>
+          <div className="flex flex-none flex-wrap gap-2">
+            <a href="https://agent-commerce.emergedigital.com" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--border)] bg-[var(--chip)] px-3.5 py-2 text-sm font-medium text-[var(--text)] transition-colors hover:bg-[var(--panel-hi)]">View the agent catalog</a>
+            <a href="https://emergedigital.com/insights/agent-commerce-xrpl-live/?utm_source=vela&utm_medium=marketplace" target="_blank" rel="noopener noreferrer" className="rounded-lg border border-[var(--accent-line)] bg-[var(--accent-soft)] px-3.5 py-2 text-sm font-medium text-[var(--accent-fg)] transition-colors hover:opacity-90">Read the launch note</a>
+          </div>
         </div>
       </div>
     );
@@ -320,7 +357,7 @@
         </div>
 
         <div>
-          <SectionTitle icon="trendUp" title="How others succeeded" sub="Results FPT has delivered with these solutions" />
+          <SectionTitle icon="trendUp" title="How others succeeded" sub="Results FPT has delivered with these solutions — public case studies" />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {CASE_STUDIES.map((cs, i) => (
               <Card key={i} className="p-5">

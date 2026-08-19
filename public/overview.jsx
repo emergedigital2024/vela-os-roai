@@ -171,7 +171,7 @@
               <div className="mb-2"><DeltaPill value={11.4} /><div className="mt-1 text-xs text-[var(--muted)]">vs last quarter</div></div>
             </div>
             <p className="mt-3 max-w-sm text-sm text-[var(--muted)]">
-              Every $1 of AI cost returned <span className="font-semibold text-[var(--text)]">{fmtMult(PORTFOLIO.roai)}</span> in delivered value across {PORTFOLIO.activeClients} clients on the FPT CX suite this quarter.
+              Every $1 of AI cost returned <span className="font-semibold text-[var(--text)]">{fmtMult(PORTFOLIO.roai)}</span> in delivered value across {PORTFOLIO.activeClients} clients on the practice's CX suite this quarter.
             </p>
             <div className="mt-5 grid grid-cols-3 gap-4 border-t border-[var(--border)] pt-5">
               <div>
@@ -246,7 +246,7 @@
 
         {/* featured case studies — real FPT results */}
         <div>
-          <SectionTitle icon="trendUp" title="Proof in the field" sub="Outcomes FPT has delivered with the CX offering"
+          <SectionTitle icon="trendUp" title="Proof in the field" sub="Outcomes FPT has delivered with this CX portfolio — public case studies"
             right={<div className="hidden items-center gap-4 text-xs text-[var(--muted)] sm:flex">{MARKET_STATS.map((m, i) => <span key={i} className="flex items-center gap-1.5"><span className="font-bold text-[var(--text)]">{m.stat}</span>{m.label}</span>)}</div>} />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {CASE_STUDIES.map((cs, i) => (
@@ -283,7 +283,7 @@
             ))}
           </div>
           <div className="mt-3 border-t border-[var(--border)] pt-3 text-[11px] leading-snug text-[var(--faint)]">
-            Part of <span className="font-semibold text-[var(--muted)]">FPT Corporation</span> — {FPT.revenue} revenue · {FPT.employees} employees worldwide.
+            Bench and credentials shown are <span className="font-semibold text-[var(--muted)]">FPT Corporation</span>'s — {FPT.revenue} revenue · {FPT.employees} employees worldwide. Public figures, shown as reference context for this concept demo.
           </div>
         </Card>
       </div>

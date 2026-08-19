@@ -56,7 +56,7 @@
         {!collapsed && (
           <div className="leading-tight">
             <div className="text-sm font-bold tracking-tight text-[var(--text)]">Vela <span className="text-[var(--accent-fg)]">OS</span></div>
-            <div className="text-[11px] text-[var(--muted)]">FPT CX Services</div>
+            <div className="text-[11px] text-[var(--muted)]">ROAI Analytics</div>
           </div>
         )}
       </div>
@@ -148,6 +148,12 @@
             className="mt-1 block px-2 text-center text-[11px] text-[var(--faint)] transition-colors hover:text-[var(--accent-fg)]">
             Part of the <span className="font-medium">Agentforce practice</span> ↗
           </a>
+          <div className="mt-1 px-2 text-center text-[11px] text-[var(--faint)]">
+            Part of the Emerge Digital{" "}
+            <a href="https://emergedigital.com?utm_source=vela&utm_medium=footer&utm_campaign=parent" target="_blank" rel="noopener" className="transition-colors hover:text-[var(--accent-fg)]">ecosystem</a>
+            {" · "}
+            <a href="https://vault.emergedigital.com?utm_source=vela&utm_medium=footer&utm_campaign=vaultos" target="_blank" rel="noopener" className="transition-colors hover:text-[var(--accent-fg)]">VaultOS</a>
+          </div>
         </div>
       </aside>
     );
@@ -318,7 +324,7 @@
 
     // ---- per-view document.title (SEO + tab/history clarity) ----
     useEffect(() => {
-      const BRAND = "Vela OS · FPT CX Services";
+      const BRAND = "Vela OS — ROAI Analytics";
       let label;
       if (mode === "client") {
         label = (CLIENT_TITLES[clientSection] || "Customer portal") + " · Client portal";

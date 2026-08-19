@@ -67,7 +67,7 @@
     if (!J) { window.print(); return; }
     const doc = new J({ unit: "pt", format: "a4" });
     let y = 56;
-    doc.setFontSize(18); doc.text("Vela OS · FPT CX Services", 40, y); y += 24;
+    doc.setFontSize(18); doc.text("Vela OS — ROAI Analytics", 40, y); y += 24;
     doc.setFontSize(10); doc.setTextColor(120);
     doc.text("Invoice " + inv.number, 40, y); y += 15;
     doc.text(client.name + "  ·  " + client.acct.type + (client.acct.poNumber ? "  ·  PO " + client.acct.poNumber : ""), 40, y); y += 15;
@@ -112,7 +112,7 @@
         </div>
         <div className="px-6 py-5">
           <div className="flex items-start justify-between">
-            <div><div className="text-sm font-bold text-[var(--text)]">Vela OS · FPT CX Services</div><div className="text-xs text-[var(--muted)]">billing@vela-os.fpt</div></div>
+            <div><div className="text-sm font-bold text-[var(--text)]">Vela OS — ROAI Analytics</div><div className="text-xs text-[var(--muted)]">billing@emergedigital.ae</div></div>
             <div className="text-right"><StatusBadge s={eff(inv)} /></div>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-[var(--border)] bg-[var(--panel-2)] p-4 text-sm">
@@ -459,7 +459,7 @@
               {customers.map((c) => (
                 <button key={c.id} onClick={() => open(c)} className="flex w-full items-center gap-3 border-b border-[var(--border)] px-5 py-3.5 text-left transition-colors last:border-0 hover:bg-[var(--panel-hi)]">
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-[var(--chip)] text-[11px] font-bold text-[var(--text)]">{(c.name || "?").slice(0, 2).toUpperCase()}</span>
-                  <div className="min-w-0 flex-1"><div className="truncate text-sm font-medium text-[var(--text)]">{c.name || c.id}</div><div className="truncate font-mono text-[11px] text-[var(--muted)]">{c.external_id || c.id}</div></div>
+                  <div className="min-w-0 flex-1"><div className="flex items-center gap-2 text-sm font-medium text-[var(--text)]"><span className="truncate">{c.name || c.id}</span>{(c.name || "").startsWith("Agent wallet") && <span className="flex-none rounded bg-[var(--accent-soft)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--accent-fg)]">agent · x402</span>}</div><div className="truncate font-mono text-[11px] text-[var(--muted)]">{c.external_id || c.id}</div></div>
                   <Icon name="chevronRight" size={15} className="text-[var(--faint)]" />
                 </button>
               ))}
