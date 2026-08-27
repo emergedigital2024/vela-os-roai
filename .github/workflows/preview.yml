@@ -24,10 +24,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Claims lint
         # Catch killed claims in review, not at deploy time when they are already merged.
         run: node scripts/claims-lint.mjs
+
+      - name: Build app bundle
+        # Bundles app/ → public/assets/vela-<hash>.js + public/index.html (both git-ignored).
+        run: npm run build
 
       - name: Upload preview version
         id: upload
