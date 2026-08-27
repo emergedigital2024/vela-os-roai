@@ -58,19 +58,21 @@ threshold alerts; Net 30 / Net 60, ACH, wire, corporate card, Government GPC and
 
 ## Tech
 
-**React 18**, bundled by **esbuild**. Tailwind still arrives via the Play CDN in this
-revision (static purged CSS is a follow-up). Each component file is a plain IIFE that
-registers a `window.*` global and reads the globals registered before it, so **load order
-matters** (the canonical order lives in `app/entry.js`). The build concatenates React +
-the 11 modules in that order, transpiles JSX (classic runtime → `React.createElement`),
-and minifies everything into one content-hashed asset — there is no in-browser Babel.
-Hand-built SVG charts. Theme via CSS variables (dark default, teal accent, light supported).
-Brand type: Lexend / Lexend Zetta / Prompt / Geist Mono (`.font-display`, `.font-label`,
-`.font-mono`, `.tabular-nums`).
+**React 18**, bundled by **esbuild**. Tailwind is compiled at build time with the **v3 CLI**
+into a static, purged, content-hashed stylesheet — the Play CDN is not loaded. Each
+component file is a plain IIFE that registers a `window.*` global and reads the globals
+registered before it, so **load order matters** (the canonical order lives in
+`app/entry.js`). The build concatenates React + the 11 modules in that order, transpiles
+JSX (classic runtime → `React.createElement`), and minifies everything into one
+content-hashed JS asset — there is no in-browser Babel. Hand-built SVG charts. Theme via
+CSS variables (dark default, teal accent, light supported). Brand type: Lexend /
+Lexend Zetta / Prompt / Geist Mono (`.font-display`, `.font-label`, `.font-mono`,
+`.tabular-nums`).
 
 ```
 app/                  # source (not served)
-  index.html          # template — the build injects the hashed <script> at <!-- build:js -->
+  index.html          # template — hashed <script> at <!-- build:js -->, hashed CSS at <!-- build:css -->
+  tailwind.css        # Tailwind v3 entry (@tailwind base/components/utilities)
   entry.js            # import order: _globals → data → icons → … → app → _bootstrap
   _globals.js         # puts React / ReactDOM on window (the IIFEs reference a global `React`)
   _bootstrap.js       # ReactDOM.createRoot(#root).render(<App/>)  — runs last
@@ -89,13 +91,15 @@ app/                  # source (not served)
                       #   query-param routing
 
 public/               # served by Cloudflare — static assets + build output
-  assets/vela-*.js    # generated: the hashed, minified bundle              (git-ignored)
-  index.html          # generated from app/index.html with the hash injected (git-ignored)
+  assets/vela-*.js    # generated: hashed, minified JS bundle               (git-ignored)
+  assets/vela-*.css   # generated: hashed, purged Tailwind CSS              (git-ignored)
+  index.html          # generated from app/index.html with hashes injected  (git-ignored)
   _headers            # immutable 1-year cache on /assets/*; HTML revalidated
   js/ask-emerge.js    # Ask Emerge launcher (window.EMERGE_ASK, site=vela)
   og.png, guide.html, robots.txt, sitemap.xml, canonical-facts.json, downloads/, favicon.svg
 
-scripts/build.mjs     # esbuild: bundle + minify + hash, then render public/index.html
+tailwind.config.js    # font families (Lexend / Lexend Zetta / Prompt / Geist Mono) + purge globs
+scripts/build.mjs     # esbuild JS + Tailwind v3 CLI CSS, then render public/index.html
 src/index.js          # Worker: host-canon 301 + Metronome / ROAI /api proxies
 ```
 
@@ -105,7 +109,7 @@ Routing is a lightweight `URLSearchParams` + `history` sync in `app.jsx` (no rou
 
 ```bash
 npm install          # one-time
-npm run build        # bundle app/ → public/assets/vela-<hash>.js + public/index.html
+npm run build        # bundle app/ → public/assets/vela-<hash>.{js,css} + public/index.html
 npm run dev          # build, then `wrangler dev` (serves public/ + the /api proxy locally)
 npm run deploy       # build, then `wrangler deploy`
 ```
