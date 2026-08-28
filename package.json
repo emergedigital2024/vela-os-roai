@@ -1,0 +1,21 @@
+{
+  "name": "vela-os-roai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vela OS — ROAI Analytics dashboard on Cloudflare Workers, with a read-only Metronome / Salesforce ROAI proxy.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && npx --yes wrangler@4 dev",
+    "deploy": "npm run build && npx --yes wrangler@4 deploy",
+    "preview": "npm run build && npx --yes wrangler@4 versions upload",
+    "lint:claims": "node scripts/claims-lint.mjs"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}

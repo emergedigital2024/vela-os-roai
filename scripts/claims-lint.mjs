@@ -53,6 +53,8 @@ const ROOT = new URL("..", import.meta.url).pathname;
 // Text-shaped things that either ship to the browser or become video.
 const SCAN = [
   { dir: "public", exts: new Set([".html", ".txt", ".xml", ".json", ".jsx", ".js", ".md"]) },
+  // Dashboard source lives under app/ (public/index.html + public/assets/ are build output).
+  { dir: "app", exts: new Set([".html", ".js", ".jsx"]) },
   { dir: "video", exts: new Set([".html", ".md"]) },
   // scripts/ generates the downloadable collateral. The PDF and PPTX are binaries this
   // lint cannot read, so the generator is the only text-shaped place their copy exists —
