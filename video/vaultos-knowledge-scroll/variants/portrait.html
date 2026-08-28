@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="../assets/gsap.min.js"></script>
+    <link rel="stylesheet" href="../assets/world.css" />
+    <style>html, body { width: 1080px; height: 1920px; }</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24" data-width="1080" data-height="1920">
+      <!-- Portrait cut: same world, portrait camera plan (see world.js). Beat 6 is a lateral pan.
+           Lives in variants/ so the hyperframes runtime discovers only index.html as the root
+           composition; the frame exporter serves this file directly, and render:portrait
+           swap-renders it (see package.json). Asset paths are ../-relative for direct serving. -->
+      <div id="film" class="clip" data-start="0" data-duration="24" data-track-index="1"></div>
+      <div id="hf-vignette"></div>
+    </div>
+    <script>
+      window.__FILM_ORIENTATION = "portrait";
+      window.__timelines = window.__timelines || {}; // registration itself happens in world.js
+    </script>
+    <script src="../assets/world.js"></script>
+  </body>
+</html>
