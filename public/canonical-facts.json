@@ -1,9 +1,9 @@
 {
-  "$schema_note": "Canonical single source of truth for Vela OS proof + brand facts (Emerge Digital). Shared by Vela (public/) and future (data/). Resolved per issue #5; signed off by Rami 2026-06-16 (v1.0.0).",
+  "$schema_note": "Canonical single source of truth for Vela OS proof + brand facts (Emerge Digital). Shared by Vela (public/) and future (data/). Twin copies intentionally diverge on ON.* product marks (future keeps them, Vela is de-branded) and on the ecosystem_figures published_on/published_in key — sync meaning, not bytes. Resolved per issue #5; signed off by Rami 2026-06-16 (v1.0.0).",
   "$issue": "https://github.com/emergedigital2024/vela-os-roai/issues/5",
-  "version": "1.1.0",
-  "as_of": "2026-08-02",
-  "signed_off_by": "Rami Alcheikh (v1.0.0); v1.1.0 de-brand per settled FPT position 2026-07-27 — practice_name wording pending Rami ratification",
+  "version": "1.2.0",
+  "as_of": "2026-08-28",
+  "signed_off_by": "Rami Alcheikh (v1.0.0); v1.1.0 de-brand per settled FPT position 2026-07-27 — practice_name wording pending Rami ratification; v1.2.0 adds ecosystem_figures in sync with emerge-future #57 — figures PENDING Rami verification (provenance traced and found circular), and the 330% withholding DEVIATES from DECISION-5 pending ratification",
 
   "brand": {
     "practice_name": "Emerge Digital",
@@ -35,6 +35,35 @@
       { "name": "Salesforce", "tier": "FDE Network Partner",        "engineers": "330+", "certs": "770+", "note": "First ASEAN Data & AI CoE" },
       { "name": "Liferay",    "tier": "Global Platinum",            "engineers": "150+", "certs": "180+", "note": "1st in VN + Japan to Global Platinum" },
       { "name": "Shopify",    "tier": "Shopify Plus",               "engineers": "200+", "certs": "40+",  "note": "Plus · custom storefronts · migration" }
+    ]
+  },
+
+  "ecosystem_figures": {
+    "$note": "Public THIRD-PARTY figures. Not Emerge Digital results, not Vela results. Twin of emerge-future's `ecosystem_figures` block — SYNCED IN MEANING, deliberately not in shape: that repo builds HTML routes so its entries carry `published_on` (routes), while Vela ships .jsx straight to the browser, so entries here carry `published_in` (repo-relative files). scripts/claims-lint.mjs enforces both directions.",
+    "$history": "Supersedes the `fpt_parent` block removed by vela-os-roai #54 / emerge-future #43 (2026-08-02). Same figures, different frame — 'parent' implied Emerge is an FPT subsidiary, the killed claim from the 2026-07-27 position. FPT's own published figures under explicit attribution were never the problem. NEVER reintroduce the `fpt_parent` key name.",
+    "$attribution": "Display ONLY under explicit attribution naming the source organisation. In this app that is the overview.jsx footnote ('Bench and credentials shown are FPT Corporation's …'), which is what makes the figures publishable at all.",
+    "$as_of_means": "`as_of` is when the figure entered or was last confirmed in THIS record — NOT when the source organisation published it. That is `source_period`, and every row below is needs_verification:true.",
+    "$provenance_warning": "Traced 2026-08-28 and it is CIRCULAR. DECISION-5.md sources these to issue #5; issue #5 sources them to the `future` site; `future` carried them in raw HTML with no citation. DECISION-5 asserts the ARR figure is 'real but Salesforce-wide' — that assertion has no external source behind it anywhere in the chain. Nothing here has been checked against a primary source.",
+    "figures": [
+      { "id": "fpt_revenue", "value": "$2.47B", "label": "FPT Corporation revenue",
+        "source_org": "FPT Corporation", "source_period": "FY2024 — identification UNCONFIRMED", "source_url": null,
+        "as_of": "2026-06-16", "published": true, "published_in": ["public/overview.jsx"], "needs_verification": true,
+        "verification_note": "Rendered in the overview.jsx footnote via data.jsx FPT.revenue. Matches FPT Corporation's FY2024 consolidated revenue (VND 62,849bn) on a USD conversion, but no primary source was ever recorded and it is displayed undated. If FY2025 supersedes it, this app shows a stale figure." },
+
+      { "id": "fpt_employees", "value": "80,000+", "label": "FPT Corporation employees",
+        "source_org": "FPT Corporation", "source_period": "UNCONFIRMED", "source_url": null,
+        "as_of": "2026-06-16", "published": true, "published_in": ["public/overview.jsx"], "needs_verification": true,
+        "verification_note": "Rendered in the overview.jsx footnote via data.jsx FPT.employees. Carried since v1.0.0 with no primary source; a '+' headcount ages upward, so lower-risk than the revenue row." },
+
+      { "id": "salesforce_agentforce_arr", "value": "$1.4B", "label": "global Agentforce ARR",
+        "source_org": "Salesforce", "source_period": "UNCONFIRMED", "source_url": null,
+        "as_of": "2026-06-16", "published": false, "published_in": [], "needs_verification": true,
+        "verification_note": "Never rendered in this app. It sat in data.jsx as the dead field FPT.agentforceArrNote — dead to the eye but NOT to the wire: data.jsx is served at /data.jsx (HTTP 200, ~39KB), so the string reached every visitor via view-source while appearing nowhere on screen. Field deleted 2026-08-28. emerge-future publishes $1.4B on its homepage under explicit Salesforce labelling; this app does not, and that divergence is intentional, not drift." },
+
+      { "id": "salesforce_agentforce_arr_yoy", "value": "330%", "label": "global Agentforce ARR YoY growth",
+        "source_org": "Salesforce", "source_period": "UNCONFIRMED", "source_url": null,
+        "as_of": "2026-06-16", "published": false, "published_in": [], "needs_verification": true,
+        "verification_note": "Withheld on BOTH surfaces — emerge-future #56 removed it from the homepage band, and it left this repo with the agentforceArrNote deletion. NOTE FOR REVIEW: DECISION-5.md (signed off 2026-06-16) decided 'Include, relabeled as Salesforce global'. Withholding it therefore DEVIATES from a signed decision and is Rami's to ratify or reverse. The case for withholding: a growth multiplier is the highest-risk shape of unsourced figure (cf. the +54%/+41% pair hub PR #95 retracted as invented) and the provenance chain is circular. To restore: cite a Salesforce release in source_url, flip published, and add it back to both surfaces together." }
     ]
   },
 

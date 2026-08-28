@@ -492,11 +492,16 @@
     { name: "Shopify", tier: "Shopify Plus", engineers: "200+", certs: "40+", note: "Plus · custom storefronts · migration" },
   ];
   const PARTNER_TOTALS = { engineers: "1,000+", certs: "1,500+" };
-  // FPT Corporation public figures — display ONLY with explicit FPT attribution (overview.jsx
-  // footnote does this). The Agentforce ARR is a Salesforce-global ecosystem figure, NOT an
-  // FPT-specific result — label it as such wherever shown. (canonical-facts.json no longer
-  // carries an fpt_parent block; unattributed reuse of these numbers is a killed claim.)
-  const FPT = { revenue: "$2.47B", employees: "80,000+", agentforceArrNote: "$1.4B Salesforce-global Agentforce ARR (+330% YoY)" };
+  // FPT Corporation public figures — display ONLY under explicit FPT attribution, which the
+  // overview.jsx footnote provides; unattributed reuse is a killed claim. Canonical record and
+  // provenance live in canonical-facts.json `ecosystem_figures`, and claims-lint enforces this
+  // pair against it. A third field (agentforceArrNote) was dropped 2026-08-28: it rendered
+  // nowhere, but this file is served at /data.jsx, so its unsourced ARR and growth figures
+  // still reached every visitor via view-source — "renders nowhere" was never "ships nowhere".
+  // Those two are registered published:false; read the verification_note before restoring
+  // either, and note they are not repeated above: in a file that ships, a withheld number in
+  // a comment is still a published one.
+  const FPT = { revenue: "$2.47B", employees: "80,000+" };
   const MARKET_STATS = [
     { stat: "2–3×", label: "higher revenue growth for CX leaders" },
     { stat: "~70%", label: "rate experience as important as product or price" },

@@ -10,6 +10,12 @@
  *   3. Bare "FPT" outside the attributed public forms (FPT Corporation, FPT Software,
  *      FPT-delivered, FPT's public …, FPT × Salesforce, FPT PARTNERS).
  *   4. "Platform X" — partner-confidential, nothing public ever.
+ *   5. Ecosystem figures that drifted from public/canonical-facts.json. Every
+ *      `ecosystem_figures` entry marked published must appear in its published_in
+ *      files; every entry marked published:false must appear in NO scanned file.
+ *      Scoped to files rather than routes because this app ships .jsx directly —
+ *      see the note at the check itself for why "renders nowhere" was never the
+ *      same thing as "ships nowhere".
  *
  * WHY THIS EXISTS SEPARATELY FROM emerge-digital-website's compliance-lint:
  * that one scopes to ITS OWN dist/. It has never been able to see this repo. The
@@ -160,6 +166,75 @@ for (const { dir, exts } of SCAN) {
         const win = text.slice(m.index, m.index + 24);
         if (FPT_ATTRIBUTED.test(win)) continue;
         warnings.push({ file: rel, line: lineOf(text, m.index), rule: "bare-fpt", match: text.slice(m.index, m.index + 40).split("\n")[0] });
+      }
+    }
+  }
+}
+
+// --- 5. canonical figure registry vs what actually ships --------------------
+// public/canonical-facts.json calls itself the single source of truth, but until
+// emerge-future #57 / this change nothing read it. Its twin now enforces the same
+// contract (compliance-lint rule 7) against built routes; here the unit is FILES,
+// because this app ships .jsx to the browser instead of building HTML.
+//
+// The asymmetry that motivated this: FPT.agentforceArrNote rendered nowhere on
+// screen, so it looked deleted-by-neglect — but /data.jsx is served (HTTP 200,
+// ~39KB), so its unsourced figures reached every visitor in view-source. "Not
+// rendered" is not "not published". Hence: a withheld figure must be absent from
+// every scanned file, not merely absent from the UI.
+const FACTS_REL = "public/canonical-facts.json";
+let facts = null;
+try {
+  facts = JSON.parse(readFileSync(join(ROOT, FACTS_REL), "utf8"));
+} catch (e) {
+  findings.push({ file: FACTS_REL, line: 0, rule: "registry", match: `unreadable (${e.message})` });
+}
+
+// Every text-shaped file the SCAN rules already cover — the registry file itself
+// is exempt from the absence check, since recording a withheld figure is its job.
+function scannedFiles() {
+  const out = [];
+  for (const { dir, exts } of SCAN) {
+    for (const full of walk(join(ROOT, dir))) {
+      if (exts.has(extname(full))) out.push(relative(ROOT, full));
+    }
+  }
+  return out;
+}
+
+if (facts?.ecosystem_figures?.figures) {
+  const all = scannedFiles();
+  for (const fig of facts.ecosystem_figures.figures) {
+    if (fig.published) {
+      const where = fig.published_in ?? [];
+      if (!where.length) {
+        findings.push({ file: FACTS_REL, line: 0, rule: "registry", match: `${fig.id}: published:true with empty published_in — unenforceable` });
+      }
+      for (const rel of where) {
+        let text;
+        try {
+          text = readFileSync(join(ROOT, rel), "utf8");
+        } catch {
+          findings.push({ file: FACTS_REL, line: 0, rule: "registry", match: `${fig.id}: published_in file ${rel} does not exist` });
+          continue;
+        }
+        // overview.jsx renders {FPT.revenue}, so accept either the literal value or
+        // the data.jsx binding that supplies it — the point is that the file is the
+        // one actually responsible for showing the figure.
+        const binding = fig.id.startsWith("fpt_") ? `FPT.${fig.id.slice(4)}` : null;
+        if (!text.includes(fig.value) && !(binding && text.includes(binding))) {
+          findings.push({ file: rel, line: 0, rule: "registry", match: `${fig.id} = "${fig.value}" is registered as published here but neither the value nor its binding appears — update canonical-facts.json in the same PR, or set published:false` });
+        }
+      }
+    } else {
+      for (const rel of all) {
+        if (rel === FACTS_REL) continue;
+        const text = readFileSync(join(ROOT, rel), "utf8");
+        let i = text.indexOf(fig.value);
+        while (i !== -1) {
+          findings.push({ file: rel, line: lineOf(text, i), rule: "registry", match: `"${fig.value}" (${fig.id}) is marked published:false in canonical-facts.json — this file ships, so any occurrence is published` });
+          i = text.indexOf(fig.value, i + fig.value.length);
+        }
       }
     }
   }
