@@ -496,11 +496,11 @@
   // overview.jsx footnote provides; unattributed reuse is a killed claim. Canonical record and
   // provenance live in canonical-facts.json `ecosystem_figures`, and claims-lint enforces this
   // pair against it. A third field (agentforceArrNote) was dropped 2026-08-28: it rendered
-  // nowhere, but this file is served at /data.jsx, so its unsourced ARR and growth figures
-  // still reached every visitor via view-source — "renders nowhere" was never "ships nowhere".
-  // Those two are registered published:false; read the verification_note before restoring
-  // either, and note they are not repeated above: in a file that ships, a withheld number in
-  // a comment is still a published one.
+  // nowhere, but this file used to be served at /data.jsx (HTTP 200) so unsourced ARR and
+  // growth figures still reached every visitor via view-source — "renders nowhere" was never
+  // "ships nowhere". Source now lives under app/ and is bundled; withheld numbers still must
+  // not appear in comments. Those two are registered published:false; read the
+  // verification_note before restoring either.
   const FPT = { revenue: "$2.47B", employees: "80,000+" };
   const MARKET_STATS = [
     { stat: "2–3×", label: "higher revenue growth for CX leaders" },

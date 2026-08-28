@@ -39,7 +39,7 @@
   },
 
   "ecosystem_figures": {
-    "$note": "Public THIRD-PARTY figures. Not Emerge Digital results, not Vela results. Twin of emerge-future's `ecosystem_figures` block — SYNCED IN MEANING, deliberately not in shape: that repo builds HTML routes so its entries carry `published_on` (routes), while Vela ships .jsx straight to the browser, so entries here carry `published_in` (repo-relative files). scripts/claims-lint.mjs enforces both directions.",
+    "$note": "Public THIRD-PARTY figures. Not Emerge Digital results, not Vela results. Twin of emerge-future's `ecosystem_figures` block — SYNCED IN MEANING, deliberately not in shape: that repo builds HTML routes so its entries carry `published_on` (routes), while Vela's dashboard source lives under app/ and is bundled at build, so entries here carry `published_in` (repo-relative source files). scripts/claims-lint.mjs enforces both directions.",
     "$history": "Supersedes the `fpt_parent` block removed by vela-os-roai #54 / emerge-future #43 (2026-08-02). Same figures, different frame — 'parent' implied Emerge is an FPT subsidiary, the killed claim from the 2026-07-27 position. FPT's own published figures under explicit attribution were never the problem. NEVER reintroduce the `fpt_parent` key name.",
     "$attribution": "Display ONLY under explicit attribution naming the source organisation. In this app that is the overview.jsx footnote ('Bench and credentials shown are FPT Corporation's …'), which is what makes the figures publishable at all.",
     "$as_of_means": "`as_of` is when the figure entered or was last confirmed in THIS record — NOT when the source organisation published it. That is `source_period`, and every row below is needs_verification:true.",
@@ -47,12 +47,12 @@
     "figures": [
       { "id": "fpt_revenue", "value": "$2.47B", "label": "FPT Corporation revenue",
         "source_org": "FPT Corporation", "source_period": "FY2024 — identification UNCONFIRMED", "source_url": null,
-        "as_of": "2026-06-16", "published": true, "published_in": ["public/overview.jsx"], "needs_verification": true,
+        "as_of": "2026-06-16", "published": true, "published_in": ["app/overview.jsx"], "needs_verification": true,
         "verification_note": "Rendered in the overview.jsx footnote via data.jsx FPT.revenue. Matches FPT Corporation's FY2024 consolidated revenue (VND 62,849bn) on a USD conversion, but no primary source was ever recorded and it is displayed undated. If FY2025 supersedes it, this app shows a stale figure." },
 
       { "id": "fpt_employees", "value": "80,000+", "label": "FPT Corporation employees",
         "source_org": "FPT Corporation", "source_period": "UNCONFIRMED", "source_url": null,
-        "as_of": "2026-06-16", "published": true, "published_in": ["public/overview.jsx"], "needs_verification": true,
+        "as_of": "2026-06-16", "published": true, "published_in": ["app/overview.jsx"], "needs_verification": true,
         "verification_note": "Rendered in the overview.jsx footnote via data.jsx FPT.employees. Carried since v1.0.0 with no primary source; a '+' headcount ages upward, so lower-risk than the revenue row." },
 
       { "id": "salesforce_agentforce_arr", "value": "$1.4B", "label": "global Agentforce ARR",
